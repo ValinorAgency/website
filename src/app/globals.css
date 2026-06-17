@@ -102,7 +102,10 @@ h1, h2, h3, h4 {
 }
 
 .section-shell {
-  padding: clamp(5rem, 9vw, 8rem) 1.5rem;
+  padding: clamp(3.5rem, 9vw, 8rem) 1.25rem;
+}
+@media (min-width: 640px) {
+  .section-shell { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
 
 section[id],
@@ -249,6 +252,18 @@ button:focus-visible {
   pointer-events: none;
 }
 .hover-invert:hover::before { top: 0; }
+
+/* ── Mobile polish ──────────────────────────────────────────────────────────── */
+@media (max-width: 639px) {
+  /* Card-level padding classes used across sections */
+  .card-pad { padding: 1.1rem !important; }
+
+  /* Stat strip wraps tighter */
+  .stat-strip { gap: 1.25rem !important; }
+
+  /* Section header margin */
+  .section-header-mb { margin-bottom: 2rem !important; }
+}
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {

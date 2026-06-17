@@ -38,7 +38,7 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                className="hover-invert rounded-full px-4 py-2 text-sm font-medium"
+                className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-white hover:bg-white/[0.08]"
                 style={{ color: "rgba(255,255,255,0.78)" }}
               >
                 {link.label}

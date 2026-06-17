@@ -78,10 +78,11 @@ export default function AISolutions() {
                 initial={reduce ? false : { opacity: 0, y: 18 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.55, delay: 0.1 + 0.08 * i, ease: expo }}
+                className="card-pad"
                 style={{
                   background: "var(--surface-raised)",
                   border: "1px solid var(--border)",
-                  borderRadius: "8px",
+                  borderRadius: "12px",
                   padding: "1.75rem",
                   display: "flex",
                   flexDirection: "column",
@@ -107,6 +108,7 @@ export default function AISolutions() {
             initial={reduce ? false : { opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.5, ease: expo }}
+            className="stat-strip"
             style={{
               display: "flex",
               flexWrap: "wrap",

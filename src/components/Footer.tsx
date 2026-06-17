@@ -19,16 +19,9 @@ export default function Footer() {
       <div className="section-inner">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-xs">
-            <a href="#" className="flex items-center gap-2.5">
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-xl"
-                style={{ background: "var(--brand)" }}
-              >
-                <span className="font-display text-xs font-bold text-white tracking-tight">SL</span>
-              </div>
-              <p className="font-display text-[0.95rem] font-semibold tracking-[-0.03em]" style={{ color: "var(--ink)" }}>
-                Valinor Agency
-              </p>
+            <a href="#" className="flex items-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/VALINOR.png" alt="Valinor Agency" style={{ height: 36, width: "auto", opacity: 0.9 }} />
             </a>
             <p className="mt-4 text-sm leading-6" style={{ color: "var(--ink-muted)" }}>
               Diseñamos interfaces que transmiten precisión, criterio y confianza.

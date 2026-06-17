@@ -126,8 +126,12 @@ export default function ProblemsSolved() {
       </div>
 
       <style>{`
-        @media (max-width: 640px) {
-          .problems-row { grid-template-columns: 1fr !important; gap: 0.75rem !important; }
+        @media (max-width: 720px) {
+          .problems-row {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+            padding: 1.25rem 0 !important;
+          }
         }
       `}</style>
     </section>

@@ -82,8 +82,9 @@ export default function WebServices() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 22rem), 1fr))",
           gap: "1px",
+          background: "var(--border)",
           border: "1px solid var(--border)",
-          borderRadius: "8px",
+          borderRadius: "12px",
           overflow: "hidden",
         }}>
           {services.map((s, i) => (
@@ -94,12 +95,11 @@ export default function WebServices() {
               transition={{ duration: 0.55, delay: 0.08 * i, ease: expo }}
               style={{
                 background: "var(--surface)",
-                padding: "2rem",
-                borderRight: "1px solid var(--border)",
-                borderBottom: "1px solid var(--border)",
+                padding: "1.75rem 1.5rem",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.85rem",
+                minHeight: "10rem",
               }}
             >
               <span style={{
