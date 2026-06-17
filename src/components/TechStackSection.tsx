@@ -209,17 +209,18 @@ export default function TechStackSection() {
       <div style={{ display: "flex", alignItems: "center", marginTop: 22, flexShrink: 0 }}>
         {item.side === "right" ? (
           <>
-            <div style={{ width: 48, height: 1, background: "oklch(0.78 0 0)" }} />
+            <div className="ann-line" style={{ width: 48, height: 1, background: "oklch(0.78 0 0)" }} />
             <div style={{ width: 5, height: 5, borderRadius: "50%", background: "oklch(0.25 0 0)", flexShrink: 0 }} />
           </>
         ) : (
           <>
             <div style={{ width: 5, height: 5, borderRadius: "50%", background: "oklch(0.25 0 0)", flexShrink: 0 }} />
-            <div style={{ width: 48, height: 1, background: "oklch(0.78 0 0)" }} />
+            <div className="ann-line" style={{ width: 48, height: 1, background: "oklch(0.78 0 0)" }} />
           </>
         )}
       </div>
       <div
+        className="ann-card"
         style={{
           width: 186,
           marginLeft: item.side === "right" ? 10 : 0,
@@ -232,7 +233,7 @@ export default function TechStackSection() {
         }}
       >
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "4px 8px", marginBottom: 5 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{item.name}</span>
+          <span className="ann-name" style={{ fontSize: 12, fontWeight: 600, color: "var(--ink)" }}>{item.name}</span>
           <span style={{
             fontSize: 9, fontWeight: 500, color: "var(--ink-faint)",
             border: "1px solid var(--border)", borderRadius: 99,
@@ -241,7 +242,7 @@ export default function TechStackSection() {
             {item.tag}
           </span>
         </div>
-        <p style={{ fontSize: 10.5, color: "var(--ink-muted)", lineHeight: 1.55, margin: 0 }}>{item.desc}</p>
+        <p className="ann-desc" style={{ fontSize: 10.5, color: "var(--ink-muted)", lineHeight: 1.55, margin: 0 }}>{item.desc}</p>
       </div>
     </div>
   );
@@ -291,17 +292,17 @@ export default function TechStackSection() {
       {/* ── Desktop: 3D scroll animation ────────────────────────────────────── */}
       <div
         ref={pinRef}
-        className="hidden h-svh flex-col items-start justify-start overflow-hidden px-8 pt-4 lg:flex xl:px-14"
+        className="hidden h-svh flex-col items-start justify-start overflow-hidden px-8 pt-6 lg:flex xl:px-14"
       >
         <div className="mb-6 w-full">
           <h2
-            className="mx-auto flex justify-center font-display text-[clamp(3.4rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
+            className="mx-auto flex justify-center font-display text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             El stack detrás
           </h2>
           <h2
-            className="mx-auto mb-4 xl:mb-20 2xl:mb-40 flex justify-center font-display text-[clamp(3.4rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
+            className="mx-auto mb-4 xl:mb-24 2xl:mb-40 flex justify-center font-display text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             de cada proyecto.
@@ -313,7 +314,7 @@ export default function TechStackSection() {
           display: "flex",
           alignItems: "center",
           width: "min(96vw, 1240px)",
-          height: "min(50vh, 460px)",
+          height: "min(56vh, 460px)",
           alignSelf: "center",
         }}>
           {/* Left annotation zone */}
@@ -478,9 +479,20 @@ export default function TechStackSection() {
         </div>
       </div>
 
-      {/* Cards start hidden via CSS so GSAP can animate without React style-prop conflict */}
       <style>{`
         #stack [data-annotation] { opacity: 0; }
+
+        /* Compact annotation cards on short screens (e.g. 1366×768) */
+        @media (min-width: 1024px) and (max-height: 820px) {
+          #stack .ann-card {
+            width: 150px !important;
+            padding: 8px 10px !important;
+            border-radius: 12px !important;
+          }
+          #stack .ann-line { width: 30px !important; }
+          #stack .ann-name { font-size: 10.5px !important; }
+          #stack .ann-desc { font-size: 9px !important; line-height: 1.45 !important; }
+        }
       `}</style>
     </section>
   );
