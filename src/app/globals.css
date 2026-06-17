@@ -97,8 +97,8 @@ h1, h2, h3, h4 {
 }
 
 ::selection {
-  background: var(--brand);
-  color: #FFFFFF;
+  background: rgba(36, 214, 188, 0.35);
+  color: #ffffff;
 }
 
 .section-shell {

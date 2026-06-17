@@ -291,7 +291,7 @@ export default function TechStackSection() {
       {/* ── Desktop: 3D scroll animation ────────────────────────────────────── */}
       <div
         ref={pinRef}
-        className="hidden h-svh flex-col items-start justify-start overflow-hidden px-8 pt-12 lg:flex xl:px-14"
+        className="hidden h-svh flex-col items-start justify-start overflow-hidden px-8 pt-4 lg:flex xl:px-14"
       >
         <div className="mb-6 w-full">
           <h2
@@ -301,7 +301,7 @@ export default function TechStackSection() {
             El stack detrás
           </h2>
           <h2
-            className="mx-auto mb-40 flex justify-center font-display text-[clamp(3.4rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
+            className="mx-auto mb-4 xl:mb-20 2xl:mb-40 flex justify-center font-display text-[clamp(3.4rem,7vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             de cada proyecto.
@@ -313,7 +313,7 @@ export default function TechStackSection() {
           display: "flex",
           alignItems: "center",
           width: "min(96vw, 1240px)",
-          height: "min(58vh, 460px)",
+          height: "min(50vh, 460px)",
           alignSelf: "center",
         }}>
           {/* Left annotation zone */}
