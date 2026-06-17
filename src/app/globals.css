@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans-stack: var(--font-inter), "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-display-stack: var(--font-inter), "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --page-background: var(--bg);
+
+  /* Surfaces — negro profundo base oscura */
+  --bg: #060609;
+  --surface: #0E0E12;
+  --surface-raised: #17171D;
+
+  /* Tipografía */
+  --ink: #EEEEF2;
+  --ink-muted: #9898A6;
+  --ink-faint: #66667A;
+
+  /* Marca — azul ligeramente más brillante para fondo oscuro */
+  --brand: #ffffff;
+  --brand-deep: #3279F9;
+  --brand-light: rgba(77, 144, 255, 0.20);
+  --brand-xlight: rgba(77, 144, 255, 0.10);
+
+  /* Acentos secundarios */
+  --accent: #DDDDE8;
+  --accent-light: rgba(255, 255, 255, 0.06);
+  --accent-2: #9898A6;
+  --accent-2-light: rgba(255, 255, 255, 0.04);
+
+  /* Bordes — blancos muy sutiles */
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.22);
+
+  /* Sombras — más pronunciadas sobre fondo oscuro */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.50);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.52);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.60);
+  --shadow-brand: 0 8px 24px rgba(77, 144, 255, 0.42);
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
+
+@theme inline {
+  --color-background: var(--bg);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-sans-stack);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: var(--font-display-stack);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background-color: var(--page-background);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 0.8px, transparent 0.8px);
+  background-size: 4px 4px;
+  color: var(--ink);
+  font-family: var(--font-sans-stack);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  background-color: var(--page-background);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 0.8px, transparent 0.8px);
+  background-size: 4px 4px;
+}
+
+/* Display: sans-serif moderno + optical sizing, igual que Google Sans Flex */
+.font-display {
+  font-family: var(--font-display-stack);
+  letter-spacing: -0.04em;
+  font-optical-sizing: auto;
+}
+
+h1, h2, h3, h4 {
+  font-optical-sizing: auto;
+}
+
+::selection {
+  background: var(--brand);
+  color: #FFFFFF;
+}
+
+.section-shell {
+  padding: clamp(5rem, 9vw, 8rem) 1.5rem;
+}
+
+section[id],
+footer[id] {
+  scroll-margin-top: 5.5rem;
+}
+
+.section-inner {
+  margin: 0 auto;
+  width: min(100%, 72rem);
+}
+
+.surface-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Dark theme: remap Tailwind's bg-white to dark surface */
+.bg-white {
+  background-color: var(--surface-raised);
+}
+
+/* Hero CTA: botones outline sin fondo para el hero principal */
+.hero-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.80);
+  background: transparent;
+  padding: 0.65rem 2.2rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.22s, color 0.22s, background 0.22s;
+}
+.hero-cta-btn:hover {
+  border-color: rgba(255, 255, 255, 0.58);
+  color: rgba(255, 255, 255, 1.0);
+  background: rgba(255, 255, 255, 0.04);
+}
+.hero-cta-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.40);
+  outline-offset: 3px;
+}
+
+/* Botón primario — azul */
+.pill-button-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--brand);
+  color: #000000;
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.pill-button-dark:hover {
+  background: var(--brand-deep);
+  box-shadow: var(--shadow-brand);
+  transform: translateY(-1px);
+}
+.pill-button-dark:focus-visible {
+  outline: 3px solid var(--brand-light);
+  outline-offset: 3px;
+}
+
+/* Botón secundario */
+.pill-button-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.pill-button-light:hover {
+  border-color: var(--border-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+.pill-button-light:focus-visible {
+  outline: 3px solid var(--border-strong);
+  outline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--border-strong);
+  outline-offset: 3px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+/* Custom cursor — oculta el nativo en dispositivos de puntero fino (mouse) */
+@media (pointer: fine) {
+  *, *::before, *::after { cursor: none !important; }
+}
+
+/* Texto outline: relleno transparente, solo el trazo blanco */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.80);
+}
+@media (min-width: 768px) {
+  .text-outline { -webkit-text-stroke-width: 2px; }
+}
+
+/* Hover barrido invertido: white fill sube de abajo → mix-blend-difference invierte colores */
+.hover-invert {
+  position: relative;
+  overflow: hidden;
+  mix-blend-mode: difference;
+}
+.hover-invert::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  top: 100%;
+  background: white;
+  transition: top 0.52s cubic-bezier(0, 0, 0.2, 1);
+  pointer-events: none;
+}
+.hover-invert:hover::before { top: 0; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
