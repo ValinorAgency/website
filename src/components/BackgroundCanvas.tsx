@@ -73,7 +73,7 @@ export default function BackgroundCanvas() {
 
     // ── Resize ─────────────────────────────────────────────────────────────────
     function resize() {
-      if (!canvas) return;
+      if (!canvas || !ctx) return;
       const dpr = Math.min(window.devicePixelRatio ?? 1, 2);
       W = window.innerWidth;
       H = window.innerHeight;
