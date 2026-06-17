@@ -179,10 +179,11 @@ export default function TechStackSection() {
         // Cards stay visible — they accumulate as the stack progresses
       });
 
+      // Trigger on pinRef so the title scrolls off before the mockup pins
       ScrollTrigger.create({
-        trigger: sectionRef.current,
+        trigger: pinRef.current,
         start: "top top",
-        end: "bottom bottom",
+        end: () => `+=${window.innerHeight * 3.5}`,
         pin: pinRef.current,
         scrub: 1.5,
         animation: tl,
@@ -252,7 +253,7 @@ export default function TechStackSection() {
       ref={sectionRef}
       id="stack"
       aria-labelledby="stack-heading"
-      className="relative lg:h-[360vh]"
+      className="relative"
     >
       {/* ── Mobile: static list ─────────────────────────────────────────────── */}
       <div className="section-inner py-20 lg:hidden">
@@ -289,32 +290,34 @@ export default function TechStackSection() {
         </ol>
       </div>
 
-      {/* ── Desktop: 3D scroll animation ────────────────────────────────────── */}
+      {/* ── Desktop title: scrolls off naturally before the animation pins ──── */}
+      <div className="hidden lg:flex flex-col items-center px-8 pt-20 pb-20 xl:px-14">
+        <p style={{
+          fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase",
+          color: "#24D6BC", marginBottom: "1rem",
+        }}>
+          Tecnología
+        </p>
+        <h2
+          id="stack-heading"
+          className="font-display text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-center text-[var(--ink)]"
+          style={{ textWrap: "balance" } as React.CSSProperties}
+        >
+          El stack detrás<br />de cada proyecto.
+        </h2>
+      </div>
+
+      {/* ── Desktop animation: pinned full-screen once title scrolls away ───── */}
       <div
         ref={pinRef}
-        className="hidden h-svh flex-col items-start justify-start overflow-hidden px-8 pt-6 lg:flex xl:px-14"
+        className="hidden h-svh items-center justify-center overflow-hidden lg:flex"
       >
-        <div className="mb-6 w-full">
-          <h2
-            className="mx-auto flex justify-center font-display text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-          >
-            El stack detrás
-          </h2>
-          <h2
-            className="mx-auto mb-4 xl:mb-24 2xl:mb-40 flex justify-center font-display text-[clamp(2.4rem,5.5vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-[var(--ink)]"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-          >
-            de cada proyecto.
-          </h2>
-        </div>
-
         <div style={{
           position: "relative",
           display: "flex",
           alignItems: "center",
           width: "min(96vw, 1240px)",
-          height: "min(56vh, 460px)",
+          height: "min(72vh, 500px)",
           alignSelf: "center",
         }}>
           {/* Left annotation zone */}
