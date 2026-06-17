@@ -83,10 +83,10 @@ export default function LoadingOverlay() {
           bottom: "bottom" in c ? c.bottom : undefined,
           left: "left" in c ? c.left : undefined,
           right: "right" in c ? c.right : undefined,
-          borderTop:    c.borderTop    ? "1px solid rgba(255,255,255,0.13)" : undefined,
-          borderBottom: c.borderBottom ? "1px solid rgba(255,255,255,0.13)" : undefined,
-          borderLeft:   c.borderLeft   ? "1px solid rgba(255,255,255,0.13)" : undefined,
-          borderRight:  c.borderRight  ? "1px solid rgba(255,255,255,0.13)" : undefined,
+          borderTop:    "borderTop"    in c && c.borderTop    ? "1px solid rgba(255,255,255,0.13)" : undefined,
+          borderBottom: "borderBottom" in c && c.borderBottom ? "1px solid rgba(255,255,255,0.13)" : undefined,
+          borderLeft:   "borderLeft"   in c && c.borderLeft   ? "1px solid rgba(255,255,255,0.13)" : undefined,
+          borderRight:  "borderRight"  in c && c.borderRight  ? "1px solid rgba(255,255,255,0.13)" : undefined,
         }} />
       ))}
 

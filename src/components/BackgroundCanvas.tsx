@@ -101,6 +101,7 @@ export default function BackgroundCanvas() {
 
     // ── Render ─────────────────────────────────────────────────────────────────
     function tick() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, W, H);
 
       // Twinkling dots (1×1 px on the CSS dot grid)
