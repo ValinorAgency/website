@@ -860,7 +860,7 @@ export default function HeroParticleAlt() {
         {appState === "code" && !reduceMotion && (
           <motion.div
             key="code-glb"
-            className="pointer-events-none absolute z-[210] left-[12%] right-[12%] top-[14%] bottom-[28%] sm:left-[4%] sm:right-[57%] sm:top-[16%] sm:bottom-[2%]"
+            className="pointer-events-none absolute z-[210] left-[8%] right-[8%] top-[5%] bottom-[22%] sm:left-[4%] sm:right-[46%] sm:top-[8%] sm:bottom-[8%]"
             initial={{ opacity: 0, scale: 0.93, x: "-8%" }}
             animate={{ opacity: 1, scale: 1, x: "0%" }}
             exit={{ opacity: 0, scale: 0.98, x: "-5%", transition: { duration: 0.28 } }}
@@ -873,7 +873,7 @@ export default function HeroParticleAlt() {
         {appState === "ai" && !reduceMotion && (
           <motion.div
             key="ai-glb"
-            className="pointer-events-none absolute z-[210] left-[12%] right-[12%] top-[14%] bottom-[28%] sm:left-[46%] sm:right-[1%] sm:top-[6%] sm:bottom-[2%]"
+            className="pointer-events-none absolute z-[210] left-[4%] right-[4%] top-[2%] bottom-[18%] sm:left-[38%] sm:right-[-1%] sm:top-[2%] sm:bottom-[4%]"
             initial={{ opacity: 0, scale: 0.93, x: "8%" }}
             animate={{ opacity: 1, scale: 1, x: "0%" }}
             exit={{ opacity: 0, scale: 0.98, x: "5%", transition: { duration: 0.28 } }}
@@ -968,7 +968,7 @@ export default function HeroParticleAlt() {
                   ? "sm:left-[51%] sm:right-[4%]"
                   : "sm:left-[4%]  sm:right-[49%]"
                 }`}
-              style={appState === "ai" ? { paddingLeft: "calc(1.5rem + 30px)" } : undefined}
+              style={appState === "ai" ? { paddingLeft: "calc(1.5rem + 60px)" } : undefined}
             >
               <motion.div
                 className="pointer-events-auto flex flex-col gap-4 w-full"

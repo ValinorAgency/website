@@ -14,7 +14,7 @@ export default function Footer() {
     <footer
       id="footer"
       className="px-5 py-12 sm:px-8"
-      style={{ borderTop: "1px solid var(--border)", background: "var(--surface)" }}
+      style={{ borderTop: "1px solid var(--border)", backgroundColor: "var(--surface)" }}
     >
       <div className="section-inner">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">

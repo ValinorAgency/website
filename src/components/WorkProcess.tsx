@@ -49,7 +49,7 @@ export default function WorkProcess() {
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} id="proceso" className="section-shell" style={{ background: "var(--surface)" }}>
+    <section ref={ref} id="proceso" className="section-shell" style={{ backgroundColor: "var(--surface)" }}>
       <div className="section-inner">
 
         <motion.div

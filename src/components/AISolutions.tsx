@@ -33,7 +33,7 @@ export default function AISolutions() {
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} id="ia" className="section-shell" style={{ background: "var(--surface)" }}>
+    <section ref={ref} id="ia" className="section-shell" style={{ backgroundColor: "var(--surface)" }}>
       <div className="section-inner">
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "3.5rem" }}>

@@ -263,6 +263,10 @@ export default function HologramGlbFigure({
     camera.position.set(0, 0.05, 4.6);
 
     const group = new THREE.Group();
+    // 'YXZ' order: Y rotation (auto-spin) applies first around world Y,
+    // then X and Z apply the model's display orientation — prevents the
+    // "spinning in circles" gimbal artefact when baseRotationX ≈ -π/2.
+    group.rotation.order = "YXZ";
     group.rotation.x = baseRotationX;
     group.rotation.y = baseRotationY;
     group.rotation.z = baseRotationZ;
@@ -298,13 +302,6 @@ export default function HologramGlbFigure({
     const mouseVel = new THREE.Vector3();
     let pointerActive = false;
     let pointerInitialized = false;
-    let dragging = false;
-    let lastDragX = 0;
-    let lastDragY = 0;
-    let yawOffset = 0;
-    let pitchOffset = 0;
-    let targetYawOffset = 0;
-    let targetPitchOffset = 0;
     let mouseEnergy = 0;
 
     const isInsideHost = (clientX: number, clientY: number) => {
@@ -319,7 +316,7 @@ export default function HologramGlbFigure({
 
     const updatePointer = (clientX: number, clientY: number) => {
       const rect = host.getBoundingClientRect();
-      if (!isInsideHost(clientX, clientY) && !dragging) {
+      if (!isInsideHost(clientX, clientY)) {
         pointerActive = false;
         return;
       }
@@ -351,40 +348,13 @@ export default function HologramGlbFigure({
 
     const onPointerMove = (event: PointerEvent) => {
       updatePointer(event.clientX, event.clientY);
-
-      if (dragging) {
-        const dx = event.clientX - lastDragX;
-        const dy = event.clientY - lastDragY;
-        lastDragX = event.clientX;
-        lastDragY = event.clientY;
-
-        targetYawOffset += dx * 0.008;
-        targetPitchOffset += dy * 0.005;
-        targetPitchOffset = THREE.MathUtils.clamp(targetPitchOffset, -0.42, 0.42);
-      }
-    };
-
-    const onPointerDown = (event: PointerEvent) => {
-      if (!isInsideHost(event.clientX, event.clientY)) return;
-      dragging = true;
-      pointerActive = true;
-      lastDragX = event.clientX;
-      lastDragY = event.clientY;
-      updatePointer(event.clientX, event.clientY);
-    };
-
-    const onPointerUp = () => {
-      dragging = false;
     };
 
     const onPointerLeave = () => {
       pointerActive = false;
-      dragging = false;
     };
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
-    window.addEventListener("pointerdown", onPointerDown, { passive: true });
-    window.addEventListener("pointerup", onPointerUp);
     window.addEventListener("pointerleave", onPointerLeave);
     window.addEventListener("blur", onPointerLeave);
 
@@ -441,12 +411,10 @@ export default function HologramGlbFigure({
       material.uniforms.uMouseActive.value = pointerActive ? 1 : 0;
       material.uniforms.uMouseEnergy.value = mouseEnergy;
 
-      const pointerTilt = pointerActive ? THREE.MathUtils.clamp(pointerNdc.x, -1, 1) * 0.075 : 0;
-      yawOffset += (targetYawOffset - yawOffset) * (1 - Math.exp(-9 * delta));
-      pitchOffset += (targetPitchOffset - pitchOffset) * (1 - Math.exp(-9 * delta));
-      group.rotation.x = baseRotationX + pitchOffset + Math.sin(elapsed * 0.31) * 0.018 + (pointerActive ? pointerNdc.y * 0.035 : 0);
-      group.rotation.y = baseRotationY + yawOffset + Math.sin(elapsed * 0.42) * 0.045 + pointerTilt;
-      group.rotation.z = baseRotationZ - 0.03;
+      // Slow continuous auto-rotation (~42 s per full turn) with subtle wobble
+      group.rotation.x = baseRotationX + Math.sin(elapsed * 0.31) * 0.018;
+      group.rotation.y = baseRotationY + elapsed * 0.15;
+      group.rotation.z = baseRotationZ;
       group.position.y = Math.sin(elapsed * 0.72) * 0.018;
       renderer.render(scene, camera);
     };
@@ -457,8 +425,6 @@ export default function HologramGlbFigure({
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointerup", onPointerUp);
       window.removeEventListener("pointerleave", onPointerLeave);
       window.removeEventListener("blur", onPointerLeave);
       geometry?.dispose();
