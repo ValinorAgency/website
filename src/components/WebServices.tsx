@@ -1,8 +1,8 @@
 "use client";
-import { cubicBezier, motion, useInView, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef } from "react";
+import { cubicBezier, motion, useInView, useMotionValue, useReducedMotion, useSpring } from "framer-motion"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useEffect, useRef } from "react"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -199,9 +199,10 @@ export default function WebServices() {
               color: "var(--ink)",
               lineHeight: 1.0,
               maxWidth: "16ch",
+              marginBottom: "100px"
             }}
           >
-            Todo lo que tu negocio necesita online
+            Todo lo que tu negocio necesita.
           </h2>
         </motion.div>
       </div>
