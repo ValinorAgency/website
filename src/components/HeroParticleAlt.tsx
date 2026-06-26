@@ -3,6 +3,7 @@
 import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion"
 import { useCallback, useEffect, useRef, useState } from "react"
 import * as THREE from "three"
+import ChladniHero from "./ChladniHero"
 import HologramGlbFigure from "./HologramGlbFigure"
 
 // ── FBO config ────────────────────────────────────────────────────────────────
@@ -522,8 +523,15 @@ function drawFace(ctx: CanvasRenderingContext2D, w: number, h: number) {
 export default function HeroParticleAlt() {
   const expo         = cubicBezier(0.16, 1, 0.3, 1);
   const reduceMotion = useReducedMotion();
-  const [appState, setAppState] = useState<AppState>("default");
+  const [appState, setAppState]     = useState<AppState>("default");
   const [isDissolving, setIsDissolving] = useState(false);
+  // Wait for the Chladni icon to drift left before revealing the title
+  const [titleReady, setTitleReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setTitleReady(true), 6000);
+    return () => clearTimeout(t);
+  }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef    = useRef<HTMLCanvasElement>(null);
@@ -846,6 +854,9 @@ export default function HeroParticleAlt() {
       id="about"
       className="pointer-events-none relative -mt-[4.5rem] flex min-h-svh flex-col items-center justify-center overflow-visible pt-[4.5rem]"
     >
+      {/* Chladni sand intro — absolute z-1, behind text (z-10) but above ambient canvas (z-0) */}
+      <ChladniHero />
+
       {!reduceMotion && (
         <canvas
           ref={canvasRef}
@@ -886,19 +897,20 @@ export default function HeroParticleAlt() {
 
       {/* ── Default hero ─────────────────────────────────────────────────────── */}
       <AnimatePresence>
-        {!isExpanded && (
+        {!isExpanded && titleReady && (
           <motion.div
             key="default-ui"
-            className="pointer-events-auto relative z-10 flex flex-col items-center gap-6 px-4 text-center"
-            initial={{ opacity: 0, scale: 0.97 }}
+            className="pointer-events-auto relative z-10 flex flex-col items-center gap-4 sm:gap-6 px-4 text-center"
+            initial={{ opacity: 0, scale: 0.95, y: 28 }}
             animate={isDissolving
-              ? { opacity: 0, scale: 0.97, filter: "blur(8px)" }
-              : { opacity: 1, scale: 1,    filter: "blur(0px)" }
+              ? { opacity: 0, scale: 0.97, y: 0, filter: "blur(8px)" }
+              : { opacity: 1, scale: 1,    y: 0, filter: "blur(0px)" }
             }
             exit={{ opacity: 0, transition: { duration: 0 } }}
             transition={{
-              opacity: { duration: 0.45, ease: "easeOut" },
-              scale:   { duration: 0.45, ease: "easeOut" },
+              opacity: { duration: 0.85, ease: "easeOut" },
+              scale:   { duration: 0.85, ease: "easeOut" },
+              y:       { duration: 0.85, ease: expo },
               filter:  { duration: 0.40, ease: "easeOut" },
             }}
           >
@@ -906,13 +918,13 @@ export default function HeroParticleAlt() {
             <div className="flex flex-col items-center gap-3">
               <h1
                 className="font-display font-black leading-[0.94]"
-                style={{ fontSize: "clamp(3.6rem, 11vw, 10rem)", letterSpacing: "-0.055em" }}
+                style={{ fontSize: "clamp(2.9rem, 11vw, 10rem)", letterSpacing: "-0.055em" }}
               >
                 <span style={{ color: "rgba(255,255,255,0.96)" }}>Valinor</span>{" "}
                 <span className="text-outline">Agency</span>
               </h1>
               <p
-                className='mt-8'
+                className='mt-4 sm:mt-8'
                 style={{
                   fontSize: "clamp(1.56rem, 1.3vw, 0.75rem)",
                   fontWeight: 200,
@@ -928,9 +940,9 @@ export default function HeroParticleAlt() {
             {/* CTA buttons */}
             <motion.div
               className="flex items-center gap-4"
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.28, duration: 0.55, ease: expo }}
+              transition={{ delay: 0.38, duration: 0.70, ease: expo }}
             >
               <button
                 className="hero-cta-btn"

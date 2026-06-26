@@ -452,12 +452,6 @@ export default function AISolutions() {
           marginBottom: "clamp(3rem, 7vw, 5rem)",
         }}
       >
-        <p style={{
-          fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase",
-          color: "#24D6BC", marginBottom: "1.25rem",
-        }}>
-          Inteligencia Artificial
-        </p>
         <h2
           className="font-display"
           style={{

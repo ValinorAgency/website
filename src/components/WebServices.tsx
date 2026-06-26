@@ -184,12 +184,6 @@ export default function WebServices() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: expo }}
         >
-          <p style={{
-            fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "#24D6BC", marginBottom: "1.5rem",
-          }}>
-            Desarrollo Web
-          </p>
           <h2
             className="font-display"
             style={{

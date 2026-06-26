@@ -90,15 +90,24 @@ export default function LoadingOverlay() {
         }} />
       ))}
 
-      <div style={{ position: "relative", textAlign: "center" }}>
-        {/* Logo */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/VALINOR.png"
-          alt="Valinor Agency"
-          style={{ height: 32, marginBottom: 52, opacity: 0.85, display: "block", margin: "0 auto 52px" }}
-        />
+      {/* Logo — large watermark behind the counter */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logoValinor-removebg.png"
+        alt=""
+        aria-hidden
+        style={{
+          position: "absolute",
+          top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "clamp(280px, 58vw, 720px)",
+          opacity: 0.13,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
 
+      <div style={{ position: "relative", textAlign: "center" }}>
         {/* Counter */}
         <div style={{
           fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",

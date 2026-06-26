@@ -286,12 +286,6 @@ export default function TechStackSection() {
             zIndex: 2, pointerEvents: "none",
           }}
         >
-          <p style={{
-            fontSize: "0.65rem", letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "#24D6BC", marginBottom: "1rem",
-          }}>
-            Tecnología
-          </p>
           <h2
             id="stack-heading"
             className="font-display text-[clamp(4rem,9vw,12rem)] font-semibold leading-[0.92] tracking-[-0.055em] text-center text-[var(--ink)]"
