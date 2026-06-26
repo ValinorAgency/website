@@ -198,7 +198,7 @@ function loopShape(): Pt[] {
 // ─── Particle canvas ───────────────────────────────────────────────────────
 
 const CANVAS_SIZE = 300;
-const PARTICLE_COUNT = 200;
+const PARTICLE_COUNT = 550;
 
 interface ParticleCanvasProps {
   shapeFn: () => Pt[];
@@ -223,25 +223,34 @@ function ParticleCanvas({ shapeFn, reduce }: ParticleCanvasProps) {
     ctx.scale(dpr, dpr);
 
     const cx = CANVAS_SIZE / 2, cy = CANVAS_SIZE / 2, radius = CANVAS_SIZE / 2 - 8;
-    const targets = samplePts(shapeFn(), PARTICLE_COUNT);
+    const FOV = 2.2; // perspectiva: mayor = menos distorsión
 
-    const particles = targets.map(pt => ({
-      hx: cx + pt.x * radius,
-      hy: cy + pt.y * radius,
-      x:  cx + pt.x * radius + (Math.random() - 0.5) * 18,
-      y:  cy + pt.y * radius + (Math.random() - 0.5) * 18,
+    const particles = samplePts(shapeFn(), PARTICLE_COUNT).map(pt => ({
+      nx: pt.x,                             // home X normalizado [-1, 1]
+      ny: pt.y,                             // home Y normalizado [-1, 1]
+      nz: (Math.random() - 0.5) * 0.28,    // profundidad aleatoria
+      x:  cx + pt.x * radius + (Math.random() - 0.5) * 16,
+      y:  cy + pt.y * radius + (Math.random() - 0.5) * 16,
       vx: 0, vy: 0,
       phase: Math.random() * Math.PI * 2,
       size:  1.1 + Math.random() * 1.0,
     }));
 
     if (reduce) {
+      // Dibuja estático con leve perspectiva en ángulo fijo
+      const angle = 0.4;
+      const cos = Math.cos(angle), sin = Math.sin(angle);
       particles.forEach(p => {
+        const rx = p.nx * cos - p.nz * sin;
+        const rz = p.nx * sin + p.nz * cos;
+        const persp = FOV / (FOV + rz);
+        ctx.globalAlpha = 0.4 + 0.4 * persp;
         ctx.beginPath();
-        ctx.arc(p.hx, p.hy, 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(36,214,188,0.75)";
+        ctx.arc(cx + rx * radius * persp, cy + p.ny * radius * persp, Math.max(0.3, 1.5 * persp), 0, Math.PI * 2);
+        ctx.fillStyle = "#24D6BC";
         ctx.fill();
       });
+      ctx.globalAlpha = 1;
       return;
     }
 
@@ -249,24 +258,37 @@ function ParticleCanvas({ shapeFn, reduce }: ParticleCanvasProps) {
 
     function frame(now: number) {
       if (!ctx) return;
-      const t   = (now - t0) / 1000;
-      const spring   = 0.062;
-      const noiseAmp = 1.6;
+      const t        = (now - t0) / 1000;
+      const angle    = t * 0.22; // rotación lenta sobre eje Y
+      const cos      = Math.cos(angle);
+      const sin      = Math.sin(angle);
+      const spring   = 0.058;
+      const noiseAmp = 1.4;
       const friction = 0.80;
 
       ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-      particles.forEach(p => {
-        const tx = p.hx + Math.sin(t * 1.15 + p.phase) * noiseAmp;
-        const ty = p.hy + Math.cos(t * 0.88 + p.phase * 1.3) * noiseAmp;
+      // Ordenar por Z rotado (painters algorithm: los más lejanos primero)
+      const sorted = particles.map(p => {
+        const rz = p.nx * sin + p.nz * cos;
+        return { p, rz };
+      }).sort((a, b) => a.rz - b.rz);
+
+      sorted.forEach(({ p, rz }) => {
+        const rx    = p.nx * cos - p.nz * sin;
+        const persp = FOV / (FOV + rz);
+
+        const tx = cx + rx * radius * persp + Math.sin(t * 1.15 + p.phase) * noiseAmp * persp;
+        const ty = cy + p.ny * radius * persp + Math.cos(t * 0.88 + p.phase * 1.3) * noiseAmp * persp;
+
         p.vx = (p.vx + (tx - p.x) * spring) * friction;
         p.vy = (p.vy + (ty - p.y) * spring) * friction;
         p.x += p.vx;
         p.y += p.vy;
 
-        ctx.globalAlpha = 0.72;
+        ctx.globalAlpha = 0.32 + 0.52 * persp; // más oscuro en profundidad
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, Math.max(0.3, p.size * persp), 0, Math.PI * 2);
         ctx.fillStyle = "#24D6BC";
         ctx.fill();
       });

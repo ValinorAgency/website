@@ -2,7 +2,7 @@ import BackgroundCanvas from "@/components/BackgroundCanvas"
 import CustomCursor from "@/components/CustomCursor"
 import LoadingOverlay from "@/components/LoadingOverlay"
 import type { Metadata } from "next"
-import { DM_Sans, Inter, Lora } from "next/font/google"
+import { Cinzel, DM_Sans, Inter, Lora } from "next/font/google"
 import "./globals.css"
 
 const inter = Inter({
@@ -16,6 +16,13 @@ const lora = Lora({
   variable: "--font-lora",
   display: "swap",
   style: ["normal", "italic"],
+});
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-cinzel",
+  display: "swap",
+  weight: ["400", "600"],
 });
 
 const dmSans = DM_Sans({
@@ -40,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`h-full antialiased ${inter.variable} ${lora.variable} ${dmSans.variable}`}>
+    <html lang="es" className={`h-full antialiased ${inter.variable} ${lora.variable} ${dmSans.variable} ${cinzel.variable}`}>
       <body className="min-h-full flex flex-col bg-[var(--page-background)] text-[var(--ink)]">
         <LoadingOverlay />
         <BackgroundCanvas />

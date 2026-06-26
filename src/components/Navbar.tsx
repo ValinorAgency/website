@@ -28,9 +28,15 @@ export default function Navbar() {
     >
       <div className="w-full px-5 py-3.5 sm:px-8 lg:px-10">
         <div className="flex items-center justify-between gap-4">
-          <a href="#" className="flex items-center">
+          <a href="#" className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/VALINOR.png" alt="Valinor Agency" className="h-10 w-auto" />
+            <img src="/prueba_icono.png" alt="Valinor icon" className="h-30 w-30 object-contain brightness-0 invert" />
+            {/* <span
+              className="text-lg font-semibold tracking-[0.18em] uppercase"
+              style={{ fontFamily: "var(--font-cinzel)", color: "rgba(255,255,255,0.95)", letterSpacing: "0.18em" }}
+            >
+              VALINOR
+            </span> */}
           </a>
 
           <nav className="hidden lg:flex items-center gap-1">
