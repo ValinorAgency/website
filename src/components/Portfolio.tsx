@@ -282,8 +282,8 @@ export default function Portfolio() {
           .mobile-project-hand { width: 1.35rem; height: 1.35rem; display: grid; place-items: center; color: #111; transform-origin: 70% 55%; }
           .mobile-project-hand svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
           .mobile-project-title:focus-visible { outline: 2px solid #111; outline-offset: 5px; }
-          .project-detail-backdrop { position: fixed; z-index: 120; inset: 0; display: grid; align-items: end; padding: .75rem; background: rgba(3,4,7,.78); backdrop-filter: blur(8px); }
-          .project-detail-card { position: relative; width: 100%; max-height: calc(100svh - 1.5rem); overflow-y: auto; border: 1px solid rgba(255,255,255,.15); border-radius: 20px; background: #111217; box-shadow: 0 28px 80px rgba(0,0,0,.5); }
+          .project-detail-backdrop { position: fixed; z-index: 120; inset: 0; display: grid; place-items: center; padding: .75rem; background: rgba(3,4,7,.78); backdrop-filter: blur(8px); }
+          .project-detail-card { position: relative; width: 100%; max-width: 40rem; max-height: calc(100svh - 1.5rem); overflow-y: auto; border: 1px solid rgba(255,255,255,.15); border-radius: 20px; background: #111217; box-shadow: 0 28px 80px rgba(0,0,0,.5); }
           .project-detail-close { position: absolute; z-index: 2; top: .75rem; right: .75rem; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(17,17,20,.14); border-radius: 50%; background: rgba(255,255,255,.75); color: #111; font-size: 1.65rem; line-height: 1; cursor: pointer; }
           .project-detail-close:focus-visible { outline: 2px solid #111; outline-offset: 3px; }
           .project-detail-visual { min-height: 15rem; display: grid; place-items: center; padding: 1rem; border-radius: 19px 19px 0 0; overflow: hidden; }
