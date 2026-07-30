@@ -1,51 +1,67 @@
 "use client";
 
-import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion"
-import { useState } from "react"
+import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const links = [
-  { label: "About", href: "#about" },
+  { label: "Inicio", href: "#about" },
   { label: "Servicios", href: "#servicios" },
-  { label: "Trabajos", href: "#trabajos" },
+  { label: "Por qué Valinor", href: "#por-que" },
+  { label: "Proyectos", href: "#portfolio" },
   { label: "Contacto", href: "#contacto" },
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    firstLinkRef.current?.focus();
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <motion.header
       initial={reduceMotion ? false : { y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.5, ease: expo }}
-      className="relative z-[var(--z-sticky)] w-full"
-      style={{
-        background: "transparent",
-      }}
+      className="absolute inset-x-0 top-0 z-[var(--z-sticky)] w-full"
     >
       <div className="w-full px-5 py-3.5 sm:px-8 lg:px-10">
         <div className="flex items-center justify-between gap-4">
           <a href="#" className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logoValinor-removebg.png" alt="Valinor icon" className="h-20 w-20 object-contain brightness-0 invert" />
-            {/* <span
-              className="text-lg font-semibold tracking-[0.18em] uppercase"
-              style={{ fontFamily: "var(--font-cinzel)", color: "rgba(255,255,255,0.95)", letterSpacing: "0.18em" }}
-            >
-              VALINOR
-            </span> */}
+            <img
+              src="/logoValinor-removebg.png"
+              alt="Valinor Agency"
+              className="h-20 w-20 object-contain brightness-0 invert"
+            />
           </a>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
             {links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:text-white hover:bg-white/[0.08]"
-                style={{ color: "rgba(255,255,255,0.78)" }}
+                className="rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white"
               >
                 {link.label}
               </a>
@@ -59,39 +75,16 @@ export default function Navbar() {
 
             <button
               type="button"
-              className="lg:hidden flex h-9 w-9 items-center justify-center rounded-full border text-sm font-medium transition-colors"
-              style={{
-                borderColor: "var(--border)",
-                background: "rgba(255,255,255,0.07)",
-                color: "var(--ink)",
-              }}
-              aria-label={menuOpen ? "Cerrar navegación" : "Abrir navegación"}
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.07] text-white transition-colors hover:bg-white/10 lg:hidden"
+              aria-label="Abrir navegación"
               aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((current) => !current)}
+              aria-controls="mobile-navigation"
+              onClick={() => setMenuOpen(true)}
             >
-              <div className="flex flex-col gap-1.5 w-4">
-                <span
-                  className={`h-0.5 w-full rounded-full transition-transform duration-300`}
-                  style={{
-                    background: "var(--ink)",
-                    transform: menuOpen ? "translateY(8px) rotate(45deg)" : "",
-                  }}
-                />
-                <span
-                  className="h-0.5 w-full rounded-full transition-all duration-300"
-                  style={{
-                    background: "var(--ink)",
-                    opacity: menuOpen ? 0 : 1,
-                  }}
-                />
-                <span
-                  className="h-0.5 w-full rounded-full transition-transform duration-300"
-                  style={{
-                    background: "var(--ink)",
-                    transform: menuOpen ? "translateY(-8px) rotate(-45deg)" : "",
-                  }}
-                />
-              </div>
+              <span className="flex w-4 flex-col gap-1.5" aria-hidden="true">
+                <span className="h-px w-full bg-current" />
+                <span className="h-px w-3 self-end bg-current" />
+              </span>
             </button>
           </div>
         </div>
@@ -100,41 +93,102 @@ export default function Navbar() {
       <AnimatePresence>
         {menuOpen ? (
           <motion.div
-            initial={reduceMotion ? false : { height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.25, ease: "easeOut" }}
-            className="overflow-hidden lg:hidden"
-            style={{ borderTop: "1px solid var(--border)", background: "rgba(8, 8, 12, 0.96)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+            className="fixed inset-0 z-[var(--z-modal)] lg:hidden"
+            initial="closed"
+            animate="open"
+            exit="closed"
           >
-            <div className="section-inner flex flex-col gap-1 px-5 py-4 sm:px-8">
-              {links.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="rounded-xl px-3 py-3 text-sm font-medium transition-colors"
-                  style={{ color: "var(--ink-muted)" }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--surface)";
-                    e.currentTarget.style.color = "var(--ink)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "";
-                    e.currentTarget.style.color = "var(--ink-muted)";
-                  }}
+            <motion.button
+              type="button"
+              aria-label="Cerrar navegación"
+              className="absolute inset-0 h-full w-full bg-black/55"
+              onClick={closeMenu}
+              variants={{ closed: { opacity: 0 }, open: { opacity: 1 } }}
+              transition={{ duration: reduceMotion ? 0 : 0.3 }}
+            />
+
+            <motion.div
+              id="mobile-navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navegación principal"
+              className="absolute inset-y-0 right-0 flex w-full max-w-[34rem] flex-col overflow-y-auto bg-[#ededed] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3.5 text-[#0b0b0e] sm:px-8"
+              variants={{
+                closed: { x: "100%" },
+                open: { x: 0 },
+              }}
+              transition={{ duration: reduceMotion ? 0 : 0.65, ease: expo }}
+            >
+              <div className="flex h-20 shrink-0 items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-black/50">
+                  Navegación
+                </span>
+                <button
+                  type="button"
+                  onClick={closeMenu}
+                  aria-label="Cerrar navegación"
+                  className="flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-black/15 px-3 text-xs font-medium uppercase tracking-[0.08em] transition-colors hover:bg-black hover:text-white"
                 >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href="#contacto"
-                onClick={() => setMenuOpen(false)}
-                className="pill-button-dark mt-2 justify-center px-5 py-3"
+                  <span className="hidden sm:inline">Cerrar</span>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+                    <path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <motion.nav
+                className="my-auto py-10"
+                aria-label="Navegación mobile"
+                variants={{
+                  closed: { transition: { staggerChildren: 0.035, staggerDirection: -1 } },
+                  open: { transition: { delayChildren: reduceMotion ? 0 : 0.18, staggerChildren: reduceMotion ? 0 : 0.075 } },
+                }}
               >
-                Hablemos
-              </a>
-            </div>
+                <ul>
+                  {links.map((link, index) => (
+                    <motion.li
+                      key={link.label}
+                      className="overflow-hidden border-b border-black/15"
+                      variants={{
+                        closed: { opacity: 0, y: 45 },
+                        open: { opacity: 1, y: 0 },
+                      }}
+                      transition={{ duration: reduceMotion ? 0 : 0.55, ease: expo }}
+                    >
+                      <a
+                        ref={index === 0 ? firstLinkRef : undefined}
+                        href={link.href}
+                        onClick={closeMenu}
+                        className="group flex min-h-16 items-center gap-4 py-3 font-display text-[clamp(2rem,10vw,4rem)] font-medium leading-none tracking-[-0.04em]"
+                      >
+                        <span className="w-6 text-[10px] font-semibold tracking-normal text-black/40">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="transition-transform duration-300 group-hover:translate-x-2 group-focus-visible:translate-x-2">
+                          {link.label}
+                        </span>
+                        <span aria-hidden="true" className="ml-auto text-2xl font-light opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-x-1 group-hover:opacity-100 group-focus-visible:translate-x-1 group-focus-visible:opacity-100">
+                          ↗
+                        </span>
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.nav>
+
+              <motion.div
+                className="flex items-end justify-between gap-5 border-t border-black/15 pt-5"
+                variants={{ closed: { opacity: 0, y: 12 }, open: { opacity: 1, y: 0 } }}
+                transition={{ delay: reduceMotion ? 0 : 0.48, duration: reduceMotion ? 0 : 0.4 }}
+              >
+                <p className="max-w-56 text-xs leading-5 text-black/55">
+                  Websites, ecommerce y aplicaciones a medida.
+                </p>
+                <a href="mailto:hola@valinor.agency" className="text-xs font-semibold underline decoration-black/25 underline-offset-4">
+                  hola@valinor.agency
+                </a>
+              </motion.div>
+            </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>

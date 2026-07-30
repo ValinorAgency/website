@@ -32,7 +32,7 @@ type ParticleSceneProps = {
   pointerActiveRef: MutableRefObject<boolean>;
 };
 
-const TITLE_LINES = ["Webs Profesionales", "a medida. /", "Agentes de AI", "personalizados."];
+const TITLE_LINES = ["Webs Profesionales", "a medida. /", "Aplicaciones web", "a medida."];
 
 const TEXT_STEP = 1;
 const MAX_PARTICLES = 32000;

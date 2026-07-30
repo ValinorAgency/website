@@ -7,7 +7,7 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const features = [
   {
-    title: "Automatización",
+    title: "Dashboards",
     description:
       "Sistemas que eliminan tareas repetitivas y convierten procesos manuales en una secuencia clara, medible y mantenible.",
     accent: "var(--brand)",
@@ -33,9 +33,9 @@ const features = [
     ),
   },
   {
-    title: "Agentes",
+    title: "Sistemas internos",
     description:
-      "Asistentes que responden con contexto, operan sobre reglas y escalan a un humano cuando la situación lo exige.",
+      "Herramientas que centralizan información, ordenan permisos y acompañan la forma de trabajar de cada equipo.",
     accent: "var(--brand)",
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -96,7 +96,7 @@ export default function Features() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section id="servicios-ai" className="section-shell">
+    <section id="soluciones" className="section-shell">
       <div className="section-inner">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 18 }}
@@ -109,7 +109,7 @@ export default function Features() {
             className="font-display text-[clamp(2.2rem,4.8vw,3.75rem)] font-semibold leading-[1.02] tracking-[-0.05em]"
             style={{ textWrap: "balance" }}
           >
-            Servicios que ordenan presencia digital y automatización.
+            Servicios para presentar, vender y gestionar mejor tu negocio.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-7 text-[var(--ink-muted)] sm:text-lg">
             Cada bloque resuelve una necesidad distinta, con la misma

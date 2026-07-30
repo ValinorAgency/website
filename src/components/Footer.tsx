@@ -4,9 +4,10 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   const links = [
-    { label: "About", href: "#about" },
+    { label: "Inicio", href: "#about" },
     { label: "Servicios", href: "#servicios" },
-    { label: "Trabajos", href: "#trabajos" },
+    { label: "Soluciones", href: "#soluciones" },
+    { label: "Proyectos", href: "#portfolio" },
     { label: "Contacto", href: "#contacto" },
   ];
 
@@ -19,12 +20,18 @@ export default function Footer() {
       <div className="section-inner">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-xs">
-            <a href="#" className="flex items-center">
+            <a href="#" className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/VALINOR.png" alt="Valinor Agency" style={{ height: 36, width: "auto", opacity: 0.9 }} />
+              <img
+                src="/logoValinor-removebg.png"
+                alt=""
+                aria-hidden="true"
+                className="h-20 w-20 object-contain brightness-0 invert"
+              />
+              <span className="font-display text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">Valinor Agency</span>
             </a>
             <p className="mt-4 text-sm leading-6" style={{ color: "var(--ink-muted)" }}>
-              Diseñamos interfaces que transmiten precisión, criterio y confianza.
+              Diseñamos y desarrollamos soluciones web claras, útiles y adaptadas a cada negocio.
             </p>
           </div>
 
@@ -54,7 +61,7 @@ export default function Footer() {
           style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem" }}
         >
           <p className="text-sm" style={{ color: "var(--ink-faint)" }}>© {year} Valinor Agency.</p>
-          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>Web premium y automatización de IA</p>
+          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>Websites, ecommerce y aplicaciones a medida</p>
         </div>
       </div>
     </footer>

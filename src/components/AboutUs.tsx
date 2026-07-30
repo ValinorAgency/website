@@ -48,15 +48,15 @@ export default function AboutUs() {
               lineHeight: 1.15,
               marginBottom: "1.5rem",
             }}>
-              Construimos lo que otros dicen que es complicado
+              Diseñamos soluciones digitales que se entienden y funcionan
             </h2>
             <p style={{
               fontSize: "0.95rem", color: "var(--ink-muted)", lineHeight: 1.75, marginBottom: "1rem",
             }}>
-              Valinor Agency es un equipo especializado en desarrollo web de alto rendimiento y soluciones de inteligencia artificial aplicada. Trabajamos con startups, empresas en crecimiento y equipos que necesitan tecnología seria sin la burocracia de una agencia tradicional.
+              Valinor Agency es un equipo especializado en diseño y desarrollo web. Trabajamos con empresas, profesionales y equipos que necesitan presentar mejor su propuesta, vender online o resolver una operación con una herramienta propia.
             </p>
             <p style={{ fontSize: "0.95rem", color: "var(--ink-muted)", lineHeight: 1.75 }}>
-              Cada proyecto es una colaboración real: entendemos el negocio, proponemos la solución técnica óptima y construimos con código limpio, documentado y mantenible.
+              Cada proyecto empieza por entender el negocio y el resultado esperado. A partir de eso proponemos una solución concreta, la validamos en etapas y la construimos para que sea clara, mantenible y fácil de usar.
             </p>
 
             <div style={{
@@ -68,9 +68,9 @@ export default function AboutUs() {
               flexWrap: "wrap",
             }}>
               {[
-                { n: "40+", label: "proyectos entregados" },
-                { n: "3 años", label: "de experiencia" },
-                { n: "98%", label: "tasa de satisfacción" },
+                { n: "A medida", label: "alcance y diseño" },
+                { n: "Por etapas", label: "entregas revisables" },
+                { n: "Propio", label: "código entregable" },
               ].map(({ n, label }) => (
                 <div key={label}>
                   <div style={{

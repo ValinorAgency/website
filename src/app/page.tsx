@@ -2,12 +2,10 @@ import Navbar        from "@/components/Navbar";
 import HeroParticleAlt from "@/components/HeroParticleAlt";
 import WebServices    from "@/components/WebServices";
 import TechStackSection from "@/components/TechStackSection";
-import AISolutions    from "@/components/AISolutions";
-import ProblemsSolved from "@/components/ProblemsSolved";
 import Portfolio      from "@/components/Portfolio";
+import ScrollTextLines from "@/components/ScrollTextLines";
 import WhyUs          from "@/components/WhyUs";
 import WorkProcess    from "@/components/WorkProcess";
-import AboutUs        from "@/components/AboutUs";
 import FinalCTA       from "@/components/FinalCTA";
 import Footer         from "@/components/Footer";
 
@@ -19,12 +17,10 @@ export default function Home() {
         <HeroParticleAlt />
         <WebServices />
         <TechStackSection />
-        <AISolutions />
-        <ProblemsSolved />
         <Portfolio />
+        <ScrollTextLines />
         <WhyUs />
         <WorkProcess />
-        <AboutUs />
         <FinalCTA />
       </main>
       <Footer />

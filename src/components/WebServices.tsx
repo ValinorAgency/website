@@ -47,9 +47,9 @@ function MagneticTag({ children }: { children: string }) {
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const NAVBAR_H      = 72;   // px — fixed navbar height
-const STACK_PEEK    = 64;   // px — visible gap between stacked card tabs
+const STACK_DEPTH   = 22;   // px — offset for cards receding behind the active card
 const SCROLL_BUF_VH = 1.1;  // viewport heights of scroll per card
-const CARD_HEIGHT   = 750;  // px — card height
+const CARD_HEIGHT   = 620;  // px — card height
 
 const services = [
   {
@@ -64,29 +64,28 @@ const services = [
     lines: ["E-", "Commerce"],
     desc: "Tiendas online preparadas para vender desde el día uno. Catálogos, pagos integrados, inventario y panel de gestión completo a medida.",
     tags: ["Pagos", "Inventario", "Panel admin"],
-    bg: "#F6F6F6",
+    bg: "#FDFCF9",
   },
   {
     num: "03",
     lines: ["Plataformas", "& Apps"],
     desc: "Aplicaciones web internas y conexiones con cualquier servicio externo. CRMs propios, portales de clientes, ERPs, APIs y herramientas de equipo.",
     tags: ["Dashboards", "APIs", "Integraciones", "Auth"],
-    bg: "#EEEEEE",
+    bg: "#FBFAF6",
   },
   {
     num: "04",
-    lines: ["Mantenimiento", "& Soporte"],
-    desc: "Tu web actualizada, segura y en funcionamiento. Monitoreo proactivo, actualizaciones y soporte técnico continuo sin sorpresas.",
-    tags: ["Uptime", "Updates", "Seguridad"],
-    bg: "#E6E6E6",
+    lines: ["Dashboards", "& Tableros"],
+    desc: "Paneles para centralizar indicadores, visualizar el estado de la operación y acceder a la información importante sin revisar múltiples archivos.",
+    tags: ["Métricas", "Reportes", "Datos"],
+    bg: "#F9F8F4",
   },
   {
     num: "05",
-    lines: ["Tiendas en", "Plataformas"],
-    desc: "Shopify y Tienda Nube: las plataformas líderes para vender online sin desarrollo a medida. Setup completo, tema custom y pagos locales integrados.",
-    tags: ["Shopify", "Tienda Nube", "Mercado Pago"],
-    badge: "Económico",
-    bg: "#DEDEDE",
+    lines: ["Soluciones", "a Medida"],
+    desc: "Sistemas y herramientas web construidos para un proceso específico: portales, paneles internos y productos digitales que se adaptan al negocio.",
+    tags: ["Portales", "Sistemas internos", "Integraciones"],
+    bg: "#F7F6F1",
   },
 ];
 
@@ -107,39 +106,31 @@ export default function WebServices() {
     const isMobile = window.innerWidth < 768;
 
     if (isMobile) {
-      // Mobile: cards flow vertically, each slides in from below on scroll
-      const tweens = cards.map(card =>
-        gsap.fromTo(card,
-          { y: 50, autoAlpha: 0 },
-          {
-            y: 0, autoAlpha: 1, duration: 0.65, ease: "power2.out",
-            scrollTrigger: { trigger: card, start: "top 88%" },
-          }
-        )
-      );
-      return () => {
-        tweens.forEach(t => { t.scrollTrigger?.kill(); t.kill(); });
-        cards.forEach(card => gsap.set(card, { clearProps: "all" }));
-      };
+      // Mobile uses native sticky positioning: lighter, reversible and touch-friendly.
+      return;
     }
 
     // Desktop: pin the container and stack cards via GSAP
-    const N     = services.length;
-    const slotH = window.innerHeight * SCROLL_BUF_VH;
-    const dwell = window.innerHeight * 0.35;
+    const N = services.length;
+    const viewportHeight = window.innerHeight;
+    const availableHeight = viewportHeight - NAVBAR_H;
+    const cardHeight = Math.min(CARD_HEIGHT, Math.max(480, availableHeight - 32));
+    const stackTop = Math.max(16, (availableHeight - cardHeight) / 2);
+    const stackDepth = Math.min(STACK_DEPTH, Math.max(0, (stackTop - 8) / (N - 1)));
+    const slotH = viewportHeight * SCROLL_BUF_VH;
+    const dwell = viewportHeight * 0.35;
     const total = (N - 1) * slotH + dwell;
 
-    // Set container to a fixed viewport height so absolute cards clip correctly
-    gsap.set(container, { height: window.innerHeight - NAVBAR_H });
+    // Every active card lands in the same vertically centered reading position.
+    gsap.set(container, { height: availableHeight });
 
-    // Cards switch to absolute positioning; left:0/right:0 combined with the
-    // JSX margin gives the same horizontal inset as the mobile layout
     cards.forEach((card, i) => {
       gsap.set(card, {
         position: "absolute",
-        top: i * STACK_PEEK,
+        top: stackTop,
         left: 0,
         right: 0,
+        height: cardHeight,
         y: i * slotH,
         scale: 1,
         transformOrigin: "50% 0%",
@@ -156,10 +147,14 @@ export default function WebServices() {
       onUpdate(self) {
         const slots = (self.progress * total) / slotH;
         cards.forEach((card, i) => {
-          const depth = Math.min(Math.max(0, slots - i), N - 1 - i);
+          const relativePosition = i - slots;
+          const depth = Math.min(Math.max(0, -relativePosition), N - 1);
+          const incomingY = Math.max(0, relativePosition * slotH);
+          const stackedY = -depth * stackDepth;
+
           gsap.set(card, {
-            y:     Math.max(0, (i - slots) * slotH),
-            scale: depth > 0.005 ? 1 - depth * 0.04 : 1,
+            y: relativePosition > 0 ? incomingY : stackedY,
+            scale: 1 - depth * 0.025,
           });
         });
       },
@@ -169,7 +164,7 @@ export default function WebServices() {
       st.kill();
       gsap.set(container, { clearProps: "height" });
       cards.forEach(card =>
-        gsap.set(card, { clearProps: "position,top,left,right,y,scale,transformOrigin" })
+        gsap.set(card, { clearProps: "position,top,left,right,height,y,scale,transformOrigin" })
       );
     };
   }, [reduce]);
@@ -185,7 +180,7 @@ export default function WebServices() {
           transition={{ duration: 0.8, ease: expo }}
         >
           <h2
-            className="font-display"
+            className="services-heading font-display"
             style={{
               fontSize: "clamp(3.5rem, 7.5vw, 9rem)",
               fontWeight: 600,
@@ -204,12 +199,14 @@ export default function WebServices() {
       {/* ── Stacking cards — pinned by ScrollTrigger (desktop) ─────────────── */}
       <div
         ref={cardsRef}
+        data-services-stack
         style={{ position: "relative", overflow: "hidden", zIndex: 15 }}
       >
         {services.map((s, i) => (
           <div
             key={s.num}
             ref={el => { cardRefs.current[i] = el; }}
+            data-service-card
             className="relative"
             style={{
               // position comes from className="relative"; GSAP overrides to
@@ -218,12 +215,13 @@ export default function WebServices() {
               margin: "0 clamp(2rem, 6vw, 5rem)",
               marginBottom: "clamp(1rem, 3vw, 1.5rem)",
               zIndex: i + 1,
+              "--service-index": i,
               background: s.bg,
               borderRadius: "20px",
               border: "1px solid rgba(0,0,0,0.08)",
               overflow: "hidden",
               willChange: "transform",
-            }}
+            } as React.CSSProperties}
           >
             {/* Subtle top glow */}
             <div aria-hidden style={{
@@ -231,32 +229,20 @@ export default function WebServices() {
               background: "radial-gradient(ellipse 70% 25% at 50% 0%, rgba(0,0,0,0.02) 0%, transparent 70%)",
             }} />
 
-            <div style={{
+            <div data-service-content style={{
               position: "relative",
               height: "100%",
               padding: "clamp(2rem, 4vw, 3.5rem) clamp(2rem, 5vw, 4.5rem)",
               display: "flex",
               flexDirection: "column",
             }}>
-              {/* Number + badge — top right */}
+              {/* Card number — top right */}
               <div style={{
                 position: "absolute",
                 top: "clamp(1.5rem, 3vw, 2.5rem)",
                 right: "clamp(2rem, 5vw, 4.5rem)",
                 display: "flex", alignItems: "center", gap: "0.6rem",
               }}>
-                {"badge" in s && (
-                  <span style={{
-                    fontSize: "0.55rem", letterSpacing: "0.12em", textTransform: "uppercase",
-                    padding: "0.2rem 0.65rem",
-                    background: "rgba(36,214,188,0.10)",
-                    border: "1px solid rgba(36,214,188,0.22)",
-                    borderRadius: "99px",
-                    color: "#24D6BC",
-                  }}>
-                    {(s as typeof s & { badge: string }).badge}
-                  </span>
-                )}
                 <span style={{
                   fontFamily: "ui-monospace, monospace",
                   fontSize: "0.6rem", letterSpacing: "0.1em",
@@ -282,7 +268,7 @@ export default function WebServices() {
               </h3>
 
               {/* Tags + description */}
-              <div style={{ marginTop: "10.25rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+              <div data-service-details style={{ marginTop: "clamp(3rem, 7vh, 5.5rem)", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                   {s.tags.map(t => <MagneticTag key={t}>{t}</MagneticTag>)}
                 </div>
@@ -312,7 +298,65 @@ export default function WebServices() {
           </div>
         ))}
       </div>
+      <style>{`
+        @media (max-width: 767px) {
+          #servicios .services-heading {
+            max-width: 12ch !important;
+            margin-right: auto;
+            margin-bottom: 3rem !important;
+            margin-left: auto;
+            font-size: clamp(2.85rem, 13.5vw, 4.75rem) !important;
+            font-weight: 800 !important;
+            text-align: center;
+            text-transform: uppercase;
+          }
+          #servicios [data-services-stack] {
+            overflow: visible !important;
+            padding-bottom: 2rem;
+          }
 
+          #servicios [data-service-card] {
+            position: sticky !important;
+            top: calc(4.75rem + var(--service-index) * 0.65rem);
+            height: auto !important;
+            min-height: min(31rem, calc(100svh - 6.5rem));
+            margin: 0 1rem 1rem !important;
+            border-radius: 16px !important;
+            transform-origin: 50% 0;
+            background: #f7f7f7 !important;
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.22);
+          }
+
+          #servicios [data-service-content] {
+            min-height: inherit;
+            padding: 1.5rem 1.25rem 1.4rem !important;
+          }
+
+          #servicios [data-service-details] {
+            margin-top: clamp(1.5rem, 5vh, 2.75rem) !important;
+            gap: 0.9rem !important;
+          }
+        }
+
+        @media (max-width: 374px) {
+          #servicios [data-service-card] {
+            top: calc(4.25rem + var(--service-index) * 0.5rem);
+            min-height: calc(100svh - 5.25rem);
+            margin-inline: 0.75rem !important;
+          }
+
+          #servicios [data-service-content] {
+            padding-inline: 1rem !important;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          #servicios [data-service-card] {
+            position: relative !important;
+            top: auto !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

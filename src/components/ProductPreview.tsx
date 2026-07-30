@@ -8,7 +8,7 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const sidebarItems = [
   { label: "Resumen", active: true },
-  { label: "Agentes", active: false },
+  { label: "Aplicaciones", active: false },
   { label: "Proceso", active: false },
   { label: "Verificación", active: false },
 ];
@@ -21,7 +21,7 @@ const checkpoints = [
 ];
 
 const activity = [
-  { label: "Leads calificados", value: "124", delta: "+18%" },
+  { label: "Consultas", value: "24", delta: "Este mes" },
   { label: "Tareas automáticas", value: "892", delta: "esta semana" },
   { label: "Verificaciones", value: "41", delta: "sin fricción" },
 ];
@@ -60,7 +60,7 @@ export default function ProductPreview() {
             Una muestra de trabajos reales, no solo pantallas.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-7 text-[var(--ink-muted)] sm:text-lg">
-            La vista funciona como una demo de entregables: web, automatización y
+            La vista funciona como una demo de entregables: web, aplicaciones y
             verificación en una sola pieza para comunicar criterio técnico sin
             recargar.
           </p>
@@ -96,7 +96,7 @@ export default function ProductPreview() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-[var(--ink)]">Valinor Agency</p>
-                  <p className="text-xs text-[var(--ink-faint)]">Webs + agentes</p>
+                  <p className="text-xs text-[var(--ink-faint)]">Webs + aplicaciones</p>
                 </div>
               </div>
 

@@ -11,15 +11,15 @@ const problems = [
   },
   {
     problem: "Tengo procesos manuales que consumen tiempo.",
-    solution: "Mapeamos el proceso, identificamos los pasos automatizables y construimos el flujo. La primera semana ya ves el ahorro.",
+    solution: "Relevamos el circuito, ordenamos la información y creamos una herramienta que simplifica los pasos repetitivos y reduce errores.",
   },
   {
     problem: "Mi equipo usa cinco herramientas que no se hablan entre sí.",
     solution: "Conectamos tus sistemas con integraciones a medida: sin migrar todo, sin fricción, con los datos en un solo lugar.",
   },
   {
-    problem: "Quiero usar IA pero no sé por dónde empezar.",
-    solution: "Hacemos un diagnóstico de tu operación, identificamos el caso de uso con mayor impacto y lo construimos en menos de dos semanas.",
+    problem: "Necesito ver métricas y estados sin revisar varias planillas.",
+    solution: "Reunimos las fuentes relevantes en un dashboard claro para seguir indicadores, detectar desvíos y tomar decisiones con contexto.",
   },
   {
     problem: "Contraté a alguien antes y el resultado fue una decepción.",
@@ -27,7 +27,7 @@ const problems = [
   },
   {
     problem: "No tengo presupuesto para un equipo tech interno.",
-    solution: "Te damos el resultado de un equipo senior sin los costos fijos: desarrollo, diseño, IA y soporte bajo un mismo paraguas.",
+    solution: "Sumamos diseño, desarrollo y acompañamiento en un mismo equipo, con un alcance definido según la prioridad y el presupuesto disponible.",
   },
 ];
 
@@ -98,7 +98,7 @@ export default function ProblemsSolved() {
                   lineHeight: 1.6,
                   fontStyle: "italic",
                 }}>
-                  "{item.problem}"
+                  “{item.problem}”
                 </p>
               </div>
 

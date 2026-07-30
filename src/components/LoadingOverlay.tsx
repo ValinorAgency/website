@@ -90,23 +90,30 @@ export default function LoadingOverlay() {
         }} />
       ))}
 
-      {/* Logo — large watermark behind the counter */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logoValinor-removebg.png"
-        alt=""
+      {/* Logo — green watermark behind the counter */}
+      <div
         aria-hidden
         style={{
           position: "absolute",
           top: "50%", left: "50%",
           transform: "translate(-50%, -50%)",
           width: "clamp(280px, 58vw, 720px)",
-          opacity: 0.13,
+          aspectRatio: "1 / 1",
+          background: "#24D6BC",
+          opacity: 0.28,
+          filter: "drop-shadow(0 0 32px rgba(36,214,188,0.22))",
+          maskImage: "url('/logoValinor-removebg.png')",
+          WebkitMaskImage: "url('/logoValinor-removebg.png')",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
           pointerEvents: "none",
           userSelect: "none",
         }}
       />
-
       <div style={{ position: "relative", textAlign: "center" }}>
         {/* Counter */}
         <div style={{
@@ -140,9 +147,11 @@ export default function LoadingOverlay() {
         position: "absolute",
         bottom: 0, left: 0,
         height: 1,
-        width: `${progress}%`,
+        width: "100%",
+        transform: `scaleX(${progress / 100})`,
+        transformOrigin: "left center",
         background: "linear-gradient(90deg, rgba(36,214,188,0.15) 0%, #24D6BC 55%, rgba(36,214,188,0.5) 100%)",
-        transition: "width 0.06s linear",
+        transition: "transform 0.06s linear",
       }} />
     </div>
   );

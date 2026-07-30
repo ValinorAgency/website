@@ -23,12 +23,12 @@ const cases = [
     visual: "operations",
   },
   {
-    tag: "IA aplicada",
-    title: "Agentes que responden, clasifican y derivan con criterio.",
+    tag: "Aplicación web",
+    title: "Sistemas internos que ordenan información y simplifican tareas.",
     description:
-      "Automatizaciones para soporte, ventas y seguimiento que combinan reglas, contexto y verificación para no perder control.",
+      "Herramientas para centralizar consultas, registrar seguimientos y mantener cada proceso visible para el equipo.",
     bullets: ["Contexto útil", "Escalado humano", "Chequeo previo"],
-    visual: "agents",
+    visual: "workflow",
   },
 ];
 
@@ -130,8 +130,8 @@ function CaseVisual({
       <div className="rounded-[1.35rem] border border-[var(--border)] bg-white p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs text-[var(--ink-faint)]">Agente activo</p>
-            <p className="mt-1 text-lg font-semibold text-[var(--ink)]">Soporte AI</p>
+            <p className="text-xs text-[var(--ink-faint)]">Sistema disponible</p>
+            <p className="mt-1 text-lg font-semibold text-[var(--ink)]">Portal operativo</p>
           </div>
           <span className="rounded-full bg-[var(--brand)] px-3 py-1 text-xs font-semibold text-white">
             Online

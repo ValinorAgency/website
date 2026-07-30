@@ -1,5 +1,6 @@
 import BackgroundCanvas from "@/components/BackgroundCanvas"
 import CustomCursor from "@/components/CustomCursor"
+import FloatingActions from "@/components/FloatingActions"
 import LoadingOverlay from "@/components/LoadingOverlay"
 import type { Metadata } from "next"
 import { Cinzel, DM_Sans, Inter, Lora } from "next/font/google"
@@ -34,11 +35,19 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Valinor Agency",
+    default: "Valinor Agency | Diseño y desarrollo web",
     template: "%s | Valinor Agency",
   },
   description:
-    "Landing premium para Valinor Agency: diseño web de alto impacto y agentes de IA a medida para equipos que necesitan verse serios y convertir mejor.",
+    "Diseñamos sitios web, ecommerce, aplicaciones y dashboards a medida para presentar, vender y gestionar mejor tu negocio.",
+  openGraph: {
+    title: "Valinor Agency | Diseño y desarrollo de soluciones web",
+    description:
+      "Sitios institucionales, landing pages, ecommerce, aplicaciones web y dashboards diseñados alrededor de objetivos concretos.",
+    type: "website",
+    locale: "es_AR",
+    siteName: "Valinor Agency",
+  },
 };
 
 export default function RootLayout({
@@ -53,6 +62,7 @@ export default function RootLayout({
         <BackgroundCanvas />
         <CustomCursor />
         {children}
+        <FloatingActions />
       </body>
     </html>
   );

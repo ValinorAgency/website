@@ -50,7 +50,7 @@ type SceneProps = {
 
 const TITLE_LINES = [
   "WEBS PROFESIONALES /",
-  "AGENTES DE AI"
+  "APLICACIONES WEB"
 ];
 
 const GRID_STEP    = 3;

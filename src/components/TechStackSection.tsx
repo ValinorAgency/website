@@ -1,18 +1,18 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const STACK = [
-  { name: "Next.js 15",        tag: "Framework",      desc: "App Router, SSR y React Server Components para páginas rápidas y SEO-ready.", side: "right" as const, rotY: 10,  rotX: -4 },
-  { name: "React 19",          tag: "UI",              desc: "Componentes declarativos, Server Components y sistema Suspense.",             side: "left"  as const, rotY: -28, rotX:  6 },
-  { name: "TypeScript",        tag: "Lenguaje",        desc: "Tipos estrictos en toda la base de código, de cliente a servidor.",          side: "right" as const, rotY: 22,  rotX: -5 },
-  { name: "Tailwind CSS v4",   tag: "Estilos",         desc: "Utilidades con design tokens coherentes y sin CSS no utilizado.",            side: "left"  as const, rotY: -18, rotX:  4 },
-  { name: "Node.js",           tag: "Backend",         desc: "Runtime para APIs, webhooks e integraciones de servidor.",                   side: "right" as const, rotY: 30,  rotX: -3 },
-  { name: "PostgreSQL + Prisma", tag: "Base de datos", desc: "Base relacional sólida con ORM typesafe y migraciones versionadas.",         side: "left"  as const, rotY: -14, rotX:  7 },
-  { name: "Vercel",            tag: "Deploy",          desc: "Deploy global en segundos, preview automática por rama y analytics.",        side: "right" as const, rotY: 0,   rotX:  0 },
+  { name: "Next.js 16",        tag: "Framework",      desc: "App Router, SSR y React Server Components para páginas rápidas y SEO-ready.", area: "frontend" as const, side: "right" as const, rotY: 10,  rotX: -4 },
+  { name: "React 19",          tag: "UI",              desc: "Componentes declarativos, Server Components y sistema Suspense.",             area: "frontend" as const, side: "left"  as const, rotY: -28, rotX:  6 },
+  { name: "TypeScript",        tag: "Lenguaje",        desc: "Tipos estrictos en toda la base de código, de cliente a servidor.",          area: "frontend" as const, side: "right" as const, rotY: 22,  rotX: -5 },
+  { name: "Tailwind CSS v4",   tag: "Estilos",         desc: "Utilidades con design tokens coherentes y sin CSS no utilizado.",            area: "frontend" as const, side: "left"  as const, rotY: -18, rotX:  4 },
+  { name: "Node.js",           tag: "Backend",         desc: "Runtime para APIs, webhooks e integraciones de servidor.",                   area: "backend" as const, side: "right" as const, rotY: 30,  rotX: -3 },
+  { name: "PostgreSQL + Prisma", tag: "Base de datos", desc: "Base relacional sólida con ORM typesafe y migraciones versionadas.",         area: "backend" as const, side: "left"  as const, rotY: -14, rotX:  7 },
+  { name: "Vercel",            tag: "Deploy",          desc: "Deploy global en segundos, preview automática por rama y analytics.",        area: "backend" as const, side: "right" as const, rotY: 0,   rotX:  0 },
 ];
 
 const LAYER_COUNT = 7;
@@ -51,6 +51,102 @@ const DOT_COLORS = [
   ["oklch(0.65 0.18 25)", "oklch(0.78 0.16 85)", "oklch(0.70 0.17 145)"],
 ];
 
+function TechTypewriterGroup({ area, title, reduceMotion }: { area: "frontend" | "backend"; title: string; reduceMotion: boolean }) {
+  const technologies = STACK.filter((technology) => technology.area === area);
+  const [active, setActive] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const item = technologies[active];
+  const visibleName = reduceMotion ? item.name : typed;
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    let timer: number;
+
+    if (!deleting && typed.length < item.name.length) {
+      timer = window.setTimeout(() => setTyped(item.name.slice(0, typed.length + 1)), 58);
+    } else if (!deleting) {
+      timer = window.setTimeout(() => setDeleting(true), 2400);
+    } else if (typed.length > 0) {
+      timer = window.setTimeout(() => setTyped((value) => value.slice(0, -1)), 30);
+    } else {
+      timer = window.setTimeout(() => {
+        setActive((current) => (current + 1) % technologies.length);
+        setDeleting(false);
+      }, 180);
+    }
+
+    return () => window.clearTimeout(timer);
+  }, [active, deleting, item.name, reduceMotion, technologies.length, typed]);
+
+  const selectTechnology = (index: number) => {
+    setActive(index);
+    setTyped("");
+    setDeleting(false);
+  };
+
+  return (
+    <section className="tech-typewriter-group" aria-labelledby={`tech-group-${area}`}>
+      <h3 id={`tech-group-${area}`}>{title}</h3>
+      <div className="tech-typewriter-stage">
+        <span className="tech-typewriter-tag">{item.tag}</span>
+        <div className="tech-typewriter-word font-display" aria-hidden="true"><span>{visibleName}</span><i /></div>
+        <p className="sr-only">{item.name}. {item.desc}</p>
+        <div className="tech-typewriter-description">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.p key={item.name} initial={reduceMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6 }} transition={{ duration: reduceMotion ? 0 : .3 }}>
+              {item.desc}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+      </div>
+      <div className="tech-typewriter-controls" aria-label={`Elegir tecnología de ${title}`}>
+        {technologies.map((technology, index) => (
+          <button key={technology.name} type="button" className={active === index ? "is-active" : ""} onClick={() => selectTechnology(index)} aria-label={`Mostrar ${technology.name}`} aria-pressed={active === index}><span /></button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MobileTechTypewriter({ reduceMotion }: { reduceMotion: boolean }) {
+  return (
+    <div className="tech-typewriter-mobile relative z-10 overflow-hidden py-20 lg:hidden">
+      <div className="section-inner px-5 sm:px-6">
+        <h2 className="max-w-[12ch] font-display text-[clamp(2.5rem,9vw,4.75rem)] font-semibold leading-[0.96] tracking-[-0.04em]" style={{ textWrap: "balance" } as React.CSSProperties}>
+          El stack detrás de cada proyecto.
+        </h2>
+        <p className="mt-4 max-w-[34rem] text-sm leading-6 text-[var(--ink-muted)] sm:text-base">
+          Elegimos cada capa por su función: velocidad, escalabilidad, mantenimiento y una operación más simple.
+        </p>
+
+        <div className="tech-typewriter-groups">
+          <TechTypewriterGroup area="frontend" title="Frontend" reduceMotion={reduceMotion} />
+          <TechTypewriterGroup area="backend" title="Backend + infraestructura" reduceMotion={reduceMotion} />
+        </div>
+      </div>
+
+      <style>{`
+        .tech-typewriter-groups { display: grid; gap: 4.5rem; margin-top: 4rem; }
+        .tech-typewriter-group { min-width: 0; }
+        .tech-typewriter-group > h3 { padding-bottom: .8rem; border-bottom: 1px solid var(--border); color: var(--ink); font-size: .76rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+        .tech-typewriter-stage { min-height: 19rem; display: flex; flex-direction: column; justify-content: center; padding-block: 1.75rem; }
+        .tech-typewriter-tag { color: #24d6bc; font-size: .65rem; font-weight: 650; letter-spacing: .13em; text-transform: uppercase; }
+        .tech-typewriter-word { min-height: 2.15em; display: flex; align-items: center; margin-top: .7rem; color: var(--ink); font-size: clamp(2.55rem,12.5vw,4.5rem); font-weight: 650; line-height: .94; letter-spacing: -.04em; overflow-wrap: anywhere; }
+        .tech-typewriter-word i { width: 2px; height: .86em; display: inline-block; margin-left: .08em; background: #24d6bc; animation: tech-caret .8s steps(1,end) infinite; }
+        .tech-typewriter-description { min-height: 6.5rem; margin-top: 1.25rem; }
+        .tech-typewriter-description p { max-width: 34ch; color: var(--ink-muted); font-size: .9rem; line-height: 1.65; }
+        .tech-typewriter-controls { display: flex; gap: .35rem; }
+        .tech-typewriter-controls button { width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: transparent; }
+        .tech-typewriter-controls button span { width: 2rem; height: 2px; display: block; background: rgba(255,255,255,.18); transform: scaleX(.7); transition: transform .3s ease, background .3s ease; }
+        .tech-typewriter-controls button.is-active span { background: #24d6bc; transform: scaleX(1); }
+        @keyframes tech-caret { 0%,48% { opacity: 1; } 49%,100% { opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .tech-typewriter-word i { animation: none; opacity: 1; } }
+      `}</style>
+    </div>
+  );
+}
+
 export default function TechStackSection() {
   const sectionRef  = useRef<HTMLDivElement>(null);
   const desktopRef  = useRef<HTMLDivElement>(null);
@@ -80,7 +176,8 @@ export default function TechStackSection() {
       gsap.set(cardRef.current,   { y: window.innerHeight, scale: 0.72 });
       gsap.set(productRef.current, { rotationY: STACK[0].rotY, rotationX: STACK[0].rotX, opacity: 0, y: 48 });
       for (let i = 0; i < LAYER_COUNT; i++) {
-        gsap.set(`[data-layer="${i}"]`, { opacity: 0 });
+        gsap.set(`[data-layer="${i}"]`, { opacity: 0, y: i === 0 ? 0 : 16, scale: i === 3 ? 0.94 : 1 });
+        if (i === 3) gsap.set(`[data-layer="${i}"]`, { clipPath: "inset(0 100% 0 0 round 16px)" });
       }
       STACK.forEach((item, i) => {
         gsap.set(`[data-annotation="${i}"]`, { opacity: 0, x: item.side === "right" ? 28 : -28 });
@@ -130,7 +227,11 @@ export default function TechStackSection() {
         tl.to(dot0Ref.current,    { backgroundColor: DOT_COLORS[i][0],   duration: 0.6 }, at + 0.4);
         tl.to(dot1Ref.current,    { backgroundColor: DOT_COLORS[i][1],   duration: 0.6 }, at + 0.5);
         tl.to(dot2Ref.current,    { backgroundColor: DOT_COLORS[i][2],   duration: 0.6 }, at + 0.6);
-        tl.to(`[data-layer="${i}"]`,      { opacity: 1, duration: 0.7, ease: "power2.out" }, at + 0.4);
+        if (i === 3) {
+          tl.to(`[data-layer="${i}"]`, { opacity: 1, y: 0, scale: 1, clipPath: "inset(0 0% 0 0 round 16px)", duration: 1.05, ease: "power3.out" }, at + 0.25);
+        } else {
+          tl.to(`[data-layer="${i}"]`, { opacity: 1, y: 0, scale: 1, duration: 0.78, ease: "power3.out" }, at + 0.4);
+        }
         tl.to(`[data-annotation="${i}"]`, { opacity: 1, x: 0, duration: 0.7, ease: "power2.out" }, at + 0.6);
       });
 
@@ -141,6 +242,14 @@ export default function TechStackSection() {
         pin: desktopRef.current,
         scrub: 1.5,
         animation: tl,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+        onEnterBack: (self) => {
+          tl.totalProgress(self.progress, false);
+        },
+        onUpdate: (self) => {
+          if (self.direction < 0) tl.totalProgress(self.progress, false);
+        },
       });
     }, sectionRef);
 
@@ -211,64 +320,16 @@ export default function TechStackSection() {
       aria-labelledby="stack-heading"
       className="relative"
     >
-      {/* ── Background (title phase only — card has own bg) ─────────────────── */}
+      {/* Background (title phase only — card has its own background) */}
       <div aria-hidden style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
-        <div style={{
-          position: "absolute", inset: 0,
-          backgroundImage: [
-            "linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
-            "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)",
-          ].join(","),
-          backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(ellipse 70% 50% at 50% 40%, black 15%, transparent 70%)",
-          WebkitMaskImage: "radial-gradient(ellipse 70% 50% at 50% 40%, black 15%, transparent 70%)",
-        }} />
-        <div style={{
-          position: "absolute", left: "50%", top: "38%",
-          transform: "translate(-50%, -50%)",
-          width: "60%", height: "50%",
-          background: "radial-gradient(ellipse, rgba(36,214,188,0.07) 0%, rgba(36,214,188,0.02) 45%, transparent 70%)",
-          filter: "blur(1px)",
-        }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: ["linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)", "linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)"].join(","), backgroundSize: "56px 56px", maskImage: "radial-gradient(ellipse 70% 50% at 50% 40%, black 15%, transparent 70%)", WebkitMaskImage: "radial-gradient(ellipse 70% 50% at 50% 40%, black 15%, transparent 70%)" }} />
+        <div style={{ position: "absolute", left: "50%", top: "38%", transform: "translate(-50%, -50%)", width: "60%", height: "50%", background: "radial-gradient(ellipse, rgba(36,214,188,0.07) 0%, rgba(36,214,188,0.02) 45%, transparent 70%)", filter: "blur(1px)" }} />
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 80% at 50% 50%, transparent 40%, rgba(6,6,9,0.6) 100%)" }} />
       </div>
+      {/* Mobile/tablet: typewriter technology showcase */}
+      <MobileTechTypewriter reduceMotion={reduceMotion} />
 
-      {/* ── Mobile: static list ─────────────────────────────────────────────── */}
-      <div className="section-inner py-20 lg:hidden">
-        <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--ink-faint)]">
-          Tecnología
-        </span>
-        <h2
-          id="stack-heading"
-          className="mt-2 font-display text-[clamp(2rem,4.2vw,3.3rem)] font-semibold leading-[1.04] tracking-[-0.04em]"
-          style={{ textWrap: "balance" } as React.CSSProperties}
-        >
-          El stack detrás de cada proyecto.
-        </h2>
-        <ol className="mt-8 grid gap-3 sm:grid-cols-2">
-          {STACK.map((item, i) => (
-            <li
-              key={item.name}
-              className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] p-4 shadow-[var(--shadow-xs)]"
-            >
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--surface)] text-[11px] font-semibold tabular-nums text-[var(--ink-muted)]">
-                {i + 1}
-              </span>
-              <div>
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="text-sm font-semibold text-[var(--ink)]">{item.name}</span>
-                  <span className="rounded-full border border-[var(--border)] px-1.5 py-px text-[10px] font-medium text-[var(--ink-faint)]">
-                    {item.tag}
-                  </span>
-                </div>
-                <p className="mt-0.5 text-xs leading-5 text-[var(--ink-muted)]">{item.desc}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* ── Desktop: pinned container (title + rising card) ──────────────────── */}
+      {/* Desktop: pinned container (title + rising card) */}
       <div
         ref={desktopRef}
         className="hidden lg:block"
@@ -396,61 +457,54 @@ export default function TechStackSection() {
                   </div>
 
                   {/* Screen */}
-                  <div style={{ position: "relative", height: "min(35vw, 410px)", background: "white", overflow: "hidden" }}>
+                  <div className="stack-demo-screen" aria-hidden="true" style={{ position: "relative", height: "min(35vw, 410px)", background: "#f6f2e9", overflow: "hidden" }}>
                     <div ref={overlayRef} style={{ position: "absolute", inset: 0, zIndex: 10, pointerEvents: "none", backgroundColor: "rgba(0,0,0,0)", transition: "none" }} />
 
-                    <div data-layer="0" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: 11, color: "oklch(0.74 0 0)", letterSpacing: "0.06em" }}>Next.js App initialized</span>
+                    <div data-layer="0" className="demo-page-base">
+                      <div className="demo-page-wash" />
                     </div>
 
-                    <div data-layer="1" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 44, borderBottom: "1px solid oklch(0.93 0 0)", display: "flex", alignItems: "center", padding: "0 24px", background: "white" }}>
-                      <div style={{ width: 58, height: 11, borderRadius: 6, background: "oklch(0.12 0 0)" }} />
-                      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 14 }}>
-                        {[40, 48, 32].map((w, j) => <div key={j} style={{ width: w, height: 6, borderRadius: 3, background: "oklch(0.88 0 0)" }} />)}
-                        <div style={{ width: 76, height: 28, borderRadius: 99, background: "oklch(0.12 0 0)" }} />
+                    <div data-layer="1" className="demo-site-nav">
+                      <div className="demo-site-brand"><span>V</span><b>Valinor Studio</b></div>
+                      <div className="demo-site-links"><span>Proyectos</span><span>Estudio</span><span>Contacto</span></div>
+                      <div className="demo-site-nav-cta">Hablemos</div>
+                    </div>
+
+                    <div data-layer="2" className="demo-hero-copy">
+                      <h3>Espacios digitales<br />con intención.</h3>
+                      <p>Diseñamos experiencias claras para marcas que quieren avanzar.</p>
+                      <div className="demo-hero-actions"><b>Ver proyectos</b><span>Conocer el estudio ↗</span></div>
+                    </div>
+
+                    <div data-layer="3" className="demo-hero-image">
+                      <div className="demo-iridescent-art">
+                        <span className="demo-art-orbit demo-art-orbit-one" />
+                        <span className="demo-art-orbit demo-art-orbit-two" />
+                        <span className="demo-art-core" />
+                        <small>Forma · luz · movimiento</small>
                       </div>
                     </div>
 
-                    <div data-layer="2" style={{ position: "absolute", top: 44, left: 0, right: 0, padding: "26px 24px 0" }}>
-                      <div style={{ height: 25, width: "76%", borderRadius: 8, background: "oklch(0.1 0 0)", marginBottom: 10 }} />
-                      <div style={{ height: 20, width: "50%", borderRadius: 8, background: "oklch(0.1 0 0)", opacity: 0.28, marginBottom: 18 }} />
-                      <div style={{ height: 7, width: "62%", borderRadius: 4, background: "oklch(0.9 0 0)", marginBottom: 7 }} />
-                      <div style={{ height: 7, width: "46%", borderRadius: 4, background: "oklch(0.93 0 0)", marginBottom: 22 }} />
-                      <div style={{ display: "flex", gap: 10 }}>
-                        <div style={{ width: 104, height: 30, borderRadius: 99, background: "oklch(0.1 0 0)" }} />
-                        <div style={{ width: 104, height: 30, borderRadius: 99, border: "1px solid oklch(0.88 0 0)" }} />
+                    <div data-layer="4" className="demo-work-strip">
+                      <div className="demo-work-heading"><span>Trabajo seleccionado</span><b>2026</b></div>
+                      <div className="demo-work-items">
+                        <div><i className="demo-thumb demo-thumb-one" /><span>Atelier Norte</span></div>
+                        <div><i className="demo-thumb demo-thumb-two" /><span>Casa Prisma</span></div>
+                        <div><i className="demo-thumb demo-thumb-three" /><span>Materia</span></div>
                       </div>
                     </div>
 
-                    <div data-layer="3" style={{ position: "absolute", bottom: 40, left: 24, right: 24, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-                      {[0, 1, 2].map((j) => (
-                        <div key={j} style={{ border: "1px solid oklch(0.92 0 0)", borderRadius: 14, padding: 14, background: "oklch(0.985 0 0)" }}>
-                          <div style={{ width: 16, height: 16, borderRadius: 5, background: j === 0 ? "rgba(36,214,188,0.35)" : "oklch(0.87 0 0)", marginBottom: 10 }} />
-                          <div style={{ height: 5, borderRadius: 3, background: "oklch(0.91 0 0)", marginBottom: 6 }} />
-                          <div style={{ height: 5, width: "70%", borderRadius: 3, background: "oklch(0.94 0 0)" }} />
-                        </div>
-                      ))}
+                    <div data-layer="5" className="demo-system-status">
+                      <div><span className="demo-status-dot" /><code>GET /proyectos</code><b>200</b></div>
+                      <div><span className="demo-status-dot" /><code>PostgreSQL</code><b>12 items</b></div>
                     </div>
 
-                    <div data-layer="4" style={{ position: "absolute", right: 14, top: 54, borderRadius: 10, border: "1px solid oklch(0.91 0 0)", background: "white", padding: "6px 10px", boxShadow: "0 2px 10px rgba(0,0,0,0.06)", display: "flex", alignItems: "center", gap: 6 }}>
-                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: "oklch(0.72 0.17 145)" }} />
-                      <code style={{ fontSize: 9, color: "oklch(0.5 0 0)", fontFamily: "monospace" }}>GET /api 200</code>
-                    </div>
-
-                    <div data-layer="5" style={{ position: "absolute", right: 14, top: 96, borderRadius: 10, border: "1px solid rgba(36,214,188,0.3)", background: "white", padding: "8px 10px", boxShadow: "0 2px 10px rgba(36,214,188,0.08)" }}>
-                      {[52, 42, 32].map((w, j) => (
-                        <div key={j} style={{ height: 4, width: w, borderRadius: 2, background: j === 0 ? "rgba(36,214,188,0.4)" : "oklch(0.89 0 0)", marginBottom: j < 2 ? 4 : 0 }} />
-                      ))}
-                      <code style={{ display: "block", marginTop: 6, fontSize: 9, color: "oklch(0.6 0 0)", fontFamily: "monospace" }}>3 rows · Prisma</code>
-                    </div>
-
-                    <div data-layer="6" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 40, background: "linear-gradient(90deg, oklch(0.1 0 0), oklch(0.12 0.04 180))", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                    <div data-layer="6" className="demo-deploy-bar">
                       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="m4 12 6 6 10-10" stroke="#24D6BC" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <span style={{ fontSize: 11, fontWeight: 500, color: "white" }}>Deployed to Vercel · Production</span>
+                      <span>Publicado en producción</span><i>valinor-studio.vercel.app</i>
                     </div>
-
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 55%)", pointerEvents: "none", zIndex: 11 }} />
                   </div>
                 </div>
@@ -479,6 +533,46 @@ export default function TechStackSection() {
       <style>{`
         #stack [data-annotation] { opacity: 0; }
         #stack [data-layer]      { opacity: 0; }
+        .demo-page-base { position: absolute; inset: 0; background: #f6f2e9; color: #171817; }
+        .demo-page-wash { position: absolute; inset: 0; background: radial-gradient(circle at 76% 38%, rgba(137,218,199,.2), transparent 30%), linear-gradient(120deg, rgba(255,255,255,.72), transparent 55%); }
+        .demo-site-nav { position: absolute; z-index: 2; inset: 0 0 auto; height: 46px; display: flex; align-items: center; gap: 18px; padding: 0 22px; border-bottom: 1px solid rgba(23,24,23,.1); color: #171817; }
+        .demo-site-brand { display: flex; align-items: center; gap: 7px; }
+        .demo-site-brand span { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: #171817; color: #fff; font-size: 8px; font-weight: 700; }
+        .demo-site-brand b { font-size: 10px; font-weight: 650; letter-spacing: -.01em; }
+        .demo-site-links { display: flex; gap: 14px; margin-left: auto; color: rgba(23,24,23,.55); font-size: 7px; }
+        .demo-site-nav-cta { padding: 6px 10px; border-radius: 99px; background: #171817; color: #fff; font-size: 7px; font-weight: 650; }
+        .demo-hero-copy { position: absolute; z-index: 2; top: 82px; left: 24px; width: 51%; color: #171817; }
+        .demo-hero-copy h3 { font-size: clamp(23px,2.3vw,33px); font-weight: 650; line-height: .93; letter-spacing: -.04em; }
+        .demo-hero-copy p { max-width: 29ch; margin-top: 12px; color: rgba(23,24,23,.55); font-size: 8px; line-height: 1.55; }
+        .demo-hero-actions { display: flex; align-items: center; gap: 14px; margin-top: 15px; font-size: 7px; }
+        .demo-hero-actions b { padding: 8px 12px; border-radius: 99px; background: #171817; color: #fff; font-weight: 600; }
+        .demo-hero-actions span { color: rgba(23,24,23,.58); }
+        .demo-hero-image { position: absolute; z-index: 1; top: 65px; right: 22px; width: 40%; height: 194px; overflow: hidden; border-radius: 16px; }
+        .demo-iridescent-art { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 72% 22%, #fff8da 0 10%, transparent 32%), radial-gradient(circle at 20% 24%, #bdeee3 0 11%, transparent 37%), radial-gradient(circle at 72% 76%, #d8c7f2 0 15%, transparent 42%), linear-gradient(145deg,#d9ebeb,#f1dfe6 48%,#e9e2bd); }
+        .demo-iridescent-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg,rgba(255,255,255,.5),transparent 35%,rgba(255,255,255,.22) 63%,transparent); }
+        .demo-art-orbit { position: absolute; border: 1px solid rgba(255,255,255,.72); border-radius: 50%; transform: rotate(-24deg); }
+        .demo-art-orbit-one { width: 82%; height: 40%; top: 29%; left: 9%; }
+        .demo-art-orbit-two { width: 48%; height: 72%; top: 12%; left: 28%; transform: rotate(32deg); }
+        .demo-art-core { position: absolute; top: 50%; left: 50%; width: 56px; height: 56px; border-radius: 42% 58% 62% 38%; background: rgba(255,255,255,.52); box-shadow: 0 12px 28px rgba(83,68,102,.14); transform: translate(-50%,-50%) rotate(18deg); }
+        .demo-iridescent-art small { position: absolute; z-index: 2; right: 10px; bottom: 9px; color: rgba(23,24,23,.58); font-size: 6px; letter-spacing: .08em; text-transform: uppercase; }
+        .demo-work-strip { position: absolute; z-index: 2; right: 22px; bottom: 40px; left: 22px; height: 94px; padding-top: 10px; border-top: 1px solid rgba(23,24,23,.12); color: #171817; }
+        .demo-work-heading { display: flex; justify-content: space-between; color: rgba(23,24,23,.48); font-size: 6px; letter-spacing: .08em; text-transform: uppercase; }
+        .demo-work-heading b { font-weight: 500; }
+        .demo-work-items { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-top: 8px; }
+        .demo-work-items > div { min-width: 0; }
+        .demo-work-items span { display: block; margin-top: 4px; font-size: 6px; font-weight: 600; }
+        .demo-thumb { height: 42px; display: block; border-radius: 7px; }
+        .demo-thumb-one { background: linear-gradient(135deg,#dac9bd,#f4eadf 52%,#9db9b1); }
+        .demo-thumb-two { background: radial-gradient(circle at 70% 30%,#f8efd2,transparent 30%),linear-gradient(135deg,#a8d3cc,#e0c6e6); }
+        .demo-thumb-three { background: linear-gradient(125deg,#25272a 0 38%,#d7c6b9 38% 62%,#b7dfd7 62%); }
+        .demo-system-status { position: absolute; z-index: 7; top: 53px; right: 12px; display: grid; gap: 5px; }
+        .demo-system-status > div { display: grid; grid-template-columns: 6px auto auto; gap: 6px; align-items: center; padding: 5px 7px; border: 1px solid rgba(23,24,23,.1); border-radius: 8px; background: rgba(255,255,255,.88); box-shadow: 0 6px 16px rgba(25,28,28,.08); }
+        .demo-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #24b99f; }
+        .demo-system-status code { color: rgba(23,24,23,.62); font-size: 6px; }
+        .demo-system-status b { color: #268d7b; font-size: 6px; font-weight: 650; }
+        .demo-deploy-bar { position: absolute; z-index: 8; right: 0; bottom: 0; left: 0; height: 40px; display: flex; align-items: center; justify-content: center; gap: 7px; background: #151817; color: #fff; }
+        .demo-deploy-bar span { font-size: 7px; font-weight: 600; }
+        .demo-deploy-bar i { color: rgba(255,255,255,.38); font-size: 6px; font-style: normal; }
 
         /* Card hidden below viewport on desktop by default; GSAP takes over via inline style */
         @media (min-width: 1024px) {

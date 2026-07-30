@@ -48,8 +48,8 @@ export default function CustomCursor() {
     };
 
     const tick = () => {
-      posRef.current.x = lerp(posRef.current.x, aimRef.current.x, 0.13);
-      posRef.current.y = lerp(posRef.current.y, aimRef.current.y, 0.13);
+      posRef.current.x = lerp(posRef.current.x, aimRef.current.x, 0.35);
+      posRef.current.y = lerp(posRef.current.y, aimRef.current.y, 0.35);
       sizeRef.current  = lerp(sizeRef.current, sizeTgtRef.current, 0.11);
 
       const s = sizeRef.current;

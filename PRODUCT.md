@@ -6,11 +6,11 @@ brand
 
 ## Users
 
-Dueños de empresas, founders, y equipos de marketing en Argentina y Latam buscando presencia digital profesional o automatización con IA. Contexto: evalúan proveedores desde el móvil o escritorio, comparan opciones, necesitan confiar rápidamente. Job: encontrar un partner técnico que entienda su negocio y entregue resultados medibles.
+Dueños de empresas, founders, y equipos de marketing en Argentina y Latam buscando presencia digital profesional, ecommerce o herramientas web a medida. Contexto: evalúan proveedores desde el móvil o escritorio, comparan opciones, necesitan confiar rápidamente. Job: encontrar un partner técnico que entienda su negocio y entregue resultados medibles.
 
 ## Product Purpose
 
-AXON Studio diseña y desarrolla sitios web de alto impacto e implementa agentes de IA a medida. La landing existe para convertir visitantes escépticos en leads calificados: transmitir competencia técnica, seriedad profesional, y un proceso de trabajo claro desde el primer scroll.
+Valinor Agency diseña y desarrolla sitios web, ecommerce, aplicaciones, dashboards y soluciones digitales a medida. La landing existe para convertir visitantes escépticos en leads calificados: transmitir competencia técnica, seriedad profesional, y un proceso de trabajo claro desde el primer scroll.
 
 ## Brand Personality
 
@@ -20,7 +20,7 @@ Preciso, confiable, ambicioso. El tono es de experto que no necesita gritar.
 
 - Agencias genéricas con stock photos de personas sonriendo en reuniones
 - Dark-mode neon "hacker aesthetic" saturado (lo que teníamos antes)
-- Cream/sand AI-startup monoculture de 2025–26
+- Estética genérica de startup tecnológica
 - SaaS clichés: hero-metric template con números grandes, glassmorphism decorativo
 
 ## Design Principles
