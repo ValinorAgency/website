@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react"
 
-const DURATION = 2800;
+const DURATION = 1950;
+const EXIT_DELAY = 252;
+const EXIT_DURATION = 675;
 
 function ease(t: number) {
   // Fast start, very slow end — feels like a real async load
@@ -36,8 +38,10 @@ export default function LoadingOverlay() {
       } else {
         setTimeout(() => {
           setExiting(true);
-          setTimeout(() => setGone(true), 750);
-        }, 280);
+          document.documentElement.dataset.heroRevealed = "true";
+          window.dispatchEvent(new CustomEvent("valinor:hero-reveal"));
+          setTimeout(() => setGone(true), EXIT_DURATION);
+        }, EXIT_DELAY);
       }
     };
 
@@ -61,9 +65,9 @@ export default function LoadingOverlay() {
         justifyContent: "center",
         pointerEvents: exiting ? "none" : "all",
         opacity: exiting ? 0 : 1,
-        transform: exiting ? "scale(1.04)" : "scale(1)",
+        clipPath: exiting ? "circle(0% at 50% 50%)" : "circle(72% at 50% 50%)",
         transition: exiting
-          ? "opacity 0.75s cubic-bezier(0.4,0,0.2,1), transform 0.75s cubic-bezier(0.4,0,0.2,1)"
+          ? "opacity 0.675s cubic-bezier(0.4,0,0.2,1), clip-path 0.675s cubic-bezier(0.76,0,0.24,1)"
           : "none",
       }}
     >
@@ -96,12 +100,12 @@ export default function LoadingOverlay() {
         style={{
           position: "absolute",
           top: "50%", left: "50%",
-          transform: "translate(-50%, -50%)",
+          transform: exiting ? "translate(-50%, -50%) scale(0.48)" : "translate(-50%, -50%) scale(1)",
           width: "clamp(280px, 58vw, 720px)",
           aspectRatio: "1 / 1",
           background: "#24D6BC",
-          opacity: 0.28,
-          filter: "drop-shadow(0 0 32px rgba(36,214,188,0.22))",
+          opacity: exiting ? 0 : 0.28,
+          filter: exiting ? "drop-shadow(0 0 80px rgba(36,214,188,0.9)) blur(8px)" : "drop-shadow(0 0 32px rgba(36,214,188,0.22))",
           maskImage: "url('/logoValinor-removebg.png')",
           WebkitMaskImage: "url('/logoValinor-removebg.png')",
           maskPosition: "center",
@@ -112,6 +116,7 @@ export default function LoadingOverlay() {
           WebkitMaskSize: "contain",
           pointerEvents: "none",
           userSelect: "none",
+          transition: "transform 0.675s cubic-bezier(0.76,0,0.24,1), opacity 0.5s ease, filter 0.675s ease",
         }}
       />
       <div style={{ position: "relative", textAlign: "center" }}>

@@ -30,7 +30,7 @@ const projects = [
   {
     name: "Dashboard operativo",
     category: "Plataforma interna",
-    desc: "Tareas, métricas, aprobaciones y reportes visibles para una operación de 40 personas.",
+    desc: "Métricas, estados y alertas clave reunidos en una vista clara para seguir la operación y tomar decisiones a tiempo.",
     outcome: "Indicadores importantes a la vista y menos tiempo dedicado a reconstruir información.",
     palette: "radial-gradient(circle at 22% 18%, #dfeefb 0 18%, transparent 45%), radial-gradient(circle at 80% 24%, #f4e3fa 0 15%, transparent 44%), radial-gradient(circle at 58% 82%, #e7f2d9 0 18%, transparent 48%), #f1ece5",
   },
@@ -238,14 +238,15 @@ export default function Portfolio() {
   const reduce = useReducedMotion();
 
   return (
-    <section ref={ref} id="portfolio" className="portfolio-flow">
+    <section ref={ref} id="servicios" className="portfolio-flow">
+      <span id="portfolio" className="portfolio-anchor" aria-hidden="true" />
       <motion.div
         className="section-inner portfolio-flow-heading"
         initial={reduce ? false : { opacity: 0, y: 28 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: .7, ease: expo }}
       >
-        <h2 className="font-display">Proyectos que ordenan, venden y hacen avanzar.</h2>
+        <h2 className="font-display">Soluciones que ordenan, venden y hacen avanzar.</h2>
       </motion.div>
 
       <div className="flow-project-list">
@@ -255,9 +256,10 @@ export default function Portfolio() {
       <MobileProjectHighlight reduce={reduce} />
 
       <style>{`
-        .portfolio-flow { padding: clamp(8rem,14vw,13rem) 0; background: #08090d; }
-        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: grid; grid-template-columns: minmax(0,1.4fr) minmax(16rem,.6fr); gap: 2rem; align-items: end; }
-        .portfolio-flow-heading h2 { max-width: 13ch; color: var(--ink); font-size: clamp(2.8rem,6.5vw,6rem); line-height: .98; letter-spacing: -.04em; font-weight: 600; }
+        .portfolio-flow { position: relative; padding: clamp(7rem,12vw,10rem) 0; background: #08090d; }
+        .portfolio-anchor { position: absolute; top: 0; }
+        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: flex; justify-content: center; }
+        .portfolio-flow-heading h2 { max-width: 13ch; color: var(--ink); font-size: clamp(2.8rem,6.5vw,6rem); line-height: .98; letter-spacing: -.04em; font-weight: 600; text-align: center; }
         .flow-project-list { border-top: 1px solid rgba(255,255,255,.13); }
         .flow-project { position: relative; height: clamp(8rem,11vw,10rem); overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.13); }
         .flow-project-base, .flow-project-reveal-inner { position: absolute; inset: 0; display: grid; grid-template-columns: 3rem minmax(0,1fr) minmax(18rem,.75fr) auto; align-items: center; gap: clamp(1rem,3vw,3rem); width: min(100% - 3rem,72rem); margin: 0 auto; }
@@ -272,7 +274,7 @@ export default function Portfolio() {
 
         @media (max-width:760px) {
           .portfolio-flow { padding: 7rem 0 1.5rem; }
-          .portfolio-flow-heading { grid-template-columns: 1fr; padding: 0 1rem .75rem; }
+          .portfolio-flow-heading { padding: 0 1rem .75rem; }
           .portfolio-flow-heading h2 { font-size: clamp(2.65rem,13vw,4rem); }
           .flow-project-list { display: none; }
           .mobile-project-highlight { display: block; background: #f5f5f2; }

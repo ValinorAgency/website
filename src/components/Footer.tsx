@@ -6,8 +6,8 @@ export default function Footer() {
   const links = [
     { label: "Inicio", href: "#about" },
     { label: "Servicios", href: "#servicios" },
-    { label: "Soluciones", href: "#soluciones" },
-    { label: "Proyectos", href: "#portfolio" },
+    { label: "Capacidades", href: "#capacidades" },
+    { label: "Por qué Valinor", href: "#por-que" },
     { label: "Contacto", href: "#contacto" },
   ];
 

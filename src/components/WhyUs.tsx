@@ -36,7 +36,6 @@ export default function WhyUs() {
       <div className="section-inner">
         <motion.div className="why-light-heading" initial={reduce ? false : { opacity: 0, y: 28 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: .7, ease: expo }}>
           <h2 className="font-display">Lo que cambia cuando trabajamos juntos.</h2>
-          <p>Una forma de trabajar pensada para reducir incertidumbre y mantener las decisiones cerca del negocio.</p>
         </motion.div>
 
         <div className="why-options" role="radiogroup" aria-label="Diferenciales de nuestra forma de trabajo">
@@ -84,9 +83,8 @@ export default function WhyUs() {
 
       <style>{`
         .why-light { padding-block: clamp(7rem,12vw,11rem); background: #f5f5f2; color: #111; }
-        .why-light-heading { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(17rem,.75fr); gap: 2rem; align-items: end; margin-bottom: clamp(3rem,6vw,5rem); }
+        .why-light-heading { margin-bottom: clamp(3rem,6vw,5rem); }
         .why-light-heading h2 { max-width: 14ch; color: #111; font-size: clamp(2.7rem,6vw,5.5rem); line-height: .98; letter-spacing: -.04em; font-weight: 800; text-transform: uppercase; }
-        .why-light-heading p { max-width: 36ch; color: rgba(17,17,17,.58); line-height: 1.7; }
         .why-options { width: min(100%, 52rem); display: flex; flex-direction: column; }
         .why-option-row { border-bottom: 1px solid rgba(17,17,17,.1); }
         .why-option-row:first-child { border-top: 1px solid rgba(17,17,17,.1); }
@@ -102,7 +100,7 @@ export default function WhyUs() {
 
         @media (max-width: 760px) {
           .why-light { padding-block: 6rem; }
-          .why-light-heading { grid-template-columns: 1fr; gap: 1.25rem; margin-bottom: 2.75rem; }
+          .why-light-heading { margin-bottom: 2.75rem; }
           .why-light-heading h2 { font-size: clamp(2.3rem,11vw,3.5rem); }
           .why-option { min-height: 4rem; font-size: 1.05rem; }
           .why-inline-detail p { padding: 0 0 1.25rem 2.05rem; font-size: .86rem; }

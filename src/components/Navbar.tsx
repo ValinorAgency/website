@@ -8,8 +8,8 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 const links = [
   { label: "Inicio", href: "#about" },
   { label: "Servicios", href: "#servicios" },
+  { label: "Capacidades", href: "#capacidades" },
   { label: "Por qué Valinor", href: "#por-que" },
-  { label: "Proyectos", href: "#portfolio" },
   { label: "Contacto", href: "#contacto" },
 ];
 

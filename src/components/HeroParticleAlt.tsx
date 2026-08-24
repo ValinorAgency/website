@@ -1,11 +1,19 @@
 "use client";
 
 import { cubicBezier, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import LiquidEther from "./LiquidEther";
 
 export default function HeroParticleAlt() {
-  const expo = cubicBezier(0.16, 1, 0.3, 1);
   const reduceMotion = useReducedMotion();
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const reveal = () => setRevealed(true);
+    if (document.documentElement.dataset.heroRevealed === "true") reveal();
+    window.addEventListener("valinor:hero-reveal", reveal);
+    return () => window.removeEventListener("valinor:hero-reveal", reveal);
+  }, []);
 
   return (
     <section
@@ -35,9 +43,13 @@ export default function HeroParticleAlt() {
 
       <motion.div
         className="relative z-10 flex flex-col items-center px-4 text-center"
-        initial={{ opacity: 0, scale: 0.95, y: 28 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.85, ease: expo }}
+        initial={{ opacity: 0, scale: 0.48, y: 0, filter: "blur(18px)" }}
+        animate={revealed ? { opacity: 1, scale: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, scale: 0.48, y: 0, filter: "blur(18px)" }}
+        transition={{
+          duration: reduceMotion ? 0 : 1.45,
+          delay: reduceMotion ? 0 : 0.08,
+          ease: cubicBezier(0.22, 0.72, 0.2, 1),
+        }}
       >
         <div className="flex flex-col items-center gap-3">
           <h1
