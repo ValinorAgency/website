@@ -5,8 +5,8 @@
 - Organización: Valinor Agency.
 - Producto: sitio web institucional de la agencia.
 - Estado: frontend avanzado, todavía no aprobado como listo para producción.
-- Mercado principal: Argentina y Latinoamérica.
-- Modalidad de trabajo: Pending confirmation para comunicación pública.
+- Mercado inicial: Argentina.
+- Modalidad de trabajo: además de proyectos de alcance definido, Valinor podrá ofrecer desarrollo por horas, soporte evolutivo o equipo dedicado, sujeto a alcance, disponibilidad y capacidad confirmada en cada caso.
 
 ## Problema
 
@@ -16,11 +16,15 @@ El sitio debe reducir la incertidumbre típica al elegir un proveedor: qué pued
 
 ## Usuarios
 
-- dueños de empresas y pymes;
-- founders y emprendimientos;
+Público principal:
+
+- PyMEs;
 - profesionales que necesitan una presencia digital sólida;
-- equipos de marketing u operación que necesitan ecommerce, dashboards o herramientas web;
-- organizaciones que buscan un partner de diseño y desarrollo con contacto directo.
+- emprendimientos.
+
+Público secundario:
+
+- empresas que necesitan ampliar temporalmente su capacidad de desarrollo (desarrollo por horas, soporte evolutivo o equipo dedicado, según disponibilidad y capacidad confirmada).
 
 ## Objetivos
 
@@ -34,19 +38,17 @@ El sitio debe reducir la incertidumbre típica al elegir un proveedor: qué pued
 
 La conversión principal es que una persona interesada envíe una consulta con contexto suficiente para evaluar su proyecto.
 
-El canal primario definitivo está Pending confirmation entre:
+Canal confirmado: combinación de formulario web real y WhatsApp comercial. Implementación pendiente; ver `docs/ARCHITECTURE.md`.
 
-- formulario web real;
-- WhatsApp comercial;
-- combinación de formulario y WhatsApp.
+El correo oficial y receptor de consultas es `agencyvalinor@gmail.com`. Las referencias operativas a `hola@valinor.agency` quedan descartadas y deben eliminarse de la implementación pública (pendiente; ver `docs/ARCHITECTURE.md` y la auditoría de lanzamiento).
 
-El correo `hola@valinor.agency` aparece actualmente como canal directo, pero su disponibilidad y configuración pública deben verificarse antes del lanzamiento.
+WhatsApp comercial (provisional): +54 9 11 5015-2833. Implementación pendiente; ver `docs/ARCHITECTURE.md`.
 
 ## Propuesta de valor
 
 Valinor diseña y desarrolla soluciones web alrededor de objetivos concretos del negocio, con contacto directo con quienes realizan el trabajo, alcance explícito, entregas revisables y elección tecnológica según la necesidad real.
 
-La redacción final del hero y de los CTA está Pending confirmation.
+El copy del hero fue aprobado (título, descripción, CTA primario, CTA secundario y línea de respaldo). Texto completo en `DESIGN.md`. Implementación pendiente.
 
 ## Alcance comercial confirmado
 
@@ -71,6 +73,8 @@ La redacción final del hero y de los CTA está Pending confirmation.
 
 La IA puede mencionarse como herramienta interna para análisis, diseño, desarrollo, documentación y control de calidad.
 
+Valinor no ofrece IA como servicio independiente. Una integración con IA dentro de un proyecto de cliente podrá evaluarse puntualmente solo si el cliente la solicita explícitamente y acepta los costos de API y de proveedores externos que implique. Valinor no financiará indefinidamente el consumo del cliente con una API key propia.
+
 ## Requisitos confirmados
 
 - idioma principal español;
@@ -92,11 +96,20 @@ El sitio necesita distinguir claramente:
 - trabajos o casos reales efectivamente autorizados para publicación;
 - ejemplos conceptuales o demostraciones.
 
+El portfolio actual debe presentarse como proyectos o conceptos. Cada concepto debe estar identificado con la etiqueta "Concepto". Los conceptos se reemplazarán progresivamente por casos reales autorizados a medida que existan. Implementación pendiente; ver hallazgo P1-02 de la auditoría.
+
 Casos reales publicables: Pending confirmation.
 
-Presentación pública de los integrantes y sus roles: Pending confirmation.
+Presentación pública de los integrantes: confirmada. Sección breve de equipo con fotos, sin LinkedIn inicialmente:
 
-Testimonios, logos de clientes y métricas: no utilizar hasta contar con autorización y fuente verificable.
+- Milton Collard — Cofundador · Frontend y Experiencia Digital. Especialidades: frontend, diseño de interfaces, SEO, optimización de conversiones y análisis funcional.
+- Martín Abbott — Cofundador · Backend y Arquitectura de Datos. Especialidades: backend, bases de datos, integraciones y análisis funcional.
+
+Cada fundador cuenta individualmente con más de ocho años de experiencia en desarrollo de software.
+
+Fotos concretas del equipo: Pending confirmation. Implementación de la sección: pendiente.
+
+Testimonios, logos de clientes y métricas: no utilizar hasta contar con autorización y fuente verificable. No usar clientes, testimonios, métricas, logos ni resultados ficticios.
 
 ## Restricciones
 
@@ -123,15 +136,22 @@ No implementar tracking hasta definir proveedor, consentimiento aplicable y alca
 
 ## Preguntas abiertas
 
-- ¿Cuál será el dominio oficial?
-- ¿Dónde se desplegará la web?
-- ¿Cuál será el número comercial de WhatsApp?
-- ¿El formulario enviará por email, WhatsApp o ambos?
-- ¿Qué proveedor se utilizará para el envío del formulario?
+Realmente pendientes:
+
+- ¿Cuándo se comprará el dominio oficial? Candidato principal: `valinoragency.com.ar`.
+- ¿Cuál será el remitente definitivo del correo del formulario? Depende de comprar y verificar el dominio.
+- ¿Qué fotos concretas se usarán para la sección de equipo?
 - ¿Qué proyectos reales pueden mostrarse públicamente?
-- ¿Cómo se presentarán públicamente los integrantes y roles de Valinor?
-- ¿La comunicación geográfica será Argentina, Latinoamérica o internacional?
 - ¿Qué métricas definirán una conversión exitosa?
+
+Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de implementación:
+
+- Hosting: Vercel.
+- Número comercial de WhatsApp (provisional): +54 9 11 5015-2833.
+- Canal del formulario: formulario web (Resend) y WhatsApp combinados.
+- Proveedor del formulario: Resend.
+- Presentación pública de integrantes y roles: sección breve de equipo con bios de ambos cofundadores.
+- Mercado inicial: Argentina.
 
 ## Fuentes
 
@@ -139,3 +159,4 @@ No implementar tracking hasta definir proveedor, consentimiento aplicable y alca
 - Implementación actual de la rama `development`.
 - Auditoría de lanzamiento del 28 de agosto de 2026.
 - Decisiones expresadas por el usuario sobre el posicionamiento público de Valinor.
+- Decisiones confirmadas por el usuario el 28 de agosto de 2026 sobre hosting, dominio, mercado, público, modalidad de trabajo, alcance de IA, portfolio, equipo, hero y contacto.

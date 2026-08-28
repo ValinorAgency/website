@@ -10,8 +10,9 @@ El objetivo del sitio es convertir visitantes en potenciales clientes mediante u
 - Aplicación principal: landing institucional de una sola página.
 - Frontend: implementado.
 - Backend propio: no existe.
-- Formulario de contacto: actualmente prepara un correo mediante `mailto:`.
-- Hosting y dominio de producción: Pending confirmation.
+- Formulario de contacto: actualmente prepara un correo mediante `mailto:`. Proveedor y arquitectura confirmados (Resend + ruta de servidor de Next.js); implementación pendiente. Ver `docs/ARCHITECTURE.md`.
+- Hosting de producción: confirmado (Vercel); despliegue todavía no realizado.
+- Dominio: no comprado. Candidato principal: `valinoragency.com.ar`.
 - Estado de lanzamiento: requiere resolver los puntos documentados en `docs/audits/2026-08-28-launch-readiness.md`.
 
 ## Documentos canónicos

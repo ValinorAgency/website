@@ -99,44 +99,66 @@ El formulario actual:
 - no ofrece confirmación real de recepción;
 - no almacena información.
 
-El proveedor y arquitectura del formulario real están Pending confirmation.
+Arquitectura confirmada para el formulario real (implementación pendiente):
+
+- proveedor: Resend;
+- procesamiento: ruta de servidor (Route Handler) de Next.js;
+- campos: nombre, email o WhatsApp, tipo de proyecto y mensaje;
+- tipos de proyecto: sitio web, tienda online, aplicación web/dashboard, otro;
+- destinatario: `agencyvalinor@gmail.com`;
+- Reply-To: email ingresado por el visitante cuando corresponda;
+- remitente definitivo: Pending confirmation, depende de comprar y verificar el dominio oficial;
+- variable de entorno prevista: `RESEND_API_KEY`;
+- debe incluir validación en cliente y en servidor, estados de carga, éxito y error, honeypot antispam y protección básica contra abuso (rate limiting).
+
+El correo `hola@valinor.agency` referenciado actualmente en `src/components/Navbar.tsx` y `src/components/FinalCTA.tsx` queda descartado como canal operativo. Debe reemplazarse por `agencyvalinor@gmail.com` al implementar; ver hallazgo P0-03 de la auditoría.
 
 ### WhatsApp
 
 El botón flotante genera un enlace wa.me con texto precargado, pero sin número de destino.
 
-El número comercial está Pending confirmation.
+Número comercial confirmado (provisional): +54 9 11 5015-2833.
+Enlace técnico: https://wa.me/5491150152833.
+Mensaje inicial sugerido: "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto."
+
+Implementación pendiente; ver hallazgo P0-02 de la auditoría.
 
 ## Datos y persistencia
 
-Not applicable en el estado actual.
+Not applicable en el estado actual (sin backend ni base de datos propios).
 
-Si se incorpora un formulario real, deben documentarse:
+Para el formulario real, decidido y pendiente de implementación:
 
-- proveedor;
-- datos recopilados;
-- validación;
-- retención;
-- protección antispam;
-- rate limiting;
-- tratamiento de errores;
-- variables de entorno;
-- obligaciones de privacidad aplicables.
+- proveedor: Resend;
+- datos recopilados: nombre, email o WhatsApp, tipo de proyecto y mensaje;
+- validación: cliente y servidor;
+- retención: Pending confirmation;
+- protección antispam: honeypot;
+- rate limiting: protección básica contra abuso, mecanismo específico Pending confirmation;
+- tratamiento de errores: estados de carga, éxito y error en el cliente;
+- variables de entorno: `RESEND_API_KEY`;
+- obligaciones de privacidad aplicables: Pending confirmation.
 
 ## Integraciones
 
-### Confirmadas
+### Confirmadas (implementadas)
 
 - enlaces mailto:;
 - enlace externo a WhatsApp;
 - Google Fonts procesadas mediante next/font.
 
+### Decididas, pendientes de implementación
+
+- Resend como proveedor de email para el formulario de contacto (vía ruta de servidor de Next.js);
+- número de WhatsApp comercial (provisional): +54 9 11 5015-2833;
+- hosting: Vercel.
+
 ### Pendientes
 
-- proveedor de email o formularios;
 - analytics;
 - Search Console;
-- hosting y dominio definitivos.
+- dominio oficial (candidato: `valinoragency.com.ar`, no comprado);
+- remitente definitivo del formulario (depende del dominio).
 
 ## SEO
 
@@ -152,7 +174,7 @@ Existen title, description y Open Graph básico. Faltan o requieren confirmació
 - robots.ts;
 - sitemap.ts;
 - datos estructurados;
-- dominio oficial.
+- dominio oficial (candidato: `valinoragency.com.ar`, pendiente de compra).
 
 ## Seguridad
 
@@ -181,9 +203,9 @@ El objetivo cuantitativo de rendimiento está Pending confirmation.
 
 - Repositorio: ValinorAgency/website.
 - Rama auditada: development.
-- Proyecto Vercel dentro del equipo Valinor Agency: no identificado durante la auditoría.
-- Hosting de producción: Pending confirmation.
-- Dominio: Pending confirmation.
+- Proyecto Vercel dentro del equipo Valinor Agency: no identificado durante la auditoría del 28 de agosto de 2026.
+- Hosting de producción: confirmado (Vercel). Proyecto de despliegue todavía no configurado.
+- Dominio: no comprado. Candidato principal: `valinoragency.com.ar`.
 - CI/CD: no configurado en el repositorio.
 
 ## Restricciones técnicas
@@ -198,10 +220,11 @@ El objetivo cuantitativo de rendimiento está Pending confirmation.
 
 ## Preguntas abiertas
 
-- ¿Dónde se desplegará la web?
-- ¿Cuál es el dominio oficial?
-- ¿Qué ruta o estrategia recibirá el formulario?
+- ¿Cuándo se comprará el dominio oficial? Candidato principal: `valinoragency.com.ar`.
+- ¿Cuál será el remitente definitivo del formulario? Depende de comprar y verificar el dominio.
 - ¿Se mantendrá Three.js en el hero para todos los dispositivos?
 - ¿Se eliminarán componentes y assets experimentales?
 - ¿Se incorporará CI para lint, build y auditoría?
+
+Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de implementación: hosting (Vercel), ruta y proveedor del formulario (ruta de servidor de Next.js + Resend).
 

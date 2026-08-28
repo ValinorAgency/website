@@ -115,11 +115,26 @@ La home renderiza actualmente:
 
 La necesidad de incorporar casos reales, equipo y proceso está identificada en la auditoría, pero todavía requiere aprobación de contenido.
 
+### Copy aprobado del hero
+
+Confirmado, implementación pendiente:
+
+- Título: "Diseño y desarrollo web a medida".
+- Descripción: "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."
+- CTA principal: "Contanos tu proyecto".
+- CTA secundario: "Explorar conceptos".
+- Respaldo: "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
+
+### Sección de equipo (confirmada, implementación pendiente)
+
+Sección breve con fotos, sin LinkedIn inicialmente. Bios en `PRODUCT.md`. Fotos concretas: Pending confirmation.
+
 ## Componentes e interacción
 
 - Los CTA deben tener una acción inequívoca y consistente.
 - Las interacciones esenciales no pueden depender de hover.
-- Los ejemplos conceptuales deben etiquetarse como tales.
+- Los ejemplos conceptuales deben etiquetarse como tales, con la etiqueta "Concepto".
+- La sección de tecnologías se conserva por ahora. Mejora futura registrada: separar la presentación de frontend/diseño (más creativa) de la de backend/datos (más estructurada).
 - Los diálogos deben atrapar el foco, cerrarse con Escape y devolver el foco al disparador.
 - El cursor personalizado nunca debe dejar al visitante sin un cursor utilizable si JavaScript falla.
 - El formulario debe comunicar si envió, falló o derivó a una aplicación externa.
@@ -191,12 +206,12 @@ Los recursos sin uso o propios de experimentación están pendientes de limpieza
 
 ## Preguntas abiertas
 
-- Copy definitivo del hero.
-- CTA principal y secundario.
 - Casos reales autorizados.
-- Presentación pública del equipo.
+- Fotos concretas de la sección de equipo.
 - Uso final del azul y del teal dentro del sistema de marca.
 - Necesidad de mantener las fuentes adicionales.
 - Comportamiento definitivo del loader y de los canvas en mobile.
 - Imagen Open Graph oficial.
+
+Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de implementación: copy definitivo del hero, CTA principal y secundario, presentación pública del equipo (bios y estructura de la sección).
 

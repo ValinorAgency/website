@@ -23,7 +23,7 @@ Este documento es la fuente canónica para los quality gates del proyecto y la e
 | Accesibilidad | Applicable | Procedimiento manual documentado abajo | Cambios de contenido o interfaz |
 | SEO | Applicable | Checklist documentado abajo | Cambios públicos, metadata, estructura o rutas |
 | Performance | Applicable | Revisión de bundle, assets y comportamiento | Cambios de animación, fuentes, imágenes, canvas o dependencias |
-| Deploy validation | Not configured | Pending confirmation | Cuando hosting y dominio estén definidos |
+| Deploy validation | Not configured | Pending confirmation | Hosting confirmado (Vercel). Falta comprar el dominio (candidato: valinoragency.com.ar) y configurar el proyecto de despliegue |
 
 ## Browser QA
 
@@ -97,6 +97,8 @@ Para cambios en dependencias, formularios, integraciones o deploy:
 - revisar contenido público dentro de public/.
 
 No ejecutar correcciones automáticas con cambios de versión sin inspeccionar el diff y obtener autorización cuando corresponda.
+
+Para el formulario real (Resend + ruta de servidor de Next.js, ver `docs/ARCHITECTURE.md`), decidido y pendiente de implementación, el gate de seguridad deberá verificar además: validación server-side de todos los campos, honeypot antispam y protección básica contra abuso (rate limiting), y que la `RESEND_API_KEY` no quede expuesta en el cliente.
 
 ## Performance
 
