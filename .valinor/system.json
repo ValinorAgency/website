@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "system": "valinor-development-system",
+  "starter": {
+    "repository": "ValinorAgency/agency-app-starter",
+    "version": "0.1.0"
+  },
+  "technicalProfile": "core"
+}
