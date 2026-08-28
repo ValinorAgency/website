@@ -100,6 +100,20 @@ No ejecutar correcciones automáticas con cambios de versión sin inspeccionar e
 
 Para el formulario real (Resend + ruta de servidor de Next.js, ver `docs/ARCHITECTURE.md`), decidido y pendiente de implementación, el gate de seguridad deberá verificar además: validación server-side de todos los campos, honeypot antispam y protección básica contra abuso (rate limiting), y que la `RESEND_API_KEY` no quede expuesta en el cliente.
 
+### Headers de seguridad — confirmado 2026-08-28
+
+`next.config.ts` configura Content-Security-Policy, Strict-Transport-Security, X-Content-Type-Options, Referrer-Policy, Permissions-Policy y X-Frame-Options para todas las rutas, aplicados solo en runtime de producción. Detalle completo, justificación de la política y deuda técnica registrada en `docs/ARCHITECTURE.md`.
+
+Verificación ejecutada:
+
+- `npm run lint`: sin errores.
+- `npm run build`: exitoso, mismas rutas (`/`, `/_not-found`, `/sprite-probe`).
+- `npm audit --omit=dev`: 0 vulnerabilidades.
+- `npm run start` + `curl -I` sobre `/`, `/sprite-probe` y una ruta 404: los 6 headers presentes con los valores esperados en las tres respuestas.
+- Inspección del HTML y CSS servidos: confirma que los `<script>` y `style=""` inline detectados son reales (justifican `unsafe-inline`) y que todas las fuentes son same-origin.
+
+Pendiente: verificar los mismos headers sobre el dominio y hosting definitivos una vez desplegados (no se pudo verificar in situ porque el hosting de producción todavía no está configurado).
+
 ## Performance
 
 Revisar:

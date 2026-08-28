@@ -180,10 +180,28 @@ Existen title, description y Open Graph básico. Faltan o requieren confirmació
 
 - No se encontraron secretos versionados durante la auditoría del 28 de agosto de 2026.
 - No existen endpoints de negocio, autenticación ni base de datos.
-- next.config.ts no configura headers de seguridad.
 - Las dependencias actuales presentan vulnerabilidades documentadas en la auditoría.
 
-La política CSP y los headers finales deben diseñarse según el hosting y los recursos realmente utilizados.
+### Headers de seguridad (confirmado, 2026-08-28)
+
+`next.config.ts` configura, vía `headers()`, los siguientes headers para todas las rutas (`/:path*`), aplicados solo cuando `NODE_ENV === "production"` (no se aplican en `next dev`, para no arriesgar el HMR de desarrollo, que no es la superficie pública):
+
+- `Content-Security-Policy`: `default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`;
+- `Strict-Transport-Security`: `max-age=31536000`;
+- `X-Content-Type-Options`: `nosniff`;
+- `Referrer-Policy`: `strict-origin-when-cross-origin`;
+- `Permissions-Policy`: `camera=(), microphone=(), geolocation=()`;
+- `X-Frame-Options`: `DENY` (compatibilidad adicional a `frame-ancestors 'none'`).
+
+Recursos verificados que sustentan la política (todos same-origin): HTML/JS/CSS servidos por Next.js, imágenes y modelos `.glb` en `public/`, fuentes Inter/Lora/Cinzel/DM Sans auto-hospedadas por `next/font/google` bajo `/_next/static/media/*.woff2`. El único enlace externo real del sitio es `wa.me` (navegación por `<a href>`, no un recurso cargado por la página). No hay `<iframe>`, analytics, `fetch`/XHR a dominios externos ni Web Workers. No se usa `unsafe-eval`: los shaders GLSL/WGSL de Three.js (WebGL y WebGPU) se compilan vía la API gráfica del navegador, no mediante `eval`/`Function` de JavaScript.
+
+Deuda técnica registrada:
+
+- `script-src 'unsafe-inline'`: Next.js App Router inyecta `<script>` inline con el payload de hidratación de Server Components (`self.__next_f.push(...)`); verificado en el HTML servido (2 bloques inline en `/`). Configurar headers solo desde `next.config.ts`, sin middleware, no permite generar un nonce por request para evitar esta concesión.
+- `style-src 'unsafe-inline'`: el HTML servido contiene atributos `style="..."` reales (verificado: 78 en `/`, por ejemplo tamaños `clamp()` en el hero) y Framer Motion/GSAP escriben la propiedad `style` directamente por JS.
+- `Strict-Transport-Security` sin `includeSubDomains` ni `preload`: pendiente hasta confirmar el dominio oficial y que todos los subdominios futuros estarán siempre bajo HTTPS.
+- Los headers solo se aplican en runtime de producción (`next build && next start`, y por extensión Vercel); no se aplican en `next dev`.
+- Verificación realizada con `npm run start` en local; falta verificar los headers sobre el dominio y hosting definitivos una vez desplegados (ver hallazgo P0-04 de la auditoría).
 
 ## Rendimiento
 
