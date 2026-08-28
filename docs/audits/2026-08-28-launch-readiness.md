@@ -34,18 +34,28 @@ La interfaz está avanzada y el proyecto compila, pero todavía no se considera 
 
 ### P0-01 — Dependencias vulnerables
 
-Estado: Open.
+Estado: Resuelto (2026-08-28) para dependencias de producción relacionadas con Next.js.
 
-Next.js 16.2.9 y dependencias transitivas presentan vulnerabilidades registradas por npm audit. La corrección disponible durante la auditoría indicaba Next.js 16.3.3.
+Next.js 16.2.9 y sus dependencias transitivas de producción (`postcss`, `sharp`, `nanoid`) presentaban 4 vulnerabilidades de severidad alta registradas por `npm audit --omit=dev`. Se actualizó `next` y `eslint-config-next`, en versión coordinada, de `16.2.9` a `16.3.3`.
 
-Acción propuesta:
+Versiones finales relevantes (`package-lock.json`):
 
-1. actualizar Next.js y eslint-config-next de forma coordinada;
-2. inspeccionar lockfile y cambios transitivos;
-3. ejecutar lint, build y audit;
-4. realizar browser QA.
+- `next`: 16.2.9 → 16.3.3;
+- `eslint-config-next`: 16.2.9 → 16.3.3;
+- `postcss` (transitiva de `next`): 8.4.31 → 8.5.23;
+- `sharp` (transitiva de `next`): 0.34.5 → 0.35.4;
+- `nanoid` (transitiva de `postcss`): 3.3.12 → 3.3.18.
 
-No ejecutar actualización sin autorización explícita.
+Resultado tras la actualización:
+
+- `npm audit --omit=dev`: 0 vulnerabilidades (antes: 4 altas).
+- `npm audit` (completo): 4 vulnerabilidades (1 moderada, 3 altas), todas en `devDependencies` sin relación con Next.js: `js-yaml` y `brace-expansion` (cadena de `eslint`/`typescript-eslint`) y una instancia de `postcss` propia de `@tailwindcss/postcss` (no la de `next`, ya corregida). Estas no forman parte del alcance de este hallazgo (dependencias de producción relacionadas con Next.js) y no se tocaron para evitar actualizaciones mayores o de riesgo no solicitadas.
+- `npm run lint`: sin errores.
+- `npm run build`: exitoso con Next.js 16.3.3; mismas rutas generadas (`/`, `/_not-found`, `/sprite-probe`).
+
+No se usó `npm audit fix --force`. No se modificaron dependencias distintas de `next` y `eslint-config-next` en `package.json`; los cambios restantes en `package-lock.json` son transitivos de esas dos actualizaciones.
+
+Si se desea eliminar también las vulnerabilidades de `devDependencies` señaladas arriba, requiere una decisión y tarea aparte (puede implicar actualizar `eslint` a una versión mayor).
 
 ### P0-02 — WhatsApp sin destinatario
 
