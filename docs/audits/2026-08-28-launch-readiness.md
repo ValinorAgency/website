@@ -69,7 +69,7 @@ Sigue pendiente: prueba manual en un dispositivo mobile real y, si se incorpora 
 
 ### P0-03 — Formulario sin envío real
 
-Estado: Implementación completada (2026-08-28). Envío real todavía no probado por falta de credenciales.
+Estado: Resuelto (2026-08-29) para la implementación actual. Envío real verificado por el usuario.
 
 FinalCTA usaba mailto y dependía de una aplicación de correo configurada, sin confirmación de recepción. Ahora envía vía `fetch` a `POST /api/contact` (Route Handler de Next.js + Resend), con validación en cliente y servidor, honeypot antispam y rate limiting básico. Contrato completo, campos y códigos de respuesta documentados en `docs/ARCHITECTURE.md` y `docs/QUALITY.md`.
 
@@ -80,11 +80,11 @@ Verificado localmente (`npm run start`, sin `RESEND_API_KEY`, vía `curl`):
 - rate limiting: confirmado (429 al superar 5 solicitudes en 10 minutos desde el mismo origen);
 - headers de seguridad presentes también en `/api/contact`, compatibles con la CSP existente (`connect-src 'self'`).
 
-Envío real pendiente de API key: no se afirmó ni se puede afirmar que el envío efectivo a través de Resend fue probado, porque no hay una `RESEND_API_KEY` válida disponible en este entorno.
+Envío real verificado (2026-08-29): el usuario envió el formulario desde la interfaz web local con `RESEND_API_KEY` configurada únicamente en `.env.local` (no versionada, no documentada ni mostrada). Resend aceptó y registró el envío, y el mensaje llegó correctamente a `agencyvalinor@gmail.com`. Detalle en `docs/QUALITY.md`.
 
-Remitente/dominio definitivo pendiente: el remitente actual (`Valinor Agency <onboarding@resend.dev>`) es temporal; Resend puede limitar los destinatarios de prueba según el plan de la cuenta. El remitente definitivo depende de comprar y verificar el dominio oficial (ver P0-04).
+Remitente/dominio definitivo — pendiente independiente, no bloquea este hallazgo: el remitente actual (`Valinor Agency <onboarding@resend.dev>`) sigue siendo temporal; Resend puede limitar los destinatarios de prueba según el plan de la cuenta. El remitente corporativo definitivo continúa pendiente de comprar y verificar el dominio oficial (ver P0-04).
 
-Sigue pendiente: retención de datos y obligaciones de privacidad aplicables (sin decidir); prueba de envío real una vez exista una API key válida.
+Sigue pendiente: retención de datos y obligaciones de privacidad aplicables (sin decidir).
 
 ### P0-04 — Hosting y dominio
 
@@ -233,7 +233,7 @@ Decisión: la sección de tecnologías se conserva por ahora sin cambios. Mejora
 
 1. Dominio y hosting oficial. — Parcialmente resuelto (2026-08-28): hosting Vercel confirmado; dominio pendiente de compra (candidato `valinoragency.com.ar`).
 2. Número comercial de WhatsApp. — Resuelto e implementado (2026-08-28): provisional, +54 9 11 5015-2833.
-3. Canal y proveedor del formulario. — Resuelto e implementado (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp. Envío real sin probar por falta de `RESEND_API_KEY` válida.
+3. Canal y proveedor del formulario. — Resuelto e implementado (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp. Envío real verificado el 2026-08-29; remitente sigue temporal hasta comprar y verificar el dominio oficial.
 4. Casos reales autorizados. — Pendiente.
 5. Presentación pública del equipo. — Resuelto (2026-08-28): sección breve con bios de ambos cofundadores; fotos concretas pendientes.
 6. Copy y CTA del hero. — Resuelto (2026-08-28): ver `DESIGN.md`.

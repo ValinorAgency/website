@@ -117,7 +117,17 @@ Verificación ejecutada:
   - headers de seguridad (CSP incluida) presentes también en las respuestas de `/api/contact`, confirmando que el `fetch` del cliente es same-origin y compatible con `connect-src 'self'`.
 - No se agregó un framework de tests: el repositorio no tiene ninguno configurado (`Tests automatizados: Not configured`) y agregar uno hubiera excedido el alcance de "instalar solamente la dependencia `resend`"; la validación del servidor se verificó manualmente como se detalla arriba.
 
-Pendiente: no se pudo probar un envío real, porque no hay una `RESEND_API_KEY` válida disponible en este entorno. El remitente (`onboarding@resend.dev`) es temporal y Resend puede limitar los destinatarios de prueba según la cuenta; el remitente definitivo depende de comprar y verificar el dominio oficial.
+### Verificación manual real — 2026-08-29
+
+El usuario realizó el envío real desde la interfaz web local con `RESEND_API_KEY` configurada únicamente en `.env.local` (no versionada, no documentada ni mostrada aquí). Resultado confirmado por el usuario:
+
+- el formulario se envió desde la interfaz web local;
+- Resend aceptó y registró el envío;
+- el mensaje llegó correctamente a `agencyvalinor@gmail.com`.
+
+Con esto, el envío real a través de Resend queda verificado para la implementación actual.
+
+Pendiente, independiente de lo anterior: el remitente sigue siendo temporal (`Valinor Agency <onboarding@resend.dev>`) y Resend puede limitar los destinatarios de prueba según la cuenta; el remitente corporativo definitivo continúa pendiente de comprar y verificar el dominio oficial.
 
 ### Headers de seguridad — confirmado 2026-08-28
 
