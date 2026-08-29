@@ -59,31 +59,32 @@ Si se desea eliminar también las vulnerabilidades de `devDependencies` señalad
 
 ### P0-02 — WhatsApp sin destinatario
 
-Estado: Open. Decisión confirmada (2026-08-28); implementación pendiente.
+Estado: Resuelto (2026-08-28). Implementación completada y verificada localmente.
 
-FloatingActions genera un enlace wa.me con mensaje, pero sin número de Valinor.
+FloatingActions generaba un enlace wa.me con mensaje, pero sin número de Valinor. Ahora usa `https://wa.me/5491150152833` con el mensaje "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto." codificado correctamente con `encodeURIComponent`. Detalle en `docs/ARCHITECTURE.md`.
 
-Decisión: número comercial provisional +54 9 11 5015-2833; enlace https://wa.me/5491150152833; mensaje inicial sugerido "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto." Ver `docs/ARCHITECTURE.md`.
+Verificado: HTML servido contiene el enlace completo; no quedan otras referencias a WhatsApp incompletas en el código.
 
-Sigue pendiente:
-
-- implementar el número en FloatingActions;
-- prueba en desktop y mobile;
-- definición de evento de conversión si se incorpora analytics.
+Sigue pendiente: prueba manual en un dispositivo mobile real y, si se incorpora analytics, definir el evento de conversión (fuera del alcance de esta tarea).
 
 ### P0-03 — Formulario sin envío real
 
-Estado: Open. Decisión confirmada (2026-08-28); implementación pendiente.
+Estado: Implementación completada (2026-08-28). Envío real todavía no probado por falta de credenciales.
 
-FinalCTA usa mailto y depende de una aplicación de correo configurada. No existe confirmación de recepción.
+FinalCTA usaba mailto y dependía de una aplicación de correo configurada, sin confirmación de recepción. Ahora envía vía `fetch` a `POST /api/contact` (Route Handler de Next.js + Resend), con validación en cliente y servidor, honeypot antispam y rate limiting básico. Contrato completo, campos y códigos de respuesta documentados en `docs/ARCHITECTURE.md` y `docs/QUALITY.md`.
 
-Decisión: proveedor Resend, procesado mediante una ruta de servidor de Next.js; campos nombre, email o WhatsApp, tipo de proyecto y mensaje; destinatario `agencyvalinor@gmail.com`; Reply-To con el email del visitante cuando corresponda; variable `RESEND_API_KEY`; validación en cliente y servidor, estados de carga/éxito/error, honeypot antispam y protección básica contra abuso. Ver `docs/ARCHITECTURE.md`.
+Verificado localmente (`npm run start`, sin `RESEND_API_KEY`, vía `curl`):
 
-Sigue pendiente:
+- prueba local sin credenciales: confirmada — sin la variable de entorno, el endpoint responde `500 { error: "config" }` de forma controlada, sin exponer detalles de Resend;
+- validación de payload inválido, honeypot completo y payload válido: confirmadas, cada una con el código de respuesta esperado;
+- rate limiting: confirmado (429 al superar 5 solicitudes en 10 minutos desde el mismo origen);
+- headers de seguridad presentes también en `/api/contact`, compatibles con la CSP existente (`connect-src 'self'`).
 
-- remitente definitivo (depende de comprar y verificar el dominio);
-- retención de datos y obligaciones de privacidad;
-- implementación completa.
+Envío real pendiente de API key: no se afirmó ni se puede afirmar que el envío efectivo a través de Resend fue probado, porque no hay una `RESEND_API_KEY` válida disponible en este entorno.
+
+Remitente/dominio definitivo pendiente: el remitente actual (`Valinor Agency <onboarding@resend.dev>`) es temporal; Resend puede limitar los destinatarios de prueba según el plan de la cuenta. El remitente definitivo depende de comprar y verificar el dominio oficial (ver P0-04).
+
+Sigue pendiente: retención de datos y obligaciones de privacidad aplicables (sin decidir); prueba de envío real una vez exista una API key válida.
 
 ### P0-04 — Hosting y dominio
 
@@ -231,8 +232,8 @@ Decisión: la sección de tecnologías se conserva por ahora sin cambios. Mejora
 ## Decisiones necesarias del usuario
 
 1. Dominio y hosting oficial. — Parcialmente resuelto (2026-08-28): hosting Vercel confirmado; dominio pendiente de compra (candidato `valinoragency.com.ar`).
-2. Número comercial de WhatsApp. — Resuelto (2026-08-28): provisional, +54 9 11 5015-2833.
-3. Canal y proveedor del formulario. — Resuelto (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp.
+2. Número comercial de WhatsApp. — Resuelto e implementado (2026-08-28): provisional, +54 9 11 5015-2833.
+3. Canal y proveedor del formulario. — Resuelto e implementado (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp. Envío real sin probar por falta de `RESEND_API_KEY` válida.
 4. Casos reales autorizados. — Pendiente.
 5. Presentación pública del equipo. — Resuelto (2026-08-28): sección breve con bios de ambos cofundadores; fotos concretas pendientes.
 6. Copy y CTA del hero. — Resuelto (2026-08-28): ver `DESIGN.md`.

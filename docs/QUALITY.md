@@ -98,7 +98,26 @@ Para cambios en dependencias, formularios, integraciones o deploy:
 
 No ejecutar correcciones automáticas con cambios de versión sin inspeccionar el diff y obtener autorización cuando corresponda.
 
-Para el formulario real (Resend + ruta de servidor de Next.js, ver `docs/ARCHITECTURE.md`), decidido y pendiente de implementación, el gate de seguridad deberá verificar además: validación server-side de todos los campos, honeypot antispam y protección básica contra abuso (rate limiting), y que la `RESEND_API_KEY` no quede expuesta en el cliente.
+### Formulario de contacto — implementado 2026-08-28
+
+`POST /api/contact` (Resend + Route Handler de Next.js, detalle completo en `docs/ARCHITECTURE.md`) quedó implementado con validación server-side de todos los campos, honeypot antispam y rate limiting básico best-effort. La `RESEND_API_KEY` se lee solo en el servidor (`process.env`, sin prefijo `NEXT_PUBLIC_`) y no se expone al cliente.
+
+Verificación ejecutada:
+
+- `npm run lint`: sin errores.
+- `npm run build` sin `RESEND_API_KEY` en el entorno: exitoso; nueva ruta `/api/contact` generada como dinámica (ƒ).
+- `npm audit --omit=dev`: 0 vulnerabilidades tras agregar `resend`.
+- Pruebas manuales del endpoint local (`npm run start`, sin `RESEND_API_KEY`) vía `curl`:
+  - payload válido sin API key → `500 { error: "config" }`, sin detalles de Resend ni datos sensibles en la respuesta;
+  - payload inválido (nombre corto, contacto inválido, tipo inválido, mensaje corto) → `400` con errores por campo;
+  - honeypot completo → `200 { ok: true }` sin intentar el envío;
+  - contacto como teléfono válido → pasa la validación y llega al mismo error controlado de falta de API key;
+  - más de 5 solicitudes en la ventana de 10 minutos desde el mismo origen → `429 { error: "rate_limited" }`;
+  - JSON malformado → manejado sin excepción no controlada;
+  - headers de seguridad (CSP incluida) presentes también en las respuestas de `/api/contact`, confirmando que el `fetch` del cliente es same-origin y compatible con `connect-src 'self'`.
+- No se agregó un framework de tests: el repositorio no tiene ninguno configurado (`Tests automatizados: Not configured`) y agregar uno hubiera excedido el alcance de "instalar solamente la dependencia `resend`"; la validación del servidor se verificó manualmente como se detalla arriba.
+
+Pendiente: no se pudo probar un envío real, porque no hay una `RESEND_API_KEY` válida disponible en este entorno. El remitente (`onboarding@resend.dev`) es temporal y Resend puede limitar los destinatarios de prueba según la cuenta; el remitente definitivo depende de comprar y verificar el dominio oficial.
 
 ### Headers de seguridad — confirmado 2026-08-28
 

@@ -184,8 +184,8 @@ export default function Navbar() {
                 <p className="max-w-56 text-xs leading-5 text-black/55">
                   Websites, ecommerce y aplicaciones a medida.
                 </p>
-                <a href="mailto:hola@valinor.agency" className="text-xs font-semibold underline decoration-black/25 underline-offset-4">
-                  hola@valinor.agency
+                <a href="mailto:agencyvalinor@gmail.com" className="text-xs font-semibold underline decoration-black/25 underline-offset-4">
+                  agencyvalinor@gmail.com
                 </a>
               </motion.div>
             </motion.div>

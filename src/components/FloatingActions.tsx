@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 
+const WHATSAPP_NUMBER = "5491150152833";
 const WHATSAPP_MESSAGE =
-  "Hola, me gustaría conversar sobre un proyecto digital con Valinor Agency.";
-const WHATSAPP_URL = `https://wa.me/?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto.";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 export default function FloatingActions() {
   const [showBackToTop, setShowBackToTop] = useState(false);

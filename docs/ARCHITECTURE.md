@@ -26,6 +26,7 @@ Las versiones exactas y rangos autorizados están en package.json.
 | Ruta | Propósito | Estado |
 | --- | --- | --- |
 | / | Home institucional | Activa |
+| /api/contact | Route Handler (POST) que procesa el formulario de contacto vía Resend | Activa (implementada 2026-08-28) |
 | /sprite-probe | Prototipo aislado de partículas WebGPU | Experimental; no debe considerarse página pública aprobada |
 | /_not-found | Página automática de Next.js | Activa |
 
@@ -88,69 +89,81 @@ La home incluye Framer Motion, GSAP y Three.js en el bundle cliente. La reducci�
 
 ## Contacto
 
-### Formulario
+### Formulario (implementado, 2026-08-28)
 
-El formulario actual:
+`src/components/FinalCTA.tsx` envía el formulario mediante `fetch` a `POST /api/contact` (`src/app/api/contact/route.ts`), same-origin, sin exponer ninguna credencial al navegador. Ya no usa `mailto:`.
 
-- valida mediante atributos HTML;
-- crea un asunto y cuerpo en el navegador;
-- redirige a un enlace mailto:;
-- no envía datos a un backend;
-- no ofrece confirmación real de recepción;
-- no almacena información.
+Contrato de `POST /api/contact`:
 
-Arquitectura confirmada para el formulario real (implementación pendiente):
+- request JSON: `{ name, contact, projectType, message, company }` (`company` es el honeypot, debe llegar vacío);
+- `projectType` es una lista cerrada: `sitio-web`, `tienda-online`, `aplicacion-web-dashboard`, `otro`;
+- `contact` acepta un email válido o un teléfono razonable (8 a 15 dígitos);
+- respuesta éxito: `200 { ok: true }`;
+- respuesta validación fallida: `400 { ok: false, error: "validation", fields: { ... } }`;
+- respuesta límite de solicitudes: `429 { ok: false, error: "rate_limited" }`;
+- respuesta sin `RESEND_API_KEY` configurada: `500 { ok: false, error: "config" }`;
+- respuesta con error de Resend o de red al enviar: `502 { ok: false, error: "send_failed" }`;
+- si el honeypot llega completo, responde `200 { ok: true }` sin enviar nada (no revela la protección).
 
-- proveedor: Resend;
-- procesamiento: ruta de servidor (Route Handler) de Next.js;
-- campos: nombre, email o WhatsApp, tipo de proyecto y mensaje;
-- tipos de proyecto: sitio web, tienda online, aplicación web/dashboard, otro;
+Validación implementada en `src/lib/contact-validation.ts`, compartida entre cliente y servidor (trim, límites de longitud, lista cerrada de tipo de proyecto, email o teléfono razonable). El cliente no confía únicamente en atributos HTML (`noValidate` + validación propia); el servidor revalida todo de forma independiente.
+
+Antispam y abuso:
+
+- honeypot oculto (`company`) fuera del flujo de tabulación y con `aria-hidden="true"`, para no interferir con teclado ni lectores de pantalla;
+- rate limiting en `src/app/api/contact/rate-limit.ts`: máximo 5 solicitudes cada 10 minutos por IP (`x-forwarded-for`), en memoria del proceso. Es **best-effort**: en Vercel serverless cada instancia/cold start tiene su propia memoria, así que no garantiza un límite global entre instancias concurrentes. No se agregó Redis, base de datos ni CAPTCHA.
+
+Envío de email (`resend`, dependencia oficial agregada a `package.json`):
+
 - destinatario: `agencyvalinor@gmail.com`;
-- Reply-To: email ingresado por el visitante cuando corresponda;
-- remitente definitivo: Pending confirmation, depende de comprar y verificar el dominio oficial;
-- variable de entorno prevista: `RESEND_API_KEY`;
-- debe incluir validación en cliente y en servidor, estados de carga, éxito y error, honeypot antispam y protección básica contra abuso (rate limiting).
+- remitente: `Valinor Agency <onboarding@resend.dev>` — **temporal**, es la dirección de pruebas provista por Resend; según el plan de la cuenta, Resend puede limitar a qué destinatarios puede entregar un remitente no verificado. El remitente definitivo queda pendiente hasta comprar y verificar el dominio oficial (`valinoragency.com.ar` candidato);
+- Reply-To: se agrega solo cuando el contacto ingresado es un email válido (no cuando es un teléfono);
+- variable de entorno: `RESEND_API_KEY` (ver `.env.example`; no versionada);
+- el build funciona sin la variable configurada (verificado); en runtime, sin la variable el endpoint responde `500 { error: "config" }` en vez de intentar enviar o filtrar el error de Resend;
+- los logs de servidor (`console.error`) no incluyen el mensaje del visitante ni datos personales, solo texto genérico de diagnóstico.
 
-El correo `hola@valinor.agency` referenciado actualmente en `src/components/Navbar.tsx` y `src/components/FinalCTA.tsx` queda descartado como canal operativo. Debe reemplazarse por `agencyvalinor@gmail.com` al implementar; ver hallazgo P0-03 de la auditoría.
+Pendiente:
 
-### WhatsApp
+- probar un envío real: no existe una `RESEND_API_KEY` válida disponible en este entorno, así que el envío efectivo a través de Resend no fue probado, solo el contrato del endpoint y el camino de error sin credenciales;
+- remitente y dominio definitivos, una vez comprado y verificado el dominio oficial;
+- retención de datos y obligaciones de privacidad aplicables (sin decidir).
 
-El botón flotante genera un enlace wa.me con texto precargado, pero sin número de destino.
+El correo `hola@valinor.agency`, antes referenciado en `src/components/Navbar.tsx` y `src/components/FinalCTA.tsx`, fue reemplazado por `agencyvalinor@gmail.com` en ambos componentes.
 
-Número comercial confirmado (provisional): +54 9 11 5015-2833.
-Enlace técnico: https://wa.me/5491150152833.
-Mensaje inicial sugerido: "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto."
+### WhatsApp (implementado, 2026-08-28)
 
-Implementación pendiente; ver hallazgo P0-02 de la auditoría.
+`src/components/FloatingActions.tsx` genera el enlace con el número comercial provisional y el mensaje precompletado, con `text` codificado mediante `encodeURIComponent`:
+
+- número: +54 9 11 5015-2833;
+- enlace: https://wa.me/5491150152833;
+- mensaje: "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto."
+
+No quedan otras referencias a WhatsApp en el código con enlaces incompletos o inconsistentes (verificado).
 
 ## Datos y persistencia
 
-Not applicable en el estado actual (sin backend ni base de datos propios).
-
-Para el formulario real, decidido y pendiente de implementación:
+No hay base de datos ni almacenamiento propio. El formulario de contacto (implementado, 2026-08-28) no persiste datos: los reenvía por email vía Resend en el momento de la solicitud.
 
 - proveedor: Resend;
 - datos recopilados: nombre, email o WhatsApp, tipo de proyecto y mensaje;
-- validación: cliente y servidor;
-- retención: Pending confirmation;
-- protección antispam: honeypot;
-- rate limiting: protección básica contra abuso, mecanismo específico Pending confirmation;
-- tratamiento de errores: estados de carga, éxito y error en el cliente;
-- variables de entorno: `RESEND_API_KEY`;
+- validación: cliente y servidor (`src/lib/contact-validation.ts`);
+- retención: Pending confirmation (no se almacena en el sitio; queda en la bandeja de `agencyvalinor@gmail.com` y en el historial de Resend);
+- protección antispam: honeypot (implementado);
+- rate limiting: básico, en memoria del proceso, best-effort (implementado; ver `docs/ARCHITECTURE.md` § Contacto);
+- tratamiento de errores: estados de carga, éxito y error en el cliente (implementado);
+- variables de entorno: `RESEND_API_KEY` (`.env.example` agregado; sin valor real versionado);
 - obligaciones de privacidad aplicables: Pending confirmation.
 
 ## Integraciones
 
 ### Confirmadas (implementadas)
 
-- enlaces mailto:;
-- enlace externo a WhatsApp;
+- Resend como proveedor de email para el formulario de contacto, vía `POST /api/contact` (código implementado 2026-08-28; envío real sin probar por falta de `RESEND_API_KEY` válida en este entorno);
+- enlace de WhatsApp con número comercial provisional (+54 9 11 5015-2833);
+- enlace mailto: directo a `agencyvalinor@gmail.com` como alternativa al formulario;
 - Google Fonts procesadas mediante next/font.
 
 ### Decididas, pendientes de implementación
 
-- Resend como proveedor de email para el formulario de contacto (vía ruta de servidor de Next.js);
-- número de WhatsApp comercial (provisional): +54 9 11 5015-2833;
 - hosting: Vercel.
 
 ### Pendientes
@@ -158,7 +171,8 @@ Para el formulario real, decidido y pendiente de implementación:
 - analytics;
 - Search Console;
 - dominio oficial (candidato: `valinoragency.com.ar`, no comprado);
-- remitente definitivo del formulario (depende del dominio).
+- remitente definitivo del formulario (depende del dominio);
+- prueba de envío real del formulario con una `RESEND_API_KEY` válida.
 
 ## SEO
 
@@ -240,9 +254,10 @@ El objetivo cuantitativo de rendimiento está Pending confirmation.
 
 - ¿Cuándo se comprará el dominio oficial? Candidato principal: `valinoragency.com.ar`.
 - ¿Cuál será el remitente definitivo del formulario? Depende de comprar y verificar el dominio.
+- ¿Funciona el envío real a través de Resend? No probado todavía: no hay una `RESEND_API_KEY` válida disponible en este entorno.
 - ¿Se mantendrá Three.js en el hero para todos los dispositivos?
 - ¿Se eliminarán componentes y assets experimentales?
 - ¿Se incorporará CI para lint, build y auditoría?
 
-Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de implementación: hosting (Vercel), ruta y proveedor del formulario (ruta de servidor de Next.js + Resend).
+Resueltas e implementadas (2026-08-28): hosting decidido (Vercel, despliegue aún pendiente), formulario de contacto (`POST /api/contact` + Resend, código completo), WhatsApp con número provisional, reemplazo de `hola@valinor.agency` por `agencyvalinor@gmail.com`.
 
