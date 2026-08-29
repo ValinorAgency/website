@@ -48,7 +48,7 @@ WhatsApp comercial (provisional): +54 9 11 5015-2833. Implementación pendiente;
 
 Valinor diseña y desarrolla soluciones web alrededor de objetivos concretos del negocio, con contacto directo con quienes realizan el trabajo, alcance explícito, entregas revisables y elección tecnológica según la necesidad real.
 
-El copy del hero fue aprobado (título, descripción, CTA primario, CTA secundario y línea de respaldo). Texto completo en `DESIGN.md`. Implementación pendiente.
+El copy del hero fue aprobado (título, descripción, CTA primario, CTA secundario y línea de respaldo) e implementado y verificado el 2026-08-29 (`src/components/HeroParticleAlt.tsx`). Texto completo en `DESIGN.md`.
 
 ## Alcance comercial confirmado
 
@@ -74,6 +74,8 @@ El copy del hero fue aprobado (título, descripción, CTA primario, CTA secundar
 La IA puede mencionarse como herramienta interna para análisis, diseño, desarrollo, documentación y control de calidad.
 
 Valinor no ofrece IA como servicio independiente. Una integración con IA dentro de un proyecto de cliente podrá evaluarse puntualmente solo si el cliente la solicita explícitamente y acepta los costos de API y de proveedores externos que implique. Valinor no financiará indefinidamente el consumo del cliente con una API key propia.
+
+Copy público alineado con esta política (implementado y verificado, 2026-08-29): en `src/components/TechStackSection.tsx` se reformularon la tarjeta de capacidad que prometía "Agentes y herramientas avanzadas" (ahora "Integraciones a medida") y la palabra "INTELIGENCIA ARTIFICIAL" del marquee decorativo (ahora "INTEGRACIONES A MEDIDA"), para que la IA no aparezca como pilar o servicio comercial independiente. Se conservó sin cambios la mención de IA como herramienta interna de análisis, desarrollo y control de calidad, por ser exactamente la formulación ya aprobada arriba.
 
 ## Requisitos confirmados
 

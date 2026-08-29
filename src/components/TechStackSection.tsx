@@ -8,7 +8,7 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 const capabilities = [
   { label: "Experiencias digitales", title: "Interfaces rápidas, claras y pensadas para convertir." },
   { label: "Sistemas sólidos", title: "Arquitecturas preparadas para crecer y mantenerse." },
-  { label: "IA en el proceso", title: "Agentes y herramientas avanzadas que potencian a nuestros expertos." },
+  { label: "Integraciones a medida", title: "Conectamos herramientas y automatizamos tareas puntuales cuando el proyecto lo necesita." },
 ] as const;
 
 const browserStates = [
@@ -132,7 +132,7 @@ export default function TechStackSection() {
         <motion.div className="capabilities-marquee-track" animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }}>
           {[0, 1].map((copy) => (
             <div className="capabilities-marquee-group" key={copy}>
-              <span>DISEÑO</span><i>✳</i><span>DESARROLLO</span><i>✳</i><span>ESTRATEGIA</span><i>✳</i><span>INTELIGENCIA ARTIFICIAL</span><i>✳</i>
+              <span>DISEÑO</span><i>✳</i><span>DESARROLLO</span><i>✳</i><span>ESTRATEGIA</span><i>✳</i><span>INTEGRACIONES A MEDIDA</span><i>✳</i>
             </div>
           ))}
         </motion.div>

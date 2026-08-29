@@ -117,13 +117,15 @@ La necesidad de incorporar casos reales, equipo y proceso está identificada en 
 
 ### Copy aprobado del hero
 
-Confirmado, implementación pendiente:
+Implementado y verificado (2026-08-29), en `src/components/HeroParticleAlt.tsx`:
 
-- Título: "Diseño y desarrollo web a medida".
+- Título (h1): "Diseño y desarrollo web a medida".
 - Descripción: "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."
-- CTA principal: "Contanos tu proyecto".
-- CTA secundario: "Explorar conceptos".
+- CTA principal: "Contanos tu proyecto" → ancla a `#contacto`.
+- CTA secundario: "Explorar conceptos" → ancla a `#portfolio` (anchor existente dentro de `Portfolio.tsx`).
 - Respaldo: "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
+
+"Valinor Agency" se conserva como identidad de marca visible (mismo tratamiento tipográfico grande de antes), pero ya no es el `h1`: el `h1` de la página es el título comercial aprobado. Verificado que la home renderiza un único `h1`.
 
 ### Sección de equipo (confirmada, implementación pendiente)
 
@@ -213,5 +215,7 @@ Los recursos sin uso o propios de experimentación están pendientes de limpieza
 - Comportamiento definitivo del loader y de los canvas en mobile.
 - Imagen Open Graph oficial.
 
-Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de implementación: copy definitivo del hero, CTA principal y secundario, presentación pública del equipo (bios y estructura de la sección).
+Implementado (2026-08-29): copy definitivo del hero y CTA principal y secundario.
+
+Resuelta por decisión confirmada del usuario (2026-08-28), pendiente de implementación: presentación pública del equipo (bios y estructura de la sección).
 

@@ -100,13 +100,15 @@ Sigue pendiente: comprar el dominio, configurar el proyecto de despliegue en Ver
 
 ### P1-01 — Hero sin CTA
 
-Estado: Open. Decisión confirmada (2026-08-28); implementación pendiente.
+Estado: Resuelto (2026-08-29). Decisión aprobada e implementación verificada.
 
-El hero comunica marca y “Diseño y desarrollo web a medida”, pero no explicita audiencia, beneficio ni siguiente paso.
+El hero comunicaba marca y “Diseño y desarrollo web a medida”, pero no explicitaba audiencia, beneficio ni siguiente paso, y ese texto era un `<p>` decorativo, no el `h1`.
 
 Decisión (copy aprobado, ver `DESIGN.md`): título "Diseño y desarrollo web a medida"; descripción "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."; CTA principal "Contanos tu proyecto"; CTA secundario "Explorar conceptos"; respaldo "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
 
-Sigue pendiente: implementar el copy y verificar la jerarquía SEO del h1.
+Implementado en `src/components/HeroParticleAlt.tsx`: el título aprobado es ahora el único `h1` de la página; "Valinor Agency" se conserva como identidad de marca visible en un `<p>`, no como `h1`. CTA principal enlaza a `#contacto` (sección de `FinalCTA.tsx`); CTA secundario enlaza a `#portfolio` (anchor existente en `Portfolio.tsx`, sección de proyectos/conceptos). Verificado por inspección de código y del HTML servido (`npm run start` + `curl`): un solo `<h1>` en la página, ambos CTA presentes con esos `href` exactos, botones con `min-height: 48px` y estados `:focus-visible` heredados de `.pill-button-dark`/`.pill-button-light`.
+
+Sigue pendiente: QA visual en navegador real (desktop y mobile) — no se pudo ejecutar en este entorno por falta de navegador disponible; requiere revisión manual del usuario.
 
 ### P1-02 — Ejemplos ambiguos
 
@@ -128,13 +130,15 @@ Sigue pendiente: fotos concretas del equipo, casos reales autorizados y definici
 
 ### P1-04 — IA demasiado visible
 
-Estado: Open. Política de IA confirmada (2026-08-28); implementación (revisión de copy) pendiente.
+Estado: Resuelto (2026-08-29). Decisión aprobada e implementación verificada.
 
-La home incluye “Agentes y herramientas avanzadas” y “INTELIGENCIA ARTIFICIAL”. Aunque la IA puede mencionarse como proceso interno, su prominencia puede interpretarse como servicio comercial.
+La home incluía “Agentes y herramientas avanzadas” (tarjeta de capacidad en `TechStackSection.tsx`) y “INTELIGENCIA ARTIFICIAL” (palabra del marquee decorativo, al mismo nivel que DISEÑO/DESARROLLO/ESTRATEGIA). Aunque la IA puede mencionarse como proceso interno, esa prominencia se interpretaba como servicio o pilar comercial.
 
 Decisión: Valinor no ofrece IA como servicio independiente. Una integración de IA podrá evaluarse solo si el cliente la solicita y acepta los costos de API y proveedores externos; Valinor no financiará indefinidamente el consumo del cliente con una API key propia. Ver `PRODUCT.md`.
 
-Sigue pendiente: revisar y ajustar el copy actual de la home según esta política.
+Implementado en `src/components/TechStackSection.tsx`: la tarjeta de capacidad ahora dice "Integraciones a medida" / "Conectamos herramientas y automatizamos tareas puntuales cuando el proyecto lo necesita", y la palabra del marquee ahora es "INTEGRACIONES A MEDIDA". Se conservó sin cambios el párrafo que menciona IA como herramienta interna para análisis, desarrollo y control de calidad, por coincidir con la formulación ya aprobada en `PRODUCT.md`. Verificado por inspección de código y del HTML servido: no quedan las cadenas "Agentes y herramientas avanzadas" ni "INTELIGENCIA ARTIFICIAL" en `src/`.
+
+No se tocaron dependencias ni componentes experimentales cuyos nombres internos mencionen IA (fuera de alcance de este hallazgo).
 
 ## Prioridad P1 — SEO
 
@@ -236,8 +240,8 @@ Decisión: la sección de tecnologías se conserva por ahora sin cambios. Mejora
 3. Canal y proveedor del formulario. — Resuelto e implementado (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp. Envío real verificado el 2026-08-29; remitente sigue temporal hasta comprar y verificar el dominio oficial.
 4. Casos reales autorizados. — Pendiente.
 5. Presentación pública del equipo. — Resuelto (2026-08-28): sección breve con bios de ambos cofundadores; fotos concretas pendientes.
-6. Copy y CTA del hero. — Resuelto (2026-08-28): ver `DESIGN.md`.
-7. Nivel de presencia pública de IA. — Resuelto (2026-08-28): IA no es servicio independiente; integración evaluable caso por caso si el cliente la solicita y paga costos externos.
+6. Copy y CTA del hero. — Resuelto e implementado (2026-08-29): ver `DESIGN.md`.
+7. Nivel de presencia pública de IA. — Resuelto e implementado (2026-08-29): IA no es servicio independiente; integración evaluable caso por caso si el cliente la solicita y paga costos externos.
 8. Prioridades cuantitativas de rendimiento y conversión. — Pendiente.
 
 ## Orden recomendado de implementación

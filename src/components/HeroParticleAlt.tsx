@@ -52,27 +52,48 @@ export default function HeroParticleAlt() {
         }}
       >
         <div className="flex flex-col items-center gap-3">
-          <h1
+          <p
             className="font-display font-black leading-[0.94]"
             style={{ fontSize: "clamp(2.9rem, 11vw, 10rem)", letterSpacing: "-0.055em" }}
           >
             <span className="block md:inline" style={{ color: "rgba(255,255,255,0.96)" }}>Valinor</span>{" "}
             <span className="block text-outline md:inline">Agency</span>
-          </h1>
-          <p
+          </p>
+          <h1
             className="mt-4 sm:mt-8"
             style={{
               fontSize: "clamp(0.75rem, 1.3vw, 1.56rem)",
               fontWeight: 200,
               letterSpacing: "0.32em",
-              color: "rgba(255,255,255,0.35)",
+              color: "rgba(255,255,255,0.86)",
               textTransform: "uppercase",
             }}
           >
             Diseño y desarrollo web a medida
+          </h1>
+          <p className="mt-5 max-w-xl text-pretty px-2 text-sm leading-6 text-[var(--ink-muted)] sm:mt-6 sm:text-base sm:leading-7">
+            Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina.
+          </p>
+
+          <div className="hero-cta-row pointer-events-auto mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
+            <a href="#contacto" className="pill-button-dark">
+              Contanos tu proyecto <span aria-hidden="true">↗</span>
+            </a>
+            <a href="#portfolio" className="pill-button-light">
+              Explorar conceptos
+            </a>
+          </div>
+
+          <p className="mt-6 max-w-sm text-pretty px-2 text-xs leading-5 text-[rgba(255,255,255,0.4)] sm:text-sm">
+            Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales.
           </p>
         </div>
       </motion.div>
+
+      <style>{`
+        .hero-cta-row a { min-height: 48px; width: 100%; }
+        @media (min-width: 640px) { .hero-cta-row a { width: auto; } }
+      `}</style>
     </section>
   );
 }
