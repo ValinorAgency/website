@@ -137,6 +137,7 @@ Sección breve con fotos, sin LinkedIn inicialmente. Bios en `PRODUCT.md`. Fotos
 - Las interacciones esenciales no pueden depender de hover.
 - Los ejemplos conceptuales deben etiquetarse como tales, con la etiqueta "Concepto".
 - La sección de tecnologías se conserva por ahora. Mejora futura registrada: separar la presentación de frontend/diseño (más creativa) de la de backend/datos (más estructurada).
+- La marquesina decorativa de `TechStackSection` se eliminó (2026-08-29) por ser redundante con la lista de capacidades interactiva. Esa lista (fondo negro tipográfico revelado por `:hover`) se conserva solo en dispositivos con hover y puntero preciso; queda oculta por completo (`display: none`, sin alto reservado) bajo `(hover: none)` o `(pointer: coarse)`, porque en touch no tiene equivalente confiable y el estado `:hover` puede quedar "pegado" tras un tap.
 - Los diálogos deben atrapar el foco, cerrarse con Escape y devolver el foco al disparador.
 - El cursor personalizado nunca debe dejar al visitante sin un cursor utilizable si JavaScript falla.
 - El formulario debe comunicar si envió, falló o derivó a una aplicación externa.

@@ -128,16 +128,6 @@ export default function TechStackSection() {
           ))}
       </div>
 
-      <div className="capabilities-marquee" aria-hidden="true">
-        <motion.div className="capabilities-marquee-track" animate={reduceMotion ? undefined : { x: ["0%", "-50%"] }} transition={{ duration: 24, repeat: Infinity, ease: "linear" }}>
-          {[0, 1].map((copy) => (
-            <div className="capabilities-marquee-group" key={copy}>
-              <span>DISEÑO</span><i>✳</i><span>DESARROLLO</span><i>✳</i><span>ESTRATEGIA</span><i>✳</i><span>INTEGRACIONES A MEDIDA</span><i>✳</i>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
       <style>{`
         .capabilities-section { overflow: hidden; padding-block: clamp(6rem,10vw,8rem) clamp(3rem,6vw,5rem); background: #f4f4f1; color: #111; }
         .capabilities-layout { display: grid; grid-template-columns: minmax(0,.86fr) minmax(28rem,1.14fr); gap: clamp(4rem,9vw,9rem); align-items: center; perspective: 1600px; perspective-origin: 72% 44%; }
@@ -181,11 +171,9 @@ export default function TechStackSection() {
         .capabilities-list h3 { max-width: 25ch; margin-top: .55rem; font-size: clamp(1.25rem,2vw,1.85rem); font-weight: 560; line-height: 1.18; letter-spacing: -.025em; transition: transform .45s cubic-bezier(.16,1,.3,1); }
         .capabilities-list button:hover h3,.capabilities-list button.is-active h3 { transform: translateX(7px); }
         .capabilities-list i { position: absolute; right: 0; bottom: -1px; left: 3rem; height: 2px; background: #24d6bc; transform-origin: left; }
-        .capabilities-marquee { margin-top: clamp(4rem,8vw,7rem); overflow: hidden; border-block: 1px solid rgba(17,17,17,.14); }
-        .capabilities-marquee-track { display: flex; width: max-content; align-items: center; white-space: nowrap; will-change: transform; }
-        .capabilities-marquee-group { min-width: 100vw; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-around; padding: 1.1rem 0; }
-        .capabilities-marquee span { font-family: var(--font-display-stack); font-size: clamp(1.1rem,2vw,1.65rem); font-weight: 650; letter-spacing: -.02em; }
-        .capabilities-marquee i { margin-inline: 1.25rem; color: #24a99a; font-size: .75rem; font-style: normal; }
+        @media (hover: none), (pointer: coarse) {
+          .capabilities-list { display: none; }
+        }
         @media (max-width: 800px) {
           .capabilities-layout { grid-template-columns: 1fr; gap: 3.5rem; }
           .capabilities-copy h2 { font-size: clamp(2.8rem,13vw,4.5rem); }

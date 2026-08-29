@@ -273,7 +273,7 @@ export default function Portfolio() {
         .mobile-project-highlight { display: none; }
 
         @media (max-width:760px) {
-          .portfolio-flow { padding: 7rem 0 1.5rem; }
+          .portfolio-flow { padding: 7rem 0 0; }
           .portfolio-flow-heading { padding: 0 1rem .75rem; }
           .portfolio-flow-heading h2 { font-size: clamp(2.65rem,13vw,4rem); }
           .flow-project-list { display: none; }
