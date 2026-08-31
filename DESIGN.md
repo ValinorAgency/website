@@ -187,7 +187,7 @@ Toda animación debe:
 - evitar movimiento permanente innecesario;
 - reducirse o desactivarse en dispositivos limitados cuando corresponda.
 
-El loader actual bloquea temporalmente la interacción y está pendiente de revisión.
+El loader (`src/components/LoadingOverlay.tsx`) se optimizó (2026-09-01): conserva la identidad visual (fondo oscuro, grid de puntos, marcas de esquina, logo enmascarado en teal, contador monoespaciado, barra de progreso), pero la duración visible total se redujo de ~2.9s a ~650–700ms, sin pausa artificial en 100%, y ya no depende de ningún recurso real (imágenes, fuentes, WebGL, APIs) para desaparecer — es puramente temporizado, con un límite máximo determinista (`setTimeout` de respaldo) por si el flujo normal no dispara. Con `prefers-reduced-motion: reduce`, la transición se reduce casi a cero (~90ms) y libera la página de inmediato. Detalle completo en el hallazgo P2-01 de la auditoría.
 
 ## Accesibilidad
 
@@ -222,7 +222,7 @@ Los recursos sin uso o propios de experimentación están pendientes de limpieza
 - Fotos concretas de la sección de equipo.
 - Uso final del azul y del teal dentro del sistema de marca.
 - Necesidad de mantener las fuentes adicionales.
-- Comportamiento definitivo del loader y de los canvas en mobile.
+- Comportamiento definitivo de los canvas en mobile (el timing del loader ya se optimizó, ver Motion arriba; sigue abierto el comportamiento de LiquidEther/BackgroundCanvas en mobile, ver P2-03 de la auditoría).
 - Imagen Open Graph oficial.
 
 Implementado: copy definitivo del hero y CTA principal y secundario (2026-08-29); sección de equipo, bios y estructura (2026-08-31, fotos concretas siguen pendientes arriba).

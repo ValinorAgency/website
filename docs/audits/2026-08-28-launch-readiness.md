@@ -221,9 +221,35 @@ Sigue pendiente: verificar los headers sobre el dominio y hosting definitivos un
 
 ### P2-01 — Loader bloqueante
 
-Estado: Open.
+Estado: Resuelto (2026-09-01). Solo este hallazgo puntual del loader; el resto del rendimiento (P2-02 a P2-06) sigue abierto y no se marca como resuelto.
 
-LoadingOverlay simula una carga de aproximadamente tres segundos y bloquea interacción antes de revelar el hero.
+LoadingOverlay simulaba una carga de aproximadamente tres segundos y bloqueaba interacción antes de revelar el hero.
+
+**Duración anterior (medida por la lógica de timers real, no estimada):** `DURATION` (conteo) 1950ms + `EXIT_DELAY` (pausa artificial en 100%) 252ms + `EXIT_DURATION` (fundido de salida) 675ms = **2877ms (~2.9s)**. Los clics quedaban bloqueados (`pointerEvents:"all"`) durante los primeros 2202ms (conteo + pausa), y solo se liberaban en el instante exacto en que arrancaba el fundido — momento en que el overlay todavía estaba 100% opaco.
+
+**Causa de la espera prolongada:** una pausa artificial de 252ms mantenida a propósito en 100% antes de iniciar la salida, sumada a un conteo de casi 2 segundos y un fundido de 675ms; nada de esto dependía de un recurso real (imágenes, fuentes, WebGL, APIs) — ya era puramente temporizado, pero con constantes deliberadamente largas para simular "una carga real".
+
+**Implementado en `src/components/LoadingOverlay.tsx`** (identidad visual sin cambios: fondo oscuro, grid de puntos, marcas de esquina, logo enmascarado en teal, contador monoespaciado, barra de progreso):
+
+- `COUNT_DURATION` 380ms + `EXIT_DURATION` 260ms, sin pausa artificial entre ambos (la salida arranca apenas termina el conteo) → **duración total medida ~660–680ms** (movimiento normal), dentro del rango pedido de 500–700ms.
+- Los clics se liberan (`pointerEvents:"none"`) 120ms después de que arranca la salida (no en el instante 0, para no permitir clics accidentales mientras el overlay todavía cubre visualmente la pantalla) y bastante antes de que termine el fundido completo (~535ms de los ~660–680ms totales medidos).
+- Backstop determinista: un `setTimeout` de seguridad fijo (conteo + salida + 200ms de margen) fuerza el reveal del hero y el desmontaje aunque el flujo normal (`requestAnimationFrame`) nunca dispare (por ejemplo, una pestaña en segundo plano). Simulado con una réplica exacta de la lógica: nunca se activó en el flujo normal, como se espera.
+- Bloqueo de scroll (`document.body.style.overflow`) agregado mientras el overlay cubre la pantalla, liberado en el mismo instante en que arranca la salida, con un `try`/cleanup adicional en el desmontaje del efecto como resguardo.
+- Todos los timers (los del flujo normal y el de seguridad) se guardan en un array y se limpian con `clearTimeout`/`cancelAnimationFrame` en el cleanup del `useEffect`. Verificado con una simulación de desmontaje a mitad de camino (150ms): ningún timer disparó después del desmontaje y el scroll quedó liberado.
+- `prefers-reduced-motion: reduce`: se detecta con `window.matchMedia` dentro de `useEffect` (nunca durante el render, para no romper la hidratación); en ese caso el conteo se salta y la salida dura ~60ms — **duración total medida ~87–90ms**, prácticamente inmediata.
+- Sin `aria-busy` en ningún momento (nunca se agregó); el overlay entero sigue `aria-hidden="true"` (decorativo, fuera del árbol accesible) y no atrapa foco (no contiene elementos enfocables). El porcentaje mostrado es y era decorativo, nunca se anuncia a lectores de pantalla.
+- Verificado que no hay pantalla intermedia en blanco/negro: el fundido revela directamente el fondo oscuro del `body`/hero (`#060609`/`#05060a`), ambos ya oscuros, sin salto de color.
+
+Verificación ejecutada:
+
+- `npm run lint`: sin errores (tuvo que ajustarse la implementación para cumplir las reglas `react-hooks/set-state-in-effect` y `react-hooks/refs` del linter del proyecto: ningún `setState` corre de forma síncrona fuera de un callback, y el valor de duración de salida se guarda en estado de React en vez de en un `ref` leído durante el render).
+- `npm run build`: exitoso, mismas rutas.
+- `npm audit --omit=dev`: 0 vulnerabilidades.
+- `git diff --check`: sin errores.
+- Medición de tiempos reales: se replicó la lógica exacta de constantes y control de flujo (rAF a ~60fps, mismos `setTimeout`) en un script Node temporal (no versionado, eliminado al terminar) para medir cada transición con timestamps reales, tanto en movimiento normal como con `prefers-reduced-motion`, y para confirmar que un desmontaje a mitad de camino limpia todos los timers sin disparos posteriores.
+- Inspección del HTML servido (`npm run start` + `curl`): el overlay inicial sigue siendo `aria-hidden="true"`, sin `aria-busy` en ningún lugar del documento, con el mismo marcado visual que antes.
+
+QA visual pendiente: no hay navegador disponible en este entorno; queda para revisión manual del usuario en desktop y mobile (confirmar que la transición se sienta fluida y que el hero se revela sin salto visual).
 
 ### P2-02 — JavaScript inicial
 

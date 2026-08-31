@@ -1,9 +1,23 @@
 "use client";
 import { useEffect, useState } from "react"
 
-const DURATION = 1950;
-const EXIT_DELAY = 252;
-const EXIT_DURATION = 675;
+// Presupuesto total ~650ms (conteo + salida) para que el loader sea una
+// transición breve, no una espera. No depende de imágenes, fuentes, WebGL
+// ni APIs: es puramente temporizado, así que nunca puede quedar colgado
+// esperando un recurso real.
+const COUNT_DURATION = 380;
+const EXIT_DURATION = 260;
+// Cuánto tarda, dentro de la salida, en dejar de bloquear clics: no es 0ms
+// (para no permitir clics accidentales mientras el overlay todavía cubre
+// visualmente la pantalla) ni el final completo de la salida (para no
+// bloquear más de lo necesario).
+const POINTER_RELEASE_DELAY = 120;
+// Backstop determinista: pase lo que pase (una pestaña en segundo plano que
+// pausa requestAnimationFrame, por ejemplo), el overlay nunca permanece más
+// que esto.
+const SAFETY_MAX_MS = COUNT_DURATION + EXIT_DURATION + 200;
+// Con prefers-reduced-motion, la salida se reduce casi a cero.
+const REDUCED_EXIT_DURATION = 60;
 
 function ease(t: number) {
   // Fast start, very slow end — feels like a real async load
@@ -22,34 +36,81 @@ const CORNERS = [
 export default function LoadingOverlay() {
   const [progress, setProgress] = useState(0);
   const [exiting, setExiting] = useState(false);
+  const [interactive, setInteractive] = useState(false);
   const [gone, setGone] = useState(false);
+  const [exitDurationMs, setExitDurationMs] = useState(EXIT_DURATION);
 
   useEffect(() => {
-    let start: number | null = null;
-    let raf: number;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const countMs = reduceMotion ? 0 : COUNT_DURATION;
+    const exitMs = reduceMotion ? REDUCED_EXIT_DURATION : EXIT_DURATION;
+    const pointerDelay = reduceMotion ? 0 : POINTER_RELEASE_DELAY;
 
+    let raf = 0;
+    let start: number | null = null;
+    let hasExited = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+
+    // Bloquea el scroll de fondo solo mientras el overlay cubre la pantalla.
+    const previousOverflow = document.body.style.overflow;
+    let scrollLocked = true;
+    document.body.style.overflow = "hidden";
+    const releaseScroll = () => {
+      if (!scrollLocked) return;
+      document.body.style.overflow = previousOverflow;
+      scrollLocked = false;
+    };
+
+    const beginExit = () => {
+      if (hasExited) return;
+      hasExited = true;
+      setExitDurationMs(exitMs);
+      setExiting(true);
+      releaseScroll();
+      document.documentElement.dataset.heroRevealed = "true";
+      window.dispatchEvent(new CustomEvent("valinor:hero-reveal"));
+      timers.push(setTimeout(() => setInteractive(true), pointerDelay));
+      timers.push(setTimeout(() => setGone(true), exitMs));
+    };
+
+    // Todo el flujo pasa por requestAnimationFrame (incluso con countMs=0,
+    // que llega a t=1 en el primer frame): así ningún setState corre de
+    // forma síncrona en el cuerpo del efecto.
     const tick = (now: number) => {
-      if (!start) start = now;
-      const t = Math.min((now - start) / DURATION, 1);
+      if (start === null) start = now;
+      const t = countMs === 0 ? 1 : Math.min((now - start) / countMs, 1);
       setProgress(Math.round(ease(t) * 100));
 
       if (t < 1) {
         raf = requestAnimationFrame(tick);
       } else {
-        setTimeout(() => {
-          setExiting(true);
-          document.documentElement.dataset.heroRevealed = "true";
-          window.dispatchEvent(new CustomEvent("valinor:hero-reveal"));
-          setTimeout(() => setGone(true), EXIT_DURATION);
-        }, EXIT_DELAY);
+        beginExit();
       }
     };
-
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+
+    // Si por lo que sea el flujo normal nunca dispara (pestaña en segundo
+    // plano, error, etc.), este límite fuerza igual el reveal del hero y el
+    // desmontaje del overlay.
+    timers.push(
+      setTimeout(() => {
+        beginExit();
+        releaseScroll();
+        setGone(true);
+      }, SAFETY_MAX_MS),
+    );
+
+    return () => {
+      cancelAnimationFrame(raf);
+      timers.forEach(clearTimeout);
+      releaseScroll();
+    };
   }, []);
 
   if (gone) return null;
+
+  const exitTransition = `opacity ${exitDurationMs}ms cubic-bezier(0.4,0,0.2,1), clip-path ${exitDurationMs}ms cubic-bezier(0.76,0,0.24,1)`;
+  const logoTransition = `transform ${exitDurationMs}ms cubic-bezier(0.76,0,0.24,1), opacity ${Math.min(exitDurationMs, 220)}ms ease, filter ${exitDurationMs}ms ease`;
 
   return (
     <div
@@ -63,12 +124,10 @@ export default function LoadingOverlay() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        pointerEvents: exiting ? "none" : "all",
+        pointerEvents: interactive ? "none" : "all",
         opacity: exiting ? 0 : 1,
         clipPath: exiting ? "circle(0% at 50% 50%)" : "circle(72% at 50% 50%)",
-        transition: exiting
-          ? "opacity 0.675s cubic-bezier(0.4,0,0.2,1), clip-path 0.675s cubic-bezier(0.76,0,0.24,1)"
-          : "none",
+        transition: exiting ? exitTransition : "none",
       }}
     >
       {/* dot grid */}
@@ -116,7 +175,7 @@ export default function LoadingOverlay() {
           WebkitMaskSize: "contain",
           pointerEvents: "none",
           userSelect: "none",
-          transition: "transform 0.675s cubic-bezier(0.76,0,0.24,1), opacity 0.5s ease, filter 0.675s ease",
+          transition: logoTransition,
         }}
       />
       <div style={{ position: "relative", textAlign: "center" }}>
