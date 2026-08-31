@@ -110,10 +110,11 @@ La home renderiza actualmente:
 4. capacidades y demo de interfaz;
 5. líneas editoriales animadas;
 6. diferenciales;
-7. contacto;
-8. footer.
+7. equipo (implementado 2026-08-31, ver sección de equipo abajo);
+8. contacto;
+9. footer.
 
-La necesidad de incorporar casos reales, equipo y proceso está identificada en la auditoría, pero todavía requiere aprobación de contenido.
+La necesidad de incorporar casos reales y definir el proceso comercial sigue identificada en la auditoría, pero todavía requiere aprobación de contenido.
 
 ### Copy aprobado del hero
 
@@ -127,9 +128,17 @@ Implementado y verificado (2026-08-29), en `src/components/HeroParticleAlt.tsx`:
 
 "Valinor Agency" se conserva como identidad de marca visible (mismo tratamiento tipográfico grande de antes), pero ya no es el `h1`: el `h1` de la página es el título comercial aprobado. Verificado que la home renderiza un único `h1`.
 
-### Sección de equipo (confirmada, implementación pendiente)
+### Sección de equipo (implementada, 2026-08-31)
 
-Sección breve con fotos, sin LinkedIn inicialmente. Bios en `PRODUCT.md`. Fotos concretas: Pending confirmation.
+`src/components/TeamSection.tsx` (`id="equipo"`), renderizada entre `WhyUs` y `FinalCTA`, sin LinkedIn. Bios completas en `PRODUCT.md`.
+
+- Título: "Conocé a quienes están detrás de Valinor".
+- Introducción: "Dos perfiles complementarios que combinan desarrollo, diseño y análisis funcional para construir soluciones alineadas con cada negocio."
+- Dos tarjetas de igual jerarquía (grid 2 columnas en desktop, apiladas en mobile ≤760px), diferenciadas sutilmente con una línea superior de acento: azul `#3279F9` para Milton Collard, teal `#24D6BC` para Martín Abbott — mismos acentos ya usados en el resto del sitio.
+- Cada tarjeta muestra: avatar, nombre, rol, bio y una lista de capacidades breves (`<ul>`).
+- Respaldo, atribuido a cada fundador individualmente (no a la agencia): "Más de ocho años de experiencia profesional cada uno en desarrollo de software."
+
+**Avatares (temporales):** iniciales ("MC", "MA") generadas íntegramente por CSS — sin fotos de stock, servicios externos, URLs remotas ni imágenes generadas. No se muestra la palabra "temporal" al visitante; queda documentado aquí y en un comentario de código. Estructura preparada para reemplazo futuro por `/images/team/milton.webp` y `/images/team/martin.webp` cuando esas fotos existan y estén autorizadas; esas rutas no se agregaron todavía (no existen los archivos) para no generar referencias rotas.
 
 ## Componentes e interacción
 
@@ -216,7 +225,5 @@ Los recursos sin uso o propios de experimentación están pendientes de limpieza
 - Comportamiento definitivo del loader y de los canvas en mobile.
 - Imagen Open Graph oficial.
 
-Implementado (2026-08-29): copy definitivo del hero y CTA principal y secundario.
-
-Resuelta por decisión confirmada del usuario (2026-08-28), pendiente de implementación: presentación pública del equipo (bios y estructura de la sección).
+Implementado: copy definitivo del hero y CTA principal y secundario (2026-08-29); sección de equipo, bios y estructura (2026-08-31, fotos concretas siguen pendientes arriba).
 

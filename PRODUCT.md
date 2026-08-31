@@ -104,14 +104,14 @@ Implementado y verificado (2026-08-30), en `src/components/Portfolio.tsx` (`id="
 
 Casos reales publicables: Pending confirmation.
 
-Presentación pública de los integrantes: confirmada. Sección breve de equipo con fotos, sin LinkedIn inicialmente:
+Presentación pública de los integrantes: confirmada e implementada (2026-08-31), en `src/components/TeamSection.tsx` (`id="equipo"`, entre `WhyUs` y `FinalCTA`), sin LinkedIn:
 
 - Milton Collard — Cofundador · Frontend y Experiencia Digital. Especialidades: frontend, diseño de interfaces, SEO, optimización de conversiones y análisis funcional.
 - Martín Abbott — Cofundador · Backend y Arquitectura de Datos. Especialidades: backend, bases de datos, integraciones y análisis funcional.
 
-Cada fundador cuenta individualmente con más de ocho años de experiencia en desarrollo de software.
+Cada fundador cuenta individualmente con más de ocho años de experiencia profesional en desarrollo de software (no es antigüedad de Valinor como agencia).
 
-Fotos concretas del equipo: Pending confirmation. Implementación de la sección: pendiente.
+Avatares: temporales, con las iniciales de cada fundador generadas por CSS (sin fotos, sin servicios externos, sin URLs remotas). Fotos concretas del equipo: Pending confirmation — cuando existan, reemplazan los avatares de iniciales en `src/components/TeamSection.tsx` (`/images/team/milton.webp`, `/images/team/martin.webp`; detalle en `DESIGN.md`).
 
 Testimonios, logos de clientes y métricas: no utilizar hasta contar con autorización y fuente verificable. No usar clientes, testimonios, métricas, logos ni resultados ficticios.
 
@@ -154,7 +154,7 @@ Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de imple
 - Número comercial de WhatsApp (provisional): +54 9 11 5015-2833.
 - Canal del formulario: formulario web (Resend) y WhatsApp combinados.
 - Proveedor del formulario: Resend.
-- Presentación pública de integrantes y roles: sección breve de equipo con bios de ambos cofundadores.
+- Presentación pública de integrantes y roles: sección breve de equipo con bios de ambos cofundadores. Implementada (2026-08-31); fotos concretas siguen pendientes.
 - Mercado inicial: Argentina.
 
 ## Fuentes

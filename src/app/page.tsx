@@ -4,6 +4,7 @@ import TechStackSection from "@/components/TechStackSection";
 import Portfolio      from "@/components/Portfolio";
 import ScrollTextLines from "@/components/ScrollTextLines";
 import WhyUs          from "@/components/WhyUs";
+import TeamSection    from "@/components/TeamSection";
 import FinalCTA       from "@/components/FinalCTA";
 import Footer         from "@/components/Footer";
 
@@ -17,6 +18,7 @@ export default function Home() {
         <TechStackSection />
         <ScrollTextLines />
         <WhyUs />
+        <TeamSection />
         <FinalCTA />
       </main>
       <Footer />
