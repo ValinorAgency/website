@@ -104,19 +104,29 @@ Estado: Resuelto (2026-08-29). Decisión aprobada e implementación verificada.
 
 El hero comunicaba marca y “Diseño y desarrollo web a medida”, pero no explicitaba audiencia, beneficio ni siguiente paso, y ese texto era un `<p>` decorativo, no el `h1`.
 
-Decisión (copy aprobado, ver `DESIGN.md`): título "Diseño y desarrollo web a medida"; descripción "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."; CTA principal "Contanos tu proyecto"; CTA secundario "Explorar conceptos"; respaldo "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
+Decisión (copy aprobado, ver `DESIGN.md`): título "Diseño y desarrollo web a medida"; descripción "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."; CTA principal "Contanos tu proyecto"; CTA secundario "Explorar conceptos" (retirado 2026-08-30, ver nota); respaldo "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
 
-Implementado en `src/components/HeroParticleAlt.tsx`: el título aprobado es ahora el único `h1` de la página; "Valinor Agency" se conserva como identidad de marca visible en un `<p>`, no como `h1`. CTA principal enlaza a `#contacto` (sección de `FinalCTA.tsx`); CTA secundario enlaza a `#portfolio` (anchor existente en `Portfolio.tsx`, sección de proyectos/conceptos). Verificado por inspección de código y del HTML servido (`npm run start` + `curl`): un solo `<h1>` en la página, ambos CTA presentes con esos `href` exactos, botones con `min-height: 48px` y estados `:focus-visible` heredados de `.pill-button-dark`/`.pill-button-light`.
+Implementado en `src/components/HeroParticleAlt.tsx`: el título aprobado es ahora el único `h1` de la página; "Valinor Agency" se conserva como identidad de marca visible en un `<p>`, no como `h1`. CTA principal enlaza a `#contacto` (sección de `FinalCTA.tsx`, sin cambios). Verificado por inspección de código y del HTML servido (`npm run start` + `curl`): un solo `<h1>` en la página, CTA principal presente con ese `href`, botones con `min-height: 48px` y estados `:focus-visible` heredados de `.pill-button-dark`/`.pill-button-light`.
+
+**Actualización — 2026-08-30:** el CTA secundario cambió de "Explorar conceptos" (→ `#portfolio`) a "Ver soluciones" (→ `#servicios`), como parte del cambio de estrategia de la sección de soluciones (ver P1-02). El anchor `#portfolio` se eliminó de `Portfolio.tsx` por quedar sin consumidores. Verificado: `#servicios` existe y el CTA apunta ahí; no quedan referencias a `#portfolio` en el código.
 
 Sigue pendiente: QA visual en navegador real (desktop y mobile) — no se pudo ejecutar en este entorno por falta de navegador disponible; requiere revisión manual del usuario.
 
 ### P1-02 — Ejemplos ambiguos
 
-Estado: Open. Decisión confirmada (2026-08-28); implementación pendiente.
+Estado: Resuelto (2026-08-30). Decisión aprobada e implementación verificada. Reemplaza una implementación intermedia descartada por el usuario (ver nota abajo).
 
-Portfolio presenta soluciones conceptuales con lenguaje de proyectos destacados. Deben etiquetarse como ejemplos o sustituirse por casos reales autorizados.
+Portfolio presentaba soluciones conceptuales con lenguaje de proyectos destacados: sin etiqueta que aclarara su naturaleza, con un campo `outcome` redactado como resultado ya logrado ("...para el cliente", "menos información dispersa", etc.) y un CTA de modal ("Consultar un proyecto similar") que presuponía un proyecto real equivalente.
 
-Decisión: el portfolio actual se presenta como proyectos o conceptos, cada uno identificado con la etiqueta "Concepto"; se reemplazarán progresivamente por casos reales autorizados. Ver `PRODUCT.md`.
+**Nota — implementación intermedia descartada (2026-08-29):** se implementó primero un enfoque de "Conceptos digitales" (etiqueta "Concepto" en cada entrada, introducción declarando que "Valinor todavía no cuenta con un portfolio comercial público", y contenido organizado como caso de estudio con Problema/Propuesta/Qué demuestra). El usuario revisó ese resultado y decidió descartarlo antes de cualquier commit: la etiqueta repetida "Concepto" y la declaración explícita de no tener portfolio ponían el foco en la ausencia de casos reales en lugar de en la capacidad de Valinor. Ese enfoque nunca llegó a confirmarse como decisión final.
+
+Decisión final: la sección no es un portfolio ni presenta proyectos conceptuales. Muestra tipos de soluciones que Valinor puede desarrollar, con una explicación breve de para qué sirve cada una y las capacidades reales de Valinor asociadas — sin clientes, problemas hipotéticos específicos, resultados, métricas ni testimonios inventados. Los ejemplos visuales o referencias concretas se comparten durante la conversación comercial con cada cliente, cuando resulte apropiado; los casos reales se incorporarán públicamente solo cuando existan y estén autorizados. Ver `PRODUCT.md`.
+
+Implementado en `src/components/Portfolio.tsx` (`id="servicios"`, sin el anchor secundario `#portfolio`, retirado por quedar sin consumidores): título "Soluciones digitales a medida"; introducción "Diseñamos y desarrollamos soluciones web adaptadas a los objetivos, procesos y etapa de cada negocio."; seis categorías — sitios web y landing pages, tiendas online, aplicaciones web, dashboards y visualización de datos, sistemas de gestión, e integraciones y automatizaciones — cada una con una explicación breve y las capacidades reales asociadas, sin etiquetas "Concepto"/"Caso"/"Proyecto conceptual"/"Portfolio" ni campos de caso de estudio. El CTA del modal es "Conversemos sobre tu proyecto". El CTA secundario del hero cambió de "Explorar conceptos" (→ `#portfolio`) a "Ver soluciones" (→ `#servicios`).
+
+Verificado por inspección de código y del HTML servido (`npm run start` + `curl`): no quedan las cadenas "Concepto", "Conceptos digitales", "portfolio comercial público" ni "proyecto similar"; `#servicios` existe y el CTA del hero apunta ahí; no quedan referencias a `#portfolio` (ni el `id` ni ningún `href`) en el código.
+
+Sigue pendiente (no forma parte de este hallazgo): incorporación de casos reales autorizados, cuando existan — ver `PRODUCT.md`. QA visual interactivo (hover, modal, foco, responsive) en navegador real no se pudo ejecutar en este entorno por falta de navegador disponible; requiere revisión manual del usuario.
 
 ### P1-03 — Evidencia comercial
 

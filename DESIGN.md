@@ -106,7 +106,7 @@ La home renderiza actualmente:
 
 1. navegación;
 2. hero de marca con fondo WebGL;
-3. tipos de soluciones presentados como proyectos;
+3. tipos de soluciones que Valinor puede desarrollar (implementado 2026-08-30; no es un portfolio ni proyectos conceptuales, ver `PRODUCT.md`);
 4. capacidades y demo de interfaz;
 5. líneas editoriales animadas;
 6. diferenciales;
@@ -122,7 +122,7 @@ Implementado y verificado (2026-08-29), en `src/components/HeroParticleAlt.tsx`:
 - Título (h1): "Diseño y desarrollo web a medida".
 - Descripción: "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina."
 - CTA principal: "Contanos tu proyecto" → ancla a `#contacto`.
-- CTA secundario: "Explorar conceptos" → ancla a `#portfolio` (anchor existente dentro de `Portfolio.tsx`).
+- CTA secundario: "Ver soluciones" → ancla a `#servicios` (actualizado 2026-08-30; antes "Explorar conceptos" → `#portfolio`, retirado junto con el enfoque de conceptos digitales). El anchor `#portfolio` se eliminó de `Portfolio.tsx` por quedar sin consumidores.
 - Respaldo: "Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales."
 
 "Valinor Agency" se conserva como identidad de marca visible (mismo tratamiento tipográfico grande de antes), pero ya no es el `h1`: el `h1` de la página es el título comercial aprobado. Verificado que la home renderiza un único `h1`.
@@ -135,7 +135,7 @@ Sección breve con fotos, sin LinkedIn inicialmente. Bios en `PRODUCT.md`. Fotos
 
 - Los CTA deben tener una acción inequívoca y consistente.
 - Las interacciones esenciales no pueden depender de hover.
-- Los ejemplos conceptuales deben etiquetarse como tales, con la etiqueta "Concepto".
+- La sección de soluciones (`src/components/Portfolio.tsx`, `id="servicios"`) muestra tipos de soluciones con su explicación y capacidades asociadas; no usa las etiquetas "Concepto", "Caso" ni "Portfolio", ni campos de caso de estudio (Problema/Propuesta/Qué demuestra). Implementado y verificado (2026-08-30).
 - La sección de tecnologías se conserva por ahora. Mejora futura registrada: separar la presentación de frontend/diseño (más creativa) de la de backend/datos (más estructurada).
 - La marquesina decorativa de `TechStackSection` se eliminó (2026-08-29) por ser redundante con la lista de capacidades interactiva. Esa lista (fondo negro tipográfico revelado por `:hover`) se conserva solo en dispositivos con hover y puntero preciso; queda oculta por completo (`display: none`, sin alto reservado) bajo `(hover: none)` o `(pointer: coarse)`, porque en touch no tiene equivalente confiable y el estado `:hover` puede quedar "pegado" tras un tap.
 - Los diálogos deben atrapar el foco, cerrarse con Escape y devolver el foco al disparador.

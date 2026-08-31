@@ -79,8 +79,8 @@ export default function HeroParticleAlt() {
             <a href="#contacto" className="pill-button-dark">
               Contanos tu proyecto <span aria-hidden="true">↗</span>
             </a>
-            <a href="#portfolio" className="pill-button-light">
-              Explorar conceptos
+            <a href="#servicios" className="pill-button-light">
+              Ver soluciones
             </a>
           </div>
 

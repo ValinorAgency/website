@@ -7,45 +7,39 @@ import { type MouseEvent, useEffect, useRef, useState } from "react";
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 const projects = [
   {
-    name: "Plataforma de reservas",
-    category: "Web App",
-    desc: "Reservas, administración, notificaciones y pagos integrados en un mismo sistema.",
-    outcome: "Una operación centralizada y una experiencia de reserva más clara para el cliente.",
+    name: "Sitios web y landing pages",
+    purpose: "Presentar tu empresa, marca o producto con una experiencia clara y profesional, o comunicar una propuesta puntual enfocada en captar consultas.",
+    capabilities: "Diseño de interfaces, arquitectura de contenido, SEO técnico básico y formularios de contacto.",
     palette: "radial-gradient(circle at 18% 16%, #fff7dc 0 18%, transparent 44%), radial-gradient(circle at 82% 24%, #d9eef8 0 14%, transparent 43%), radial-gradient(circle at 56% 82%, #edddf7 0 18%, transparent 46%), #e9efe9",
   },
   {
-    name: "Portal comercial",
-    category: "Aplicación web",
-    desc: "Oportunidades, seguimientos e información comercial centralizada para todo el equipo.",
-    outcome: "Menos información dispersa y una lectura compartida del estado de cada oportunidad.",
+    name: "Tiendas online",
+    purpose: "Vender productos o servicios con un catálogo propio, un checkout optimizado y un panel para gestionar pedidos y stock.",
+    capabilities: "Arquitectura de catálogo, integraciones de pago y paneles de administración de pedidos.",
     palette: "radial-gradient(circle at 20% 22%, #e0f2ec 0 18%, transparent 45%), radial-gradient(circle at 78% 18%, #f6e2df 0 16%, transparent 44%), radial-gradient(circle at 62% 82%, #e3e5fa 0 18%, transparent 48%), #eef0e8",
   },
   {
-    name: "E-commerce premium",
-    category: "Tienda online",
-    desc: "Catálogo dinámico, filtros, checkout optimizado y un panel preparado para gestionar ventas.",
-    outcome: "Un recorrido de compra simple y una administración preparada para acompañar el crecimiento.",
+    name: "Aplicaciones web",
+    purpose: "Resolver flujos específicos del negocio, como reservas, portales o seguimiento comercial, con una herramienta a medida.",
+    capabilities: "Diseño de flujos de usuario, autenticación, integraciones y paneles de administración.",
     palette: "radial-gradient(circle at 16% 18%, #f8e5ee 0 17%, transparent 43%), radial-gradient(circle at 84% 28%, #e4f3df 0 16%, transparent 46%), radial-gradient(circle at 52% 84%, #f7edcf 0 18%, transparent 48%), #ecebf3",
   },
   {
-    name: "Dashboard operativo",
-    category: "Plataforma interna",
-    desc: "Métricas, estados y alertas clave reunidos en una vista clara para seguir la operación y tomar decisiones a tiempo.",
-    outcome: "Indicadores importantes a la vista y menos tiempo dedicado a reconstruir información.",
+    name: "Dashboards y visualización de datos",
+    purpose: "Reunir métricas, estados y alertas clave en una vista clara para tomar decisiones con información actualizada.",
+    capabilities: "Visualización de datos, alertas configurables e integración con distintas fuentes de información.",
     palette: "radial-gradient(circle at 22% 18%, #dfeefb 0 18%, transparent 45%), radial-gradient(circle at 80% 24%, #f4e3fa 0 15%, transparent 44%), radial-gradient(circle at 58% 82%, #e7f2d9 0 18%, transparent 48%), #f1ece5",
   },
   {
-    name: "Landing de lanzamiento",
-    category: "Landing page",
-    desc: "Una experiencia de preventa enfocada en comunicar la propuesta y captar consultas.",
-    outcome: "Una historia de producto más clara y un camino directo hacia la consulta.",
+    name: "Sistemas de gestión",
+    purpose: "Organizar documentos, procesos o información interna que hoy vive dispersa en planillas o carpetas.",
+    capabilities: "Organización de datos, control de acceso por rol y trazabilidad de estados.",
     palette: "radial-gradient(circle at 20% 20%, #fff0d7 0 18%, transparent 44%), radial-gradient(circle at 82% 20%, #e2eafa 0 16%, transparent 45%), radial-gradient(circle at 54% 82%, #f3dfe5 0 18%, transparent 48%), #e8f1ec",
   },
   {
-    name: "Gestión documental",
-    category: "Sistema interno",
-    desc: "Facturas, contratos y estados organizados sin depender de carpetas dispersas.",
-    outcome: "Documentación accesible, estados visibles y menos riesgo de trabajar con archivos desactualizados.",
+    name: "Integraciones y automatizaciones",
+    purpose: "Conectar herramientas existentes y automatizar tareas puntuales para reducir trabajo manual repetitivo.",
+    capabilities: "Conexión de APIs y servicios externos, y automatización de procesos según las necesidades del proyecto.",
     palette: "radial-gradient(circle at 18% 22%, #e4f3e8 0 18%, transparent 44%), radial-gradient(circle at 82% 18%, #f5e2d8 0 16%, transparent 45%), radial-gradient(circle at 58% 84%, #dfe9f8 0 18%, transparent 48%), #f2edf2",
   },
 ] as const;
@@ -95,14 +89,12 @@ function ProjectRow({ project, index, reduce }: { project: Project; index: numbe
       <div className="flow-project-base">
         <span className="flow-project-number">0{index + 1}</span>
         <h3>{project.name}</h3>
-        <span className="flow-project-category">{project.category}</span>
       </div>
       <div ref={revealRef} className="flow-project-reveal">
         <div ref={revealInnerRef} className="flow-project-reveal-inner">
           <span className="flow-project-number">0{index + 1}</span>
           <h3 ref={revealTitleRef}>{project.name}</h3>
-          <p ref={revealDescriptionRef}>{project.desc}</p>
-          <span className="flow-project-category">{project.category}</span>
+          <p ref={revealDescriptionRef}>{project.purpose}</p>
         </div>
       </div>
     </article>
@@ -124,7 +116,7 @@ function HighlightedTitle({ project, index, reduce, onSelect }: { project: Proje
       animate={{ color: active ? "#111" : "rgba(17,17,17,.24)", opacity: active ? 1 : .72, x: active ? 0 : -8 }}
       transition={{ duration: reduce ? 0 : .38, ease: expo }}
       onClick={() => onSelect(index)}
-      aria-label={`Ver detalle de ${project.name}`}
+      aria-label={`Ver más sobre ${project.name}`}
     >
       <motion.span
         className="mobile-project-hand"
@@ -186,7 +178,7 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
 
   return (
     <div className="mobile-project-highlight">
-      <div className="mobile-project-titles" aria-label="Proyectos destacados">
+      <div className="mobile-project-titles" aria-label="Tipos de soluciones">
         {projects.map((project, index) => (
           <HighlightedTitle key={project.name} project={project} index={index} reduce={reduce} onSelect={setActiveIndex} />
         ))}
@@ -207,7 +199,7 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
               transition={{ duration: reduce ? 0 : .42, ease: expo }}
               onMouseDown={(event) => event.stopPropagation()}
             >
-              <button ref={closeRef} type="button" className="project-detail-close" onClick={closeProject} aria-label="Cerrar detalle del proyecto">×</button>
+              <button ref={closeRef} type="button" className="project-detail-close" onClick={closeProject} aria-label="Cerrar detalle">×</button>
               <div className="project-detail-visual" style={{ background: activeProject.palette }} aria-hidden="true">
                 <div className="project-detail-window">
                   <div className="project-detail-window-bar"><span /><span /><span /></div>
@@ -218,11 +210,10 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
                 </div>
               </div>
               <div className="project-detail-content">
-                <span>{activeProject.category}</span>
                 <h3 id="project-detail-title" className="font-display">{activeProject.name}</h3>
-                <p>{activeProject.desc}</p>
-                <p className="project-detail-outcome">{activeProject.outcome}</p>
-                <a href="#contacto" onClick={closeProject}>Consultar un proyecto similar <span aria-hidden="true">↗</span></a>
+                <p>{activeProject.purpose}</p>
+                <p className="project-detail-outcome">{activeProject.capabilities}</p>
+                <a href="#contacto" onClick={closeProject}>Conversemos sobre tu proyecto <span aria-hidden="true">↗</span></a>
               </div>
             </motion.article>
           </motion.div>
@@ -239,14 +230,16 @@ export default function Portfolio() {
 
   return (
     <section ref={ref} id="servicios" className="portfolio-flow">
-      <span id="portfolio" className="portfolio-anchor" aria-hidden="true" />
       <motion.div
         className="section-inner portfolio-flow-heading"
         initial={reduce ? false : { opacity: 0, y: 28 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: .7, ease: expo }}
       >
-        <h2 className="font-display">Soluciones que ordenan, venden y hacen avanzar.</h2>
+        <h2 className="font-display">Soluciones digitales a medida</h2>
+        <p className="portfolio-flow-intro">
+          Diseñamos y desarrollamos soluciones web adaptadas a los objetivos, procesos y etapa de cada negocio.
+        </p>
       </motion.div>
 
       <div className="flow-project-list">
@@ -257,15 +250,14 @@ export default function Portfolio() {
 
       <style>{`
         .portfolio-flow { position: relative; padding: clamp(7rem,12vw,10rem) 0; background: #08090d; }
-        .portfolio-anchor { position: absolute; top: 0; }
-        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: flex; justify-content: center; }
+        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; }
         .portfolio-flow-heading h2 { max-width: 13ch; color: var(--ink); font-size: clamp(2.8rem,6.5vw,6rem); line-height: .98; letter-spacing: -.04em; font-weight: 600; text-align: center; }
+        .portfolio-flow-intro { max-width: 46ch; color: var(--ink-muted); font-size: .95rem; line-height: 1.65; text-align: center; }
         .flow-project-list { border-top: 1px solid rgba(255,255,255,.13); }
         .flow-project { position: relative; height: clamp(8rem,11vw,10rem); overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.13); }
         .flow-project-base, .flow-project-reveal-inner { position: absolute; inset: 0; display: grid; grid-template-columns: 3rem minmax(0,1fr) minmax(18rem,.75fr) auto; align-items: center; gap: clamp(1rem,3vw,3rem); width: min(100% - 3rem,72rem); margin: 0 auto; }
         .flow-project-base h3 { grid-column: 2 / 4; justify-self: center; color: #f7f7f8; font-size: clamp(1.65rem,3.5vw,3.4rem); line-height: 1; letter-spacing: -.035em; font-weight: 560; transition: transform .55s cubic-bezier(.16,1,.3,1); }
         .flow-project-number { font-size: .6rem; letter-spacing: .12em; opacity: .45; }
-        .flow-project-category { justify-self: end; font-size: .65rem; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; opacity: .55; }
         .flow-project-reveal { position: absolute; inset: 0; transform: translateY(101%); overflow: hidden; background: #f4f4f1; color: #111; pointer-events: none; }
         .flow-project-reveal-inner { transform: translateY(-101%); }
         .flow-project-reveal h3 { color: #111; font-size: clamp(1.5rem,3vw,3rem); line-height: 1; letter-spacing: -.035em; font-weight: 620; }
@@ -301,7 +293,6 @@ export default function Portfolio() {
           .project-detail-panel b { height: 3.2rem; }
           .project-detail-panel b:nth-child(2) { height: 4.5rem; }
           .project-detail-content { padding: 1.35rem 1.1rem 1.2rem; }
-          .project-detail-content > span { color: var(--ink-faint); font-size: .62rem; font-weight: 650; letter-spacing: .12em; text-transform: uppercase; }
           .project-detail-content h3 { max-width: 12ch; margin-top: .45rem; color: #f4f4f5; font-size: clamp(2rem,10vw,3.1rem); line-height: .96; letter-spacing: -.04em; }
           .project-detail-content p { margin-top: .85rem; color: var(--ink-muted); font-size: .88rem; line-height: 1.58; }
           .project-detail-content .project-detail-outcome { padding-top: .85rem; border-top: 1px solid rgba(255,255,255,.1); color: #e9e9ec; }

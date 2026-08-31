@@ -98,7 +98,9 @@ El sitio necesita distinguir claramente:
 - trabajos o casos reales efectivamente autorizados para publicación;
 - ejemplos conceptuales o demostraciones.
 
-El portfolio actual debe presentarse como proyectos o conceptos. Cada concepto debe estar identificado con la etiqueta "Concepto". Los conceptos se reemplazarán progresivamente por casos reales autorizados a medida que existan. Implementación pendiente; ver hallazgo P1-02 de la auditoría.
+La home no presenta un portfolio ni proyectos conceptuales. Muestra tipos de soluciones que Valinor puede desarrollar, con una explicación breve de para qué sirve cada tipo y las capacidades reales de Valinor asociadas. No se usan clientes, problemas hipotéticos específicos, resultados, métricas ni testimonios. Ejemplos visuales o referencias concretas de trabajo se comparten durante la conversación comercial con cada cliente, cuando resulte apropiado, no en la home. Los casos reales se incorporarán públicamente solo cuando existan y estén autorizados.
+
+Implementado y verificado (2026-08-30), en `src/components/Portfolio.tsx` (`id="servicios"`): título "Soluciones digitales a medida"; introducción "Diseñamos y desarrollamos soluciones web adaptadas a los objetivos, procesos y etapa de cada negocio."; seis categorías — sitios web y landing pages, tiendas online, aplicaciones web, dashboards y visualización de datos, sistemas de gestión, e integraciones y automatizaciones — cada una con una explicación breve y las capacidades reales asociadas. Reemplaza un enfoque anterior de "Conceptos digitales" (con etiqueta "Concepto" y campos tipo caso de estudio: Problema/Propuesta/Qué demuestra), descartado por el usuario tras revisión porque ponía el foco en la ausencia de casos reales en vez de en las soluciones que Valinor puede construir. Ver hallazgo P1-02 de la auditoría.
 
 Casos reales publicables: Pending confirmation.
 
