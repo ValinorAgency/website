@@ -83,6 +83,23 @@ Antes de una publicación revisar:
 - datos estructurados cuando existan datos confirmados;
 - dominio oficial.
 
+### SEO técnico base — implementado 2026-08-31
+
+Detalle completo en `docs/ARCHITECTURE.md` § SEO. Resumen de lo implementado: utilidad centralizada de `SITE_URL` (`src/lib/site-url.ts`) con protección para que un preview de Vercel no herede la URL de producción; `metadataBase`, canonical, título y descripción alineados con el copy visible; Open Graph completo (`title`, `description`, `url`, `siteName`, `locale es_AR`, `type website`, imagen); Twitter `summary_large_image` reutilizando la misma imagen; imagen social generada con `next/og` (`src/app/opengraph-image.tsx`, sin fotos ni dependencias nuevas); `robots.ts` y `sitemap.ts` con solo `/` como página pública indexable; JSON-LD `Organization` con únicamente datos confirmados, serializado de forma segura; retiro de `/sprite-probe` como ruta pública.
+
+Verificación ejecutada:
+
+- `npm run lint`: sin errores.
+- `npm run build` sin `SITE_URL` en el entorno (tras limpiar `.next` para descartar caché obsoleta): exitoso. Rutas generadas: `/`, `/_not-found`, `/api/contact`, `/opengraph-image`, `/robots.txt`, `/sitemap.xml`. Ya no se genera `/sprite-probe`.
+- `npm audit --omit=dev`: 0 vulnerabilidades.
+- `npm run start` + `curl` sobre `/`: `<title>`, `<meta name="description">`, `<link rel="canonical">` y todas las etiquetas `og:*`/`twitter:*` (incluida `og:site_name`) presentes con los valores esperados; `/opengraph-image` responde `200 image/png`.
+- `curl` sobre `/robots.txt` y `/sitemap.xml`: contenido exacto esperado (solo `/` en el sitemap, sin `lastModified`; `Disallow: /api/` y referencia al sitemap en robots).
+- `curl` sobre `/sprite-probe`: `404` (ya no es una ruta pública).
+- JSON-LD extraído del HTML servido y validado con `JSON.parse`: JSON bien formado, con exactamente las claves confirmadas (`@context`, `@type`, `name`, `url`, `email`, `telephone`, `areaServed`, `description`) y ninguna de las prohibidas (`address`, `priceRange`, `aggregateRating`, `foundingDate`, `numberOfEmployees`, `sameAs`).
+- Resolución de `SITE_URL` verificada con tres builds reales: (1) sin ninguna variable → `http://localhost:3000`; (2) `SITE_URL=valinoragency.com.ar` (sin protocolo) → `https://valinoragency.com.ar` en canonical, `og:url` y JSON-LD; (3) `VERCEL_ENV=preview` + `VERCEL_URL` + `SITE_URL` seteadas simultáneamente → usa la URL del preview, no `SITE_URL`, confirmando que un deployment temporal no se anuncia como el dominio de producción.
+
+Pendiente: validación real sobre el dominio oficial una vez comprado y configurado como `SITE_URL` en Vercel; indexación mediante Google Search Console. No se marca el deploy como verificado.
+
 ## Seguridad
 
 Para cambios en dependencias, formularios, integraciones o deploy:

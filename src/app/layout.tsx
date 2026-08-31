@@ -2,6 +2,8 @@ import BackgroundCanvas from "@/components/BackgroundCanvas"
 import CustomCursor from "@/components/CustomCursor"
 import FloatingActions from "@/components/FloatingActions"
 import LoadingOverlay from "@/components/LoadingOverlay"
+import { getOrganizationJsonLd, serializeJsonLd } from "@/lib/organization-json-ld"
+import { getSiteUrl } from "@/lib/site-url"
 import type { Metadata } from "next"
 import { Cinzel, DM_Sans, Inter, Lora } from "next/font/google"
 import "./globals.css"
@@ -33,20 +35,32 @@ const dmSans = DM_Sans({
   weight: ["300", "400", "500"],
 });
 
+const siteTitle = "Valinor Agency | Diseño y desarrollo web a medida";
+const siteDescription =
+  "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
-    default: "Valinor Agency | Diseño y desarrollo web",
+    default: siteTitle,
     template: "%s | Valinor Agency",
   },
-  description:
-    "Diseñamos sitios web, ecommerce, aplicaciones y dashboards a medida para presentar, vender y gestionar mejor tu negocio.",
+  description: siteDescription,
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Valinor Agency | Diseño y desarrollo de soluciones web",
-    description:
-      "Sitios institucionales, landing pages, ecommerce, aplicaciones web y dashboards diseñados alrededor de objetivos concretos.",
-    type: "website",
-    locale: "es_AR",
+    title: siteTitle,
+    description: siteDescription,
+    url: "/",
     siteName: "Valinor Agency",
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
   },
 };
 
@@ -57,6 +71,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`h-full antialiased ${inter.variable} ${lora.variable} ${dmSans.variable} ${cinzel.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(getOrganizationJsonLd()) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[var(--page-background)] text-[var(--ink)]">
         <LoadingOverlay />
         <BackgroundCanvas />

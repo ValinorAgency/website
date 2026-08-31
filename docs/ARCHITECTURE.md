@@ -27,10 +27,14 @@ Las versiones exactas y rangos autorizados están en package.json.
 | --- | --- | --- |
 | / | Home institucional | Activa |
 | /api/contact | Route Handler (POST) que procesa el formulario de contacto vía Resend | Activa (implementada 2026-08-28) |
-| /sprite-probe | Prototipo aislado de partículas WebGPU | Experimental; no debe considerarse página pública aprobada |
+| /robots.txt | Generado por `src/app/robots.ts` (convención de Next.js) | Activa (implementada 2026-08-31) |
+| /sitemap.xml | Generado por `src/app/sitemap.ts` (convención de Next.js) | Activa (implementada 2026-08-31) |
+| /opengraph-image | Imagen social generada por `src/app/opengraph-image.tsx` (`next/og`), reutilizada para Twitter | Activa (implementada 2026-08-31) |
 | /_not-found | Página automática de Next.js | Activa |
 
-La eliminación o exclusión de indexación de /sprite-probe está pendiente de implementación.
+`/sprite-probe` (prototipo aislado de partículas WebGPU) se eliminó como ruta pública el 2026-08-31: se borró `src/app/sprite-probe/page.tsx` porque no era parte de la home ni estaba enlazada desde ningún lugar público. Ya no es una ruta indexable (`/sprite-probe` responde 404, verificado).
+
+**Archivo huérfano para el bloque de limpieza posterior:** `src/components/SpriteParticleProbe.tsx` era usado exclusivamente por esa página y ahora no tiene ningún consumidor en el código. No se eliminó en esta tarea (fuera de alcance: solo se pidió retirar la ruta pública); queda pendiente para una limpieza posterior, junto con el resto de componentes experimentales ya identificados (ver P2-05 de la auditoría).
 
 ## Composición de la home
 
@@ -54,7 +58,7 @@ src/app/layout.tsx aplica globalmente:
 - CustomCursor;
 - FloatingActions.
 
-Los efectos globales también se aplican actualmente a /sprite-probe.
+/sprite-probe ya no existe como ruta (ver "Rutas" arriba), así que los efectos globales del layout solo se aplican a las rutas activas.
 
 ## Fronteras y responsabilidades
 
@@ -174,21 +178,40 @@ No hay base de datos ni almacenamiento propio. El formulario de contacto (implem
 - remitente definitivo del formulario (depende del dominio);
 - prueba de envío real del formulario con una `RESEND_API_KEY` válida.
 
-## SEO
+## SEO (implementado, 2026-08-31)
 
-La metadata se define actualmente en src/app/layout.tsx.
+### Resolución de la URL del sitio
 
-Existen title, description y Open Graph básico. Faltan o requieren confirmación:
+`src/lib/site-url.ts` centraliza la resolución de la URL pública, sin asumir que el dominio candidato está comprado. Prioridad:
 
-- metadataBase;
-- canonical;
-- URL Open Graph;
-- imagen Open Graph;
-- Twitter/X image;
-- robots.ts;
-- sitemap.ts;
-- datos estructurados;
-- dominio oficial (candidato: `valinoragency.com.ar`, pendiente de compra).
+1. `SITE_URL` configurada explícitamente (variable server-only, sin prefijo `NEXT_PUBLIC_`; ver `.env.example`).
+2. `VERCEL_PROJECT_PRODUCTION_URL` (dominio de producción que provee Vercel), cuando está disponible.
+3. `VERCEL_URL` (URL del deployment actual), cuando corresponde.
+4. `http://localhost:3000`, únicamente como último recurso para desarrollo local o un build local sin ninguna variable configurada.
+
+Protección explícita contra previews: cuando `VERCEL_ENV === "preview"`, se ignoran `SITE_URL` y `VERCEL_PROJECT_PRODUCTION_URL` y se usa directamente `VERCEL_URL`, para que un deployment temporal nunca se anuncie a sí mismo (canonical, Open Graph, JSON-LD) como si fuera el dominio de producción. Verificado con `npm run build && npm run start`: sin ninguna variable, resuelve a `http://localhost:3000`; con `SITE_URL=valinoragency.com.ar` (sin protocolo), resuelve a `https://valinoragency.com.ar` (protocolo normalizado); con `VERCEL_ENV=preview` + `VERCEL_URL` + `SITE_URL` seteadas simultáneamente, usa la URL del preview y no la de `SITE_URL`.
+
+El dominio candidato `valinoragency.com.ar` no está comprado ni activo; el código no lo presenta como tal, solo lo usaría si se asigna a `SITE_URL` en el entorno real.
+
+### Metadata (`src/app/layout.tsx`)
+
+- `metadataBase`: `new URL(getSiteUrl())`.
+- `title`/`description` alineados con el copy visible del hero (`src/components/HeroParticleAlt.tsx`): título "Valinor Agency | Diseño y desarrollo web a medida", descripción "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina.".
+- `alternates.canonical: "/"` (home).
+- Open Graph completo: `title`, `description`, `url: "/"`, `siteName: "Valinor Agency"`, `locale: "es_AR"`, `type: "website"`; la imagen se agrega automáticamente por la convención de archivo `opengraph-image.tsx` (no se declara a mano).
+- Twitter: `card: "summary_large_image"`, `title`, `description`; la imagen se reutiliza automáticamente de `opengraph-image.tsx` (comportamiento estándar de Next.js cuando no existe un `twitter-image` dedicado).
+- JSON-LD `Organization` inyectado en `<head>` vía `<script type="application/ld+json">`, generado por `src/lib/organization-json-ld.ts` y serializado de forma segura (escapa `<` para que ningún valor pueda cerrar el `<script>` prematuramente). Solo datos confirmados: `name` "Valinor Agency", `url` (resuelta), `email` `agencyvalinor@gmail.com`, `telephone` `+5491150152833`, `areaServed` "Argentina", `description` (la misma del hero). Sin `address`, `priceRange`, `aggregateRating`, `foundingDate`, `numberOfEmployees` ni `sameAs`. Validado estructuralmente (JSON bien formado, `JSON.parse` exitoso) sobre el HTML servido.
+
+### Imagen social (`src/app/opengraph-image.tsx`)
+
+Generada con `next/og` (`ImageResponse`, incluido en Next.js, sin dependencias nuevas): fondo oscuro de marca (`#060609`), wordmark "Valinor Agency", una línea de acento teal (`#24D6BC`) y la propuesta comercial aprobada como texto de apoyo. 1200×630, `image/png`. No usa fotografías, imágenes externas ni assets generados.
+
+### `robots.ts` y `sitemap.ts`
+
+- `src/app/robots.ts` (corregido 2026-08-31): en producción/local permite todo (`allow: "/"`), bloquea `/api/` y apunta `sitemap` a la URL resuelta + `/sitemap.xml` (omitiendo la línea `Sitemap:` si la URL resuelta es `localhost`, para no anunciar un sitemap no público). Cuando `VERCEL_ENV === "preview"`, bloquea todo el rastreo (`disallow: "/"`) y no anuncia sitemap, para que un deployment temporal nunca quede indexable.
+- `src/app/sitemap.ts`: incluye únicamente `/` (única página pública real). No incluye `/api/contact` ni `/sprite-probe` (eliminada). No declara `lastModified`: no existe una fecha real de modificación por página, y generarla en cada request sería una fecha inventada.
+
+Pendiente: `metadataBase`/canonical/Open Graph/JSON-LD/sitemap ya resuelven una URL válida en todos los casos, pero la validación real ocurre recién sobre el dominio oficial una vez comprado, verificado y configurado como `SITE_URL` en Vercel (ver P0-04); indexación real mediante Google Search Console, todavía no configurada.
 
 ## Seguridad
 
@@ -259,5 +282,5 @@ El objetivo cuantitativo de rendimiento está Pending confirmation.
 - ¿Se eliminarán componentes y assets experimentales?
 - ¿Se incorporará CI para lint, build y auditoría?
 
-Resueltas e implementadas (2026-08-28): hosting decidido (Vercel, despliegue aún pendiente), formulario de contacto (`POST /api/contact` + Resend, código completo), WhatsApp con número provisional, reemplazo de `hola@valinor.agency` por `agencyvalinor@gmail.com`.
+Resueltas e implementadas: hosting decidido (Vercel, despliegue aún pendiente), formulario de contacto (`POST /api/contact` + Resend, código completo), WhatsApp con número provisional, reemplazo de `hola@valinor.agency` por `agencyvalinor@gmail.com` (2026-08-28); SEO técnico base — resolución de `SITE_URL`, metadata, `robots.ts`, `sitemap.ts`, imagen social y JSON-LD — y retiro de `/sprite-probe` como ruta pública (2026-08-31), pendiente de validación sobre el dominio real.
 

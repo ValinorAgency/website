@@ -130,13 +130,17 @@ Sigue pendiente (no forma parte de este hallazgo): incorporación de casos reale
 
 ### P1-03 — Evidencia comercial
 
-Estado: Pending confirmation. Presentación del equipo confirmada (2026-08-28); implementación pendiente. Casos reales autorizados siguen sin decidir.
+Estado: Parcialmente resuelto (2026-08-31). Presentación del equipo implementada y verificada. Casos reales autorizados y definición de proceso siguen sin decidir.
 
-Faltan casos reales autorizados, presentación pública del equipo, proceso y otras señales de confianza. No inventar logos, resultados, testimonios ni métricas.
+Faltaban casos reales autorizados, presentación pública del equipo, proceso y otras señales de confianza. No inventar logos, resultados, testimonios ni métricas.
 
 Decisión (equipo): sección breve con fotos, sin LinkedIn inicialmente. Milton Collard — Cofundador · Frontend y Experiencia Digital; Martín Abbott — Cofundador · Backend y Arquitectura de Datos. Cada fundador con más de ocho años de experiencia. Ver `PRODUCT.md`.
 
-Sigue pendiente: fotos concretas del equipo, casos reales autorizados y definición de proceso.
+Implementado en `src/components/TeamSection.tsx` (`id="equipo"`, entre `WhyUs` y `FinalCTA` en `src/app/page.tsx`): título "Conocé a quienes están detrás de Valinor"; introducción; dos tarjetas de igual jerarquía con nombre, rol, bio y capacidades breves para Milton Collard y Martín Abbott; línea de respaldo "Más de ocho años de experiencia profesional cada uno en desarrollo de software" (atribuida a cada fundador, no a la agencia). Avatares temporales con iniciales generadas por CSS, sin fotos, servicios externos ni URLs remotas; sin la palabra "temporal" visible para el visitante (documentado en `DESIGN.md` y en un comentario de código). No se agregaron rutas a `/images/team/` porque los archivos todavía no existen.
+
+Verificado por inspección de código y del HTML servido (`npm run start` + `curl`): `id="equipo"` aparece exactamente una vez, ubicado entre el marcador de `WhyUs` y `id="contacto"`; no hay ningún `<img>` ni referencia a `/images/team/` en la sección (los únicos `<img>` del HTML son el logo de `Navbar`/`Footer`, sin relación); el texto de "más de ocho años" se atribuye a cada fundador ("cada uno"), no a Valinor como agencia.
+
+Sigue pendiente: fotos concretas del equipo (reemplazo de los avatares de iniciales), casos reales autorizados y definición de proceso. QA visual (responsive, contraste, foco) en navegador real no se pudo ejecutar en este entorno por falta de navegador disponible; requiere revisión manual del usuario.
 
 ### P1-04 — IA demasiado visible
 
@@ -154,23 +158,31 @@ No se tocaron dependencias ni componentes experimentales cuyos nombres internos 
 
 ### P1-05 — Metadata incompleta
 
-Estado: Open.
+Estado: Resuelto (2026-08-31) para el SEO técnico base. Validación sobre el dominio real y Search Console siguen pendientes (no forman parte de este hallazgo).
 
-Faltan:
+Faltaban: metadataBase; canonical; URL e imagen Open Graph; imagen Twitter/X; robots; sitemap; datos estructurados basados en información confirmada.
 
-- metadataBase;
-- canonical;
-- URL e imagen Open Graph;
-- imagen Twitter/X;
-- robots;
-- sitemap;
-- datos estructurados basados en información confirmada.
+Implementado (detalle completo en `docs/ARCHITECTURE.md` § SEO y `docs/QUALITY.md` § SEO técnico base):
+
+- `src/lib/site-url.ts`: utilidad centralizada para resolver la URL del sitio (prioridad `SITE_URL` → `VERCEL_PROJECT_PRODUCTION_URL` → `VERCEL_URL` → `localhost`), sin asumir el dominio candidato como comprado, con protección explícita para que un preview de Vercel no herede `SITE_URL` de producción.
+- `src/app/layout.tsx`: `metadataBase`, `alternates.canonical: "/"`, título y descripción alineados con el copy visible del hero, Open Graph completo (title, description, url, siteName, locale es_AR, type website, imagen) y Twitter `summary_large_image`.
+- `src/app/opengraph-image.tsx`: imagen social generada con `next/og` (sin fotos, sin dependencias nuevas), reutilizada automáticamente para Twitter.
+- `src/app/robots.ts` y `src/app/sitemap.ts`: solo `/` como página pública indexable; `/api/contact` y `/sprite-probe` excluidas; sin `lastModified` inventado.
+- JSON-LD `Organization` en `<head>` (`src/lib/organization-json-ld.ts`), con únicamente datos confirmados (nombre, URL, email, teléfono/WhatsApp, área atendida, descripción) y serialización segura.
+
+Verificado: `npm run build` sin `SITE_URL` funciona; HTML servido contiene todas las etiquetas esperadas; `/robots.txt` y `/sitemap.xml` responden con el contenido correcto; JSON-LD válido (`JSON.parse` exitoso) con las claves exactas esperadas y ninguna prohibida; resolución de `SITE_URL` probada con tres builds reales (sin variables, con `SITE_URL` sin protocolo, y simulando un preview de Vercel).
+
+Sigue pendiente (no forma parte de este hallazgo): validación real sobre el dominio oficial una vez comprado, verificado y configurado como `SITE_URL` en Vercel (ver P0-04); indexación mediante Google Search Console. No se verificó ni se marca como verificado ningún deploy.
 
 ### P1-06 — Ruta experimental indexable
 
-Estado: Open.
+Estado: Resuelto (2026-08-31).
 
-/sprite-probe genera una página estática con metadata propia. Debe eliminarse del producto publicable, aislarse o marcarse noindex según decisión técnica.
+/sprite-probe generaba una página estática con metadata propia, indexable.
+
+Implementado: se eliminó `src/app/sprite-probe/page.tsx` (confirmado que no era parte de la home ni estaba enlazada públicamente). La ruta ya no existe; `/sprite-probe` responde `404` (verificado con `npm run start` + `curl`). No se eliminaron componentes ni assets experimentales adicionales, salvo esta única página.
+
+**Archivo huérfano documentado para limpieza posterior:** `src/components/SpriteParticleProbe.tsx` era usado exclusivamente por esa página y ahora no tiene ningún consumidor en el código, pero no se eliminó en esta tarea (fuera del alcance solicitado). Ver `docs/ARCHITECTURE.md` § Rutas y P2-05.
 
 ## Prioridad P1 — seguridad
 
@@ -249,7 +261,7 @@ Decisión: la sección de tecnologías se conserva por ahora sin cambios. Mejora
 2. Número comercial de WhatsApp. — Resuelto e implementado (2026-08-28): provisional, +54 9 11 5015-2833.
 3. Canal y proveedor del formulario. — Resuelto e implementado (2026-08-28): formulario web (Resend, vía ruta de servidor de Next.js) combinado con WhatsApp. Envío real verificado el 2026-08-29; remitente sigue temporal hasta comprar y verificar el dominio oficial.
 4. Casos reales autorizados. — Pendiente.
-5. Presentación pública del equipo. — Resuelto (2026-08-28): sección breve con bios de ambos cofundadores; fotos concretas pendientes.
+5. Presentación pública del equipo. — Resuelto e implementado (2026-08-31): sección breve con bios de ambos cofundadores; fotos concretas pendientes (avatares temporales con iniciales).
 6. Copy y CTA del hero. — Resuelto e implementado (2026-08-29): ver `DESIGN.md`.
 7. Nivel de presencia pública de IA. — Resuelto e implementado (2026-08-29): IA no es servicio independiente; integración evaluable caso por caso si el cliente la solicita y paga costos externos.
 8. Prioridades cuantitativas de rendimiento y conversión. — Pendiente.
