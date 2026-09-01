@@ -85,7 +85,7 @@ export default function HeroParticleAlt() {
           </div>
 
           <p className="mt-6 max-w-sm text-pretty px-2 text-xs leading-5 text-[rgba(255,255,255,0.4)] sm:text-sm">
-            Más de ocho años de experiencia por fundador en desarrollo de soluciones digitales.
+            Más de 8 años de experiencia diseñando y desarrollando soluciones digitales.
           </p>
         </div>
       </motion.div>

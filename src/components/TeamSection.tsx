@@ -39,9 +39,6 @@ export default function TeamSection() {
           transition={{ duration: 0.7, ease: expo }}
         >
           <h2 className="font-display">Conocé a quienes están detrás de Valinor</h2>
-          <p className="team-intro">
-            Dos perfiles complementarios que combinan desarrollo, diseño y análisis funcional para construir soluciones alineadas con cada negocio.
-          </p>
         </motion.div>
 
         <div className="team-grid">
@@ -79,7 +76,6 @@ export default function TeamSection() {
         .team-section { background: var(--surface); }
         .team-heading { max-width: 46rem; margin: 0 auto clamp(3rem,6vw,4.5rem); text-align: center; }
         .team-heading h2 { font-size: clamp(2.3rem,5vw,3.8rem); font-weight: 650; line-height: 1.06; letter-spacing: -.03em; color: var(--ink); }
-        .team-intro { max-width: 42rem; margin: 1rem auto 0; color: var(--ink-muted); font-size: 1rem; line-height: 1.65; }
         .team-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(1.5rem,3vw,2.5rem); align-items: stretch; }
         .team-card { display: flex; flex-direction: column; gap: .9rem; padding: clamp(1.75rem,3vw,2.5rem); border: 1px solid var(--border); border-top: 3px solid transparent; border-radius: 20px; background: var(--surface-raised); box-shadow: var(--shadow-sm); }
         .team-card-blue { border-top-color: #3279F9; }

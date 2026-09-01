@@ -237,9 +237,6 @@ export default function Portfolio() {
         transition={{ duration: .7, ease: expo }}
       >
         <h2 className="font-display">Soluciones digitales a medida</h2>
-        <p className="portfolio-flow-intro">
-          Diseñamos y desarrollamos soluciones web adaptadas a los objetivos, procesos y etapa de cada negocio.
-        </p>
       </motion.div>
 
       <div className="flow-project-list">
@@ -250,9 +247,8 @@ export default function Portfolio() {
 
       <style>{`
         .portfolio-flow { position: relative; padding: clamp(7rem,12vw,10rem) 0; background: #08090d; }
-        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; }
+        .portfolio-flow-heading { padding: 0 1.5rem clamp(3rem,6vw,5rem); display: flex; justify-content: center; }
         .portfolio-flow-heading h2 { max-width: 13ch; color: var(--ink); font-size: clamp(2.8rem,6.5vw,6rem); line-height: .98; letter-spacing: -.04em; font-weight: 600; text-align: center; }
-        .portfolio-flow-intro { max-width: 46ch; color: var(--ink-muted); font-size: .95rem; line-height: 1.65; text-align: center; }
         .flow-project-list { border-top: 1px solid rgba(255,255,255,.13); }
         .flow-project { position: relative; height: clamp(8rem,11vw,10rem); overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.13); }
         .flow-project-base, .flow-project-reveal-inner { position: absolute; inset: 0; display: grid; grid-template-columns: 3rem minmax(0,1fr) minmax(18rem,.75fr) auto; align-items: center; gap: clamp(1rem,3vw,3rem); width: min(100% - 3rem,72rem); margin: 0 auto; }
