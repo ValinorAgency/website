@@ -45,6 +45,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Evita la cabecera "X-Powered-By: Next.js" (fingerprinting trivial del
+  // framework/versión para quien esté evaluando el sitio).
+  poweredByHeader: false,
   async headers() {
     // Los headers de seguridad solo se aplican al build/runtime de producción.
     // En `next dev` no se aplican para no arriesgar el HMR/Fast Refresh, que no

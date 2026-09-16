@@ -31,8 +31,16 @@ export function isRateLimited(key: string): boolean {
 export function getClientKey(request: Request): string {
   const forwardedFor = request.headers.get("x-forwarded-for");
   if (forwardedFor) {
-    const firstIp = forwardedFor.split(",")[0]?.trim();
-    if (firstIp) return firstIp;
+    // Vercel (el hosting de destino, ver docs/ARCHITECTURE.md) reenvía la
+    // request a la función serverless agregando la IP real del cliente al
+    // FINAL de esta cabecera; cualquier valor que el propio cliente haya
+    // mandado en su request queda antes de ese último tramo. Leer el primer
+    // valor (como se hacía antes) confiaba en un dato que el atacante
+    // controla directamente, y volvía este límite trivialmente evadible
+    // rotando la cabecera en cada intento.
+    const parts = forwardedFor.split(",").map((part) => part.trim()).filter(Boolean);
+    const lastIp = parts[parts.length - 1];
+    if (lastIp) return lastIp;
   }
   return "unknown";
 }

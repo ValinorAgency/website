@@ -1,7 +1,12 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
+import type { MouseEvent } from "react";
+import { scrollToHash } from "@/lib/scroll-to-hash";
+
 export default function Footer() {
   const year = new Date().getFullYear();
+  const reduceMotion = useReducedMotion();
 
   const links = [
     { label: "Inicio", href: "#about" },
@@ -10,6 +15,11 @@ export default function Footer() {
     { label: "Por qué Valinor", href: "#por-que" },
     { label: "Contacto", href: "#contacto" },
   ];
+
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    event.preventDefault();
+    scrollToHash(href, reduceMotion);
+  };
 
   return (
     <footer
@@ -20,7 +30,7 @@ export default function Footer() {
       <div className="section-inner">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-xs">
-            <a href="#" className="flex items-center gap-3">
+            <a href="#" onClick={(event) => handleAnchorClick(event, "#")} className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logoValinor-removebg.png"
@@ -40,6 +50,7 @@ export default function Footer() {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={(event) => handleAnchorClick(event, link.href)}
                 className="rounded-full border px-4 py-2 text-sm font-medium transition-colors"
                 style={{
                   borderColor: "var(--border)",

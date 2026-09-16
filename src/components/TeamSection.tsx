@@ -48,9 +48,9 @@ const team: readonly TeamMember[] = [
 // distinto al del lanyard de desktop (`team`, que no se toca), por eso se
 // arma una copia invertida solo para acá. Frente: foto grande con
 // nombre/rol superpuestos y botón "+INFO"; al tocar la tarjeta (o el botón)
-// se da vuelta y repite nombre/rol junto a algunas skills — no hay
+// se da vuelta y repite nombre/rol junto a la bio completa — no hay
 // "seguidores" ni métricas reales para mostrar como en la referencia, así
-// que se usan datos genuinos que ya existen.
+// que se usa el texto genuino que ya existe.
 function MobileTeamCards({ team }: { team: readonly TeamMember[] }) {
   const mobileTeam = [...team].reverse();
   const [flipped, setFlipped] = useState<boolean[]>(() => mobileTeam.map(() => false));
@@ -91,11 +91,7 @@ function MobileTeamCards({ team }: { team: readonly TeamMember[] }) {
                 <div className="team-flip-back-info">
                   <h3>{member.name}</h3>
                   <p className="team-flip-role">{shortRole}</p>
-                  <ul className="team-flip-skills">
-                    {member.skills.slice(0, 3).map((skill) => (
-                      <li key={skill}>{skill}</li>
-                    ))}
-                  </ul>
+                  <p className="team-flip-bio">{member.bio}</p>
                 </div>
               </div>
             </div>
@@ -234,16 +230,15 @@ export default function TeamSection() {
         .team-flip-front-role { display: block; margin-top: .2rem; font-size: .62rem; font-weight: 600; letter-spacing: .03em; color: rgba(255,255,255,.8); }
         .team-flip-info-btn { position: absolute; right: .75rem; bottom: .75rem; padding: .38rem .8rem; border-radius: 999px; background: #FFD447; color: #171308; font-size: .64rem; font-weight: 700; letter-spacing: .03em; }
         /* Reverso: foto arriba (poco más de la mitad) y debajo, repetidos,
-           nombre + rol corto + algunas skills — no hay métricas reales
-           ("seguidores", etc.) como en la referencia, así que se usan datos
-           genuinos que ya existen en team. */
+           nombre + rol corto + la bio completa — no hay métricas reales
+           ("seguidores", etc.) como en la referencia, así que se usa el
+           texto genuino que ya existía en team. */
         .team-flip-back { transform: rotateY(180deg); background: #f5f5f2; }
         .team-flip-photo { width: 100%; height: 55%; object-fit: cover; object-position: center top; }
-        .team-flip-back-info { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; padding: .8rem .7rem; text-align: center; }
+        .team-flip-back-info { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: .3rem; padding: .8rem .9rem; text-align: center; }
         .team-flip-back-info h3 { font-size: .92rem; font-weight: 650; letter-spacing: -.01em; color: #111; }
         .team-flip-role { font-size: .62rem; font-weight: 600; letter-spacing: .03em; color: rgba(17,17,20,.55); }
-        .team-flip-skills { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem; margin-top: .3rem; list-style: none; }
-        .team-flip-skills li { padding: .22rem .5rem; border: 1px solid rgba(17,17,20,.14); border-radius: 999px; color: rgba(17,17,20,.6); font-size: .58rem; }
+        .team-flip-bio { margin-top: .3rem; font-size: .85rem; line-height: 1.48; color: rgba(17,17,20,.65); }
 
         .team-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: clamp(1.5rem,3vw,2.5rem); align-items: stretch; }
         .team-card { display: flex; flex-direction: column; gap: .9rem; padding: clamp(1.75rem,3vw,2.5rem); border: 1px solid var(--border); border-top: 3px solid transparent; border-radius: 20px; background: var(--surface-raised); box-shadow: var(--shadow-sm); }

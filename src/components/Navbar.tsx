@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { scrollToHash } from "@/lib/scroll-to-hash";
 
 const WHATSAPP_URL =
   "https://wa.me/5491150152833?text=" +
@@ -44,6 +45,11 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
+    event.preventDefault();
+    scrollToHash(href, reduceMotion);
+  };
+
   return (
     <motion.header
       initial={reduceMotion ? false : { y: -20, opacity: 0 }}
@@ -53,7 +59,7 @@ export default function Navbar() {
     >
       <div className="w-full px-5 py-3.5 sm:px-8 lg:px-10">
         <div className="flex items-center justify-between gap-4">
-          <a href="#" className="flex items-center gap-2.5">
+          <a href="#" onClick={(event) => handleAnchorClick(event, "#")} className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logoValinor-removebg.png"
@@ -67,6 +73,7 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={(event) => handleAnchorClick(event, link.href)}
                 className="rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white"
               >
                 {link.label}
@@ -169,7 +176,10 @@ export default function Navbar() {
                       <a
                         ref={index === 0 ? firstLinkRef : undefined}
                         href={link.href}
-                        onClick={closeMenu}
+                        onClick={(event) => {
+                          handleAnchorClick(event, link.href);
+                          closeMenu();
+                        }}
                         className="group flex min-h-16 items-center gap-4 py-3 font-display text-[clamp(2rem,10vw,4rem)] font-medium leading-none tracking-[-0.04em]"
                       >
                         <span className="w-6 text-[10px] font-semibold tracking-normal text-black/40">
