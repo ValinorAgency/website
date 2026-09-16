@@ -135,11 +135,13 @@ El correo `hola@valinor.agency`, antes referenciado en `src/components/Navbar.ts
 
 ### WhatsApp (implementado, 2026-08-28)
 
-`src/components/FloatingActions.tsx` genera el enlace con el número comercial provisional y el mensaje precompletado, con `text` codificado mediante `encodeURIComponent`:
+`src/components/FloatingActions.tsx` y los CTAs de `src/components/Navbar.tsx`, `src/components/HeroParticleAlt.tsx` y `src/components/TechStackSection.tsx` generan enlaces con el número comercial provisional y mensajes precompletados, con `text` codificado mediante `encodeURIComponent`:
 
 - número: +54 9 11 5015-2833;
 - enlace: https://wa.me/5491150152833;
 - mensaje: "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto."
+- CTA "Hablemos" del navbar: "Hola! Vengo de la web de Valinor y quisiera realizar una consulta por un desarrollo."
+- CTAs "Contanos tu proyecto" y "Conversemos sobre tu proyecto": "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera  desarrollar"
 
 No quedan otras referencias a WhatsApp en el código con enlaces incompletos o inconsistentes (verificado).
 
@@ -283,4 +285,3 @@ El objetivo cuantitativo de rendimiento está Pending confirmation.
 - ¿Se incorporará CI para lint, build y auditoría?
 
 Resueltas e implementadas: hosting decidido (Vercel, despliegue aún pendiente), formulario de contacto (`POST /api/contact` + Resend, código completo), WhatsApp con número provisional, reemplazo de `hola@valinor.agency` por `agencyvalinor@gmail.com` (2026-08-28); SEO técnico base — resolución de `SITE_URL`, metadata, `robots.ts`, `sitemap.ts`, imagen social y JSON-LD — y retiro de `/sprite-probe` como ruta pública (2026-08-31), pendiente de validación sobre el dominio real.
-

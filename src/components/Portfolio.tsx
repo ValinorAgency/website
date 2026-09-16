@@ -37,7 +37,7 @@ const projects = [
     palette: "radial-gradient(circle at 20% 20%, #fff0d7 0 18%, transparent 44%), radial-gradient(circle at 82% 20%, #e2eafa 0 16%, transparent 45%), radial-gradient(circle at 54% 82%, #f3dfe5 0 18%, transparent 48%), #e8f1ec",
   },
   {
-    name: "Integraciones y automatizaciones",
+    name: "Integraciones",
     purpose: "Conectar herramientas existentes y automatizar tareas puntuales para reducir trabajo manual repetitivo.",
     capabilities: "Conexión de APIs y servicios externos, y automatización de procesos según las necesidades del proyecto.",
     palette: "radial-gradient(circle at 18% 22%, #e4f3e8 0 18%, transparent 44%), radial-gradient(circle at 82% 18%, #f5e2d8 0 16%, transparent 45%), radial-gradient(circle at 58% 84%, #dfe9f8 0 18%, transparent 48%), #f2edf2",
@@ -261,9 +261,9 @@ export default function Portfolio() {
         .mobile-project-highlight { display: none; }
 
         @media (max-width:760px) {
-          .portfolio-flow { padding: 7rem 0 0; }
+          .portfolio-flow { padding: 7rem 0 0; background: #f5f5f2; }
           .portfolio-flow-heading { padding: 0 1rem .75rem; }
-          .portfolio-flow-heading h2 { font-size: clamp(2.65rem,13vw,4rem); }
+          .portfolio-flow-heading h2 { font-size: clamp(2.65rem,13vw,4rem); color: #111; }
           .flow-project-list { display: none; }
           .mobile-project-highlight { display: block; background: #f5f5f2; }
           .mobile-project-hint { padding: 1.25rem 1rem 0; color: rgba(17,17,17,.48); font-size: .72rem; line-height: 1.5; letter-spacing: .04em; }

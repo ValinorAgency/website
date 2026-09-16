@@ -4,6 +4,12 @@ import { cubicBezier, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import LiquidEther from "./LiquidEther";
 
+const WHATSAPP_URL =
+  "https://wa.me/5491150152833?text=" +
+  encodeURIComponent(
+    "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera  desarrollar"
+  );
+
 export default function HeroParticleAlt() {
   const reduceMotion = useReducedMotion();
   const [revealed, setRevealed] = useState(false);
@@ -76,7 +82,12 @@ export default function HeroParticleAlt() {
           </p>
 
           <div className="hero-cta-row pointer-events-auto mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
-            <a href="#contacto" className="pill-button-dark">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pill-button-dark"
+            >
               Contanos tu proyecto <span aria-hidden="true">↗</span>
             </a>
             <a href="#servicios" className="pill-button-light">

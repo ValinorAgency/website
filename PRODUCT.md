@@ -38,11 +38,11 @@ Público secundario:
 
 La conversión principal es que una persona interesada envíe una consulta con contexto suficiente para evaluar su proyecto.
 
-Canal confirmado: combinación de formulario web real y WhatsApp comercial. Implementación pendiente; ver `docs/ARCHITECTURE.md`.
+Canal confirmado: combinación de formulario web real y WhatsApp comercial. Ambos canales están implementados; ver `docs/ARCHITECTURE.md`.
 
 El correo oficial y receptor de consultas es `agencyvalinor@gmail.com`. Las referencias operativas a `hola@valinor.agency` quedan descartadas y deben eliminarse de la implementación pública (pendiente; ver `docs/ARCHITECTURE.md` y la auditoría de lanzamiento).
 
-WhatsApp comercial (provisional): +54 9 11 5015-2833. Implementación pendiente; ver `docs/ARCHITECTURE.md`.
+WhatsApp comercial (provisional): +54 9 11 5015-2833. Implementado en los CTAs de contacto y en el acceso flotante; ver `docs/ARCHITECTURE.md`.
 
 ## Propuesta de valor
 

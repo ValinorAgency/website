@@ -11,14 +11,17 @@ import type { NextConfig } from "next";
 // con nonces, así que se documenta esta concesión como deuda técnica en
 // docs/ARCHITECTURE.md y docs/QUALITY.md en vez de omitirla silenciosamente.
 //
+// 'wasm-unsafe-eval' en script-src: @react-three/rapier (motor de física del
+// lanyard del equipo) carga rapier3d-compat como WebAssembly; los navegadores
+// modernos bloquean WebAssembly.instantiate() bajo CSP sin este permiso. Es más
+// acotado que 'unsafe-eval' (no habilita eval/Function de JS, solo WASM).
+//
 // 'unsafe-inline' en style-src: hay atributos style={{...}} servidos en el HTML
 // (por ejemplo tamaños clamp() en el hero) y Framer Motion/GSAP escriben la
-// propiedad style directamente por JS. No se usa unsafe-eval: los shaders
-// GLSL/WGSL de Three.js se compilan vía la API gráfica del navegador, no
-// mediante eval/Function de JavaScript.
+// propiedad style directamente por JS.
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self'",
   "font-src 'self'",

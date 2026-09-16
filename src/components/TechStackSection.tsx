@@ -3,6 +3,12 @@
 import { cubicBezier, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 
+const WHATSAPP_URL =
+  "https://wa.me/5491150152833?text=" +
+  encodeURIComponent(
+    "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera  desarrollar"
+  );
+
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const capabilities = [
@@ -91,7 +97,9 @@ export default function TechStackSection() {
             Elegimos herramientas de primer nivel para cada desafío y usamos inteligencia
             artificial para acelerar análisis, desarrollo y control de calidad.
           </p>
-          <a href="#contacto">Conversemos sobre tu proyecto <span aria-hidden="true">↗</span></a>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+            Conversemos sobre tu proyecto <span aria-hidden="true">↗</span>
+          </a>
         </motion.div>
 
         <BrowserPreview reduceMotion={reduceMotion} activeIndex={activeCapability} />
@@ -175,6 +183,11 @@ export default function TechStackSection() {
           .capabilities-list { display: none; }
         }
         @media (max-width: 800px) {
+          /* En mobile .capabilities-list queda oculta (ver la media query de
+             hover:none más abajo), así que el cierre de la sección es
+             directamente el padding-bottom acá — se alarga para separarla
+             más de la sección siguiente. */
+          .capabilities-section { padding-bottom: clamp(6rem,18vw,8rem); }
           .capabilities-layout { grid-template-columns: 1fr; gap: 3.5rem; }
           .capabilities-copy h2 { font-size: clamp(2.8rem,13vw,4.5rem); }
           .capabilities-browser-wrap { margin-inline: -.25rem; }

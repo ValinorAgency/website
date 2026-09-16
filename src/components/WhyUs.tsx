@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 const reasons = [
   { title: "Entregas visibles", desc: "Dividimos el proyecto en instancias revisables para validar decisiones antes de la entrega final." },
-  { title: "Código realmente tuyo", desc: "Entregamos el código y evitamos dependencias que compliquen mantener o ampliar la solución." },
   { title: "Tecnología con criterio", desc: "Elegimos la base técnica según el objetivo, el presupuesto y la operación del equipo." },
   { title: "Contacto directo", desc: "Hablás con quienes diseñan y desarrollan. Menos intermediarios, menos contexto perdido." },
   { title: "Alcance transparente", desc: "Acordamos entregables y condiciones antes de empezar. Si cambia algo, lo evaluamos con claridad." },

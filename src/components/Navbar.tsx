@@ -3,6 +3,12 @@
 import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+const WHATSAPP_URL =
+  "https://wa.me/5491150152833?text=" +
+  encodeURIComponent(
+    "Hola! Vengo de la web de Valinor y quisiera realizar una consulta por un desarrollo."
+  );
+
 const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 const links = [
@@ -69,7 +75,12 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <a href="#contacto" className="pill-button-dark hidden px-5 py-2 text-sm sm:inline-flex">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="pill-button-dark hidden px-5 py-2 text-sm sm:inline-flex"
+            >
               Hablemos
             </a>
 
