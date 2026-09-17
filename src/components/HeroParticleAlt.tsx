@@ -64,10 +64,7 @@ export default function HeroParticleAlt() {
         }}
       >
         <div className="flex flex-col items-center gap-3">
-          <p
-            className="font-display font-black leading-[0.94]"
-            style={{ fontSize: "clamp(2.9rem, 11vw, 10rem)", letterSpacing: "-0.055em" }}
-          >
+          <p className="hero-title font-display font-black leading-[0.94]">
             <span className="block md:inline" style={{ color: "rgba(255,255,255,0.96)" }}>Valinor</span>{" "}
             <span className="block text-outline md:inline">Agency</span>
           </p>
@@ -108,6 +105,17 @@ export default function HeroParticleAlt() {
       </motion.div>
 
       <style>{`
+        .hero-title {
+          font-size: clamp(3.6rem, 11vw, 10rem);
+          letter-spacing: -0.055em;
+        }
+
+        @media (max-width: 640px) {
+          .hero-title {
+            font-size: 25.4vw;
+          }
+        }
+
         .hero-cta-row a { min-height: 48px; width: 100%; }
         @media (min-width: 640px) { .hero-cta-row a { width: auto; } }
       `}</style>
