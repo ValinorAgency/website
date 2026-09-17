@@ -52,6 +52,7 @@ La inteligencia artificial puede mencionarse como parte del proceso interno de d
 - GSAP;
 - Three.js;
 - React Three Fiber en prototipos existentes;
+- next-intl (sitio bilingüe español/inglés, `/` e `/en` — ver `docs/decisions/0001-sitio-bilingue-next-intl.md`);
 - `next/font`.
 
 Las versiones exactas están en `package.json`. No actualizar ni agregar dependencias sin revisar impacto y obtener autorización.
@@ -113,7 +114,7 @@ website/
 └── README.md
 ```
 
-La home se compone en `src/app/page.tsx`. El layout global y la metadata base se encuentran en `src/app/layout.tsx`.
+La home se compone en `src/app/[locale]/page.tsx`. El layout global y la metadata base (por idioma) se encuentran en `src/app/[locale]/layout.tsx`; `sitemap.ts`, `robots.ts` y `api/` quedan en la raíz de `src/app/` (fuera del segmento de idioma).
 
 ## Reglas de colaboración
 

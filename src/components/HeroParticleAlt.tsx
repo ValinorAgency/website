@@ -1,18 +1,24 @@
 "use client";
 
 import { cubicBezier, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState, type MouseEvent } from "react";
+import { scrollToHash } from "@/lib/scroll-to-hash";
 import LiquidEther from "./LiquidEther";
-
-const WHATSAPP_URL =
-  "https://wa.me/5491150152833?text=" +
-  encodeURIComponent(
-    "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera  desarrollar"
-  );
 
 export default function HeroParticleAlt() {
   const reduceMotion = useReducedMotion();
   const [revealed, setRevealed] = useState(false);
+  const t = useTranslations("hero");
+  const tMeta = useTranslations("metadata");
+
+  const WHATSAPP_URL =
+    "https://wa.me/5491150152833?text=" + encodeURIComponent(t("whatsappMessage"));
+
+  const handleServicesClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    scrollToHash("#servicios", reduceMotion);
+  };
 
   useEffect(() => {
     const reveal = () => setRevealed(true);
@@ -75,10 +81,10 @@ export default function HeroParticleAlt() {
               textTransform: "uppercase",
             }}
           >
-            Diseño y desarrollo web a medida
+            {t("subheading")}
           </h1>
           <p className="mt-5 max-w-xl text-pretty px-2 text-sm leading-6 text-[var(--ink-muted)] sm:mt-6 sm:text-base sm:leading-7">
-            Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina.
+            {tMeta("description")}
           </p>
 
           <div className="hero-cta-row pointer-events-auto mt-8 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center">
@@ -88,15 +94,15 @@ export default function HeroParticleAlt() {
               rel="noopener noreferrer"
               className="pill-button-dark"
             >
-              Contanos tu proyecto <span aria-hidden="true">↗</span>
+              {t("ctaPrimary")} <span aria-hidden="true">↗</span>
             </a>
-            <a href="#servicios" className="pill-button-light">
-              Ver soluciones
+            <a href="#servicios" onClick={handleServicesClick} className="pill-button-light">
+              {t("ctaSecondary")}
             </a>
           </div>
 
           <p className="mt-6 max-w-sm text-pretty px-2 text-xs leading-5 text-[rgba(255,255,255,0.4)] sm:text-sm">
-            Más de 8 años de experiencia diseñando y desarrollando soluciones digitales.
+            {t("experience")}
           </p>
         </div>
       </motion.div>

@@ -1,19 +1,23 @@
 "use client";
 
 import { useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import type { MouseEvent } from "react";
 import { scrollToHash } from "@/lib/scroll-to-hash";
 
 export default function Footer() {
   const year = new Date().getFullYear();
   const reduceMotion = useReducedMotion();
+  const t = useTranslations("nav");
+  const tFooter = useTranslations("footer");
 
   const links = [
-    { label: "Inicio", href: "#about" },
-    { label: "Servicios", href: "#servicios" },
-    { label: "Capacidades", href: "#capacidades" },
-    { label: "Por qué Valinor", href: "#por-que" },
-    { label: "Contacto", href: "#contacto" },
+    { label: t("inicio"), href: "#about" },
+    { label: t("servicios"), href: "#servicios" },
+    { label: t("capacidades"), href: "#capacidades" },
+    { label: t("porQue"), href: "#por-que" },
+    { label: t("equipo"), href: "#equipo" },
+    { label: t("contacto"), href: "#contacto" },
   ];
 
   const handleAnchorClick = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -38,17 +42,17 @@ export default function Footer() {
                 aria-hidden="true"
                 className="h-20 w-20 object-contain brightness-0 invert"
               />
-              <span className="font-display text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">Valinor Agency</span>
+              <span className="font-display text-lg font-semibold tracking-[-0.03em] text-[var(--ink)]">{tFooter("brand")}</span>
             </a>
             <p className="mt-4 text-sm leading-6" style={{ color: "var(--ink-muted)" }}>
-              Diseñamos y desarrollamos soluciones web claras, útiles y adaptadas a cada negocio.
+              {tFooter("tagline")}
             </p>
           </div>
 
           <nav className="flex flex-wrap gap-2">
             {links.map((link) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 onClick={(event) => handleAnchorClick(event, link.href)}
                 className="rounded-full border px-4 py-2 text-sm font-medium transition-colors"
@@ -71,8 +75,8 @@ export default function Footer() {
           className="mt-10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
           style={{ borderTop: "1px solid var(--border)", paddingTop: "2rem" }}
         >
-          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>© {year} Valinor Agency.</p>
-          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>Websites, ecommerce y aplicaciones a medida</p>
+          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>{tFooter("copyright", { year })}</p>
+          <p className="text-sm" style={{ color: "var(--ink-faint)" }}>{tFooter("bottomTagline")}</p>
         </div>
       </div>
     </footer>

@@ -1,10 +1,11 @@
 "use client";
 
 import { cubicBezier, motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useState, type FormEvent } from "react";
 import AnimatedDots from "./AnimatedDots";
 import {
-  PROJECT_TYPES,
+  PROJECT_TYPE_VALUES,
   validateContactPayload,
   type ContactFieldErrors,
 } from "@/lib/contact-validation";
@@ -13,23 +14,14 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 
 type SubmitStatus = "idle" | "submitting" | "success" | "error";
 
-const DEFAULT_HELP_TEXT = "Te respondemos por email o WhatsApp según el dato que nos dejes.";
-const VALIDATION_ERROR_TEXT = "Revisá los datos marcados antes de enviar.";
-
-const SERVER_ERROR_MESSAGES: Record<string, string> = {
-  rate_limited: "Recibimos demasiadas consultas en poco tiempo. Probá de nuevo en unos minutos.",
-  config: "El formulario no está disponible en este momento. Escribinos por WhatsApp o a agencyvalinor@gmail.com.",
-  send_failed: "No pudimos enviar tu consulta. Probá de nuevo o escribinos por WhatsApp.",
-  invalid_json: "Ocurrió un error inesperado. Probá de nuevo.",
-  invalid_body: "Ocurrió un error inesperado. Probá de nuevo.",
-};
-
-const NETWORK_ERROR_TEXT = "No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.";
-
 export default function FinalCTA() {
   const reduceMotion = useReducedMotion();
+  const t = useTranslations("finalCTA");
+  const tValidation = useTranslations("contactValidation");
+  const defaultHelpText = t("defaultHelp");
+
   const [status, setStatus] = useState<SubmitStatus>("idle");
-  const [statusMessage, setStatusMessage] = useState(DEFAULT_HELP_TEXT);
+  const [statusMessage, setStatusMessage] = useState(defaultHelpText);
   const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({});
 
   const submitContact = async (event: FormEvent<HTMLFormElement>) => {
@@ -50,13 +42,13 @@ export default function FinalCTA() {
     if (!result.ok) {
       setFieldErrors(result.errors);
       setStatus("error");
-      setStatusMessage(VALIDATION_ERROR_TEXT);
+      setStatusMessage(t("validationError"));
       return;
     }
 
     setFieldErrors({});
     setStatus("submitting");
-    setStatusMessage("Enviando tu consulta…");
+    setStatusMessage(t("submitting"));
 
     try {
       const response = await fetch("/api/contact", {
@@ -75,23 +67,22 @@ export default function FinalCTA() {
         if (payload?.error === "validation" && payload.fields) {
           setFieldErrors(payload.fields);
           setStatus("error");
-          setStatusMessage(VALIDATION_ERROR_TEXT);
+          setStatusMessage(t("validationError"));
           return;
         }
 
         setStatus("error");
-        setStatusMessage(
-          (payload?.error && SERVER_ERROR_MESSAGES[payload.error]) ?? SERVER_ERROR_MESSAGES.send_failed,
-        );
+        const errorKey = payload?.error ?? "send_failed";
+        setStatusMessage(t.has(`serverErrors.${errorKey}`) ? t(`serverErrors.${errorKey}`) : t("serverErrors.send_failed"));
         return;
       }
 
       setStatus("success");
-      setStatusMessage("¡Listo! Recibimos tu consulta y te vamos a responder a la brevedad.");
+      setStatusMessage(t("success"));
       form.reset();
     } catch {
       setStatus("error");
-      setStatusMessage(NETWORK_ERROR_TEXT);
+      setStatusMessage(t("networkError"));
     }
   };
 
@@ -110,13 +101,13 @@ export default function FinalCTA() {
           <div className="relative grid gap-10 lg:grid-cols-[minmax(0,.8fr)_minmax(24rem,1.2fr)] lg:gap-16">
             <div>
               <h2 className="font-display text-[clamp(2.4rem,5.5vw,4.5rem)] font-semibold leading-[1.01] tracking-[-0.04em]" style={{ textWrap: "balance" }}>
-                Contanos qué necesitás resolver.
+                {t("heading")}
               </h2>
               <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-[var(--ink-muted)] sm:text-lg">
-                Puede ser un sitio para presentar tu empresa, una tienda online o una herramienta para ordenar procesos. Revisamos el objetivo y te proponemos un alcance claro.
+                {t("paragraph")}
               </p>
               <p className="mt-6 text-sm leading-6 text-[var(--ink-faint)]">
-                También podés escribirnos directamente a{" "}
+                {t("emailLeadIn")}{" "}
                 <a className="text-[var(--ink)] underline decoration-white/25 underline-offset-4" href="mailto:agencyvalinor@gmail.com">agencyvalinor@gmail.com</a>
               </p>
             </div>
@@ -124,46 +115,46 @@ export default function FinalCTA() {
             <form className="contact-form" onSubmit={submitContact} noValidate>
               <div className="contact-form-grid">
                 <label htmlFor="contact-name">
-                  <span>Nombre</span>
+                  <span>{t("form.nameLabel")}</span>
                   <input
                     id="contact-name"
                     name="name"
                     type="text"
                     autoComplete="name"
-                    placeholder="Tu nombre"
+                    placeholder={t("form.namePlaceholder")}
                     maxLength={120}
                     aria-invalid={Boolean(fieldErrors.name)}
                     aria-describedby={fieldErrors.name ? "contact-name-error" : undefined}
                   />
                   {fieldErrors.name ? (
                     <span id="contact-name-error" role="alert" className="contact-form-error">
-                      {fieldErrors.name}
+                      {tValidation(`errors.${fieldErrors.name}`)}
                     </span>
                   ) : null}
                 </label>
                 <label htmlFor="contact-contact">
-                  <span>Email o WhatsApp</span>
+                  <span>{t("form.contactLabel")}</span>
                   <input
                     id="contact-contact"
                     name="contact"
                     type="text"
                     inputMode="email"
                     autoComplete="email"
-                    placeholder="nombre@empresa.com o tu WhatsApp"
+                    placeholder={t("form.contactPlaceholder")}
                     maxLength={120}
                     aria-invalid={Boolean(fieldErrors.contact)}
                     aria-describedby={fieldErrors.contact ? "contact-contact-error" : undefined}
                   />
                   {fieldErrors.contact ? (
                     <span id="contact-contact-error" role="alert" className="contact-form-error">
-                      {fieldErrors.contact}
+                      {tValidation(`errors.${fieldErrors.contact}`)}
                     </span>
                   ) : null}
                 </label>
               </div>
 
               <label htmlFor="contact-project-type">
-                <span>Tipo de proyecto</span>
+                <span>{t("form.projectTypeLabel")}</span>
                 <select
                   id="contact-project-type"
                   name="projectType"
@@ -171,40 +162,40 @@ export default function FinalCTA() {
                   aria-invalid={Boolean(fieldErrors.projectType)}
                   aria-describedby={fieldErrors.projectType ? "contact-project-type-error" : undefined}
                 >
-                  <option value="" disabled>Seleccioná una opción</option>
-                  {PROJECT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
+                  <option value="" disabled>{t("form.projectTypePlaceholder")}</option>
+                  {PROJECT_TYPE_VALUES.map((value) => (
+                    <option key={value} value={value}>
+                      {tValidation(`projectTypes.${value}`)}
                     </option>
                   ))}
                 </select>
                 {fieldErrors.projectType ? (
                   <span id="contact-project-type-error" role="alert" className="contact-form-error">
-                    {fieldErrors.projectType}
+                    {tValidation(`errors.${fieldErrors.projectType}`)}
                   </span>
                 ) : null}
               </label>
 
               <label htmlFor="contact-message">
-                <span>¿Qué necesitás resolver?</span>
+                <span>{t("form.messageLabel")}</span>
                 <textarea
                   id="contact-message"
                   name="message"
                   rows={5}
-                  placeholder="Contanos brevemente el objetivo, el problema actual o la idea que querés desarrollar."
+                  placeholder={t("form.messagePlaceholder")}
                   maxLength={2000}
                   aria-invalid={Boolean(fieldErrors.message)}
                   aria-describedby={fieldErrors.message ? "contact-message-error" : undefined}
                 />
                 {fieldErrors.message ? (
                   <span id="contact-message-error" role="alert" className="contact-form-error">
-                    {fieldErrors.message}
+                    {tValidation(`errors.${fieldErrors.message}`)}
                   </span>
                 ) : null}
               </label>
 
               <div className="contact-form-honeypot" aria-hidden="true">
-                <label htmlFor="contact-company">Empresa</label>
+                <label htmlFor="contact-company">{t("form.honeypotLabel")}</label>
                 <input id="contact-company" name="company" type="text" tabIndex={-1} autoComplete="off" />
               </div>
 
@@ -213,8 +204,8 @@ export default function FinalCTA() {
                   {statusMessage}
                 </p>
                 <button type="submit" className="pill-button-dark" disabled={status === "submitting"}>
-                  {status === "submitting" ? "Enviando…" : (
-                    <>Enviar consulta <span aria-hidden="true">↗</span></>
+                  {status === "submitting" ? t("form.submitBusy") : (
+                    <>{t("form.submitIdle")} <span aria-hidden="true">↗</span></>
                   )}
                 </button>
               </div>

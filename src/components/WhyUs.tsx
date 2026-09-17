@@ -1,16 +1,10 @@
 "use client";
 
 import { AnimatePresence, cubicBezier, motion, useInView, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 const expo = cubicBezier(0.16, 1, 0.3, 1);
-const reasons = [
-  { title: "Entregas visibles", desc: "Dividimos el proyecto en instancias revisables para validar decisiones antes de la entrega final." },
-  { title: "Tecnología con criterio", desc: "Elegimos la base técnica según el objetivo, el presupuesto y la operación del equipo." },
-  { title: "Contacto directo", desc: "Hablás con quienes diseñan y desarrollan. Menos intermediarios, menos contexto perdido." },
-  { title: "Alcance transparente", desc: "Acordamos entregables y condiciones antes de empezar. Si cambia algo, lo evaluamos con claridad." },
-  { title: "Resultados observables", desc: "Definimos qué debería mejorar para revisar el resultado con evidencia, no con promesas." },
-] as const;
 
 export default function WhyUs() {
   const ref = useRef<HTMLElement | null>(null);
@@ -18,12 +12,14 @@ export default function WhyUs() {
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const [cycleSeed, setCycleSeed] = useState(0);
+  const t = useTranslations("whyUs");
+  const reasons = t.raw("reasons") as { title: string; desc: string }[];
 
   useEffect(() => {
     if (!inView || reduce) return;
     const timer = window.setInterval(() => setActive((current) => (current + 1) % reasons.length), 4800);
     return () => window.clearInterval(timer);
-  }, [inView, reduce, cycleSeed]);
+  }, [inView, reduce, cycleSeed, reasons.length]);
 
   const selectReason = (index: number) => {
     setActive(index);
@@ -34,10 +30,10 @@ export default function WhyUs() {
     <section ref={ref} id="por-que" className="why-light section-shell">
       <div className="section-inner">
         <motion.div className="why-light-heading" initial={reduce ? false : { opacity: 0, y: 28 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: .7, ease: expo }}>
-          <h2 className="font-display">Lo que cambia cuando trabajamos juntos.</h2>
+          <h2 className="font-display">{t("heading")}</h2>
         </motion.div>
 
-        <div className="why-options" role="radiogroup" aria-label="Diferenciales de nuestra forma de trabajo">
+        <div className="why-options" role="radiogroup" aria-label={t("ariaLabel")}>
           {reasons.map((reason, index) => {
             const isActive = active === index;
             return (

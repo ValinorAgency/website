@@ -16,20 +16,27 @@ No existe backend propio, persistencia, autenticación, CMS ni API de negocio.
 - GSAP;
 - Three.js;
 - React Three Fiber;
-- Leva en componentes experimentales;
+- next-intl (i18n, ver "Idiomas" más abajo);
 - next/font.
 
 Las versiones exactas y rangos autorizados están en package.json.
+
+## Idiomas
+
+Sitio bilingüe (español/inglés) vía `next-intl` (ver `docs/decisions/0001-sitio-bilingue-next-intl.md`). `src/i18n/routing.ts` define `locales: ["es","en"]`, `defaultLocale: "es"`, `localePrefix: "as-needed"` — español queda en `/` (sin prefijo) e inglés en `/en`. `src/proxy.ts` (middleware de detección/ruteo de idioma — convención `proxy.ts` de Next 16, reemplaza el `middleware.ts` de versiones anteriores) excluye `/api`, `_next` y archivos estáticos vía `matcher`. Los textos viven en `messages/es.json` y `messages/en.json`, organizados por namespace (uno por sección/componente).
+
+`layout.tsx` y `page.tsx` viven en `src/app/[locale]/` (no en la raíz de `src/app`); `sitemap.ts`, `robots.ts`, `favicon.ico` y `api/contact/` quedan en la raíz real (convención de Next.js: esas rutas especiales no pueden vivir dentro de un segmento dinámico). El email interno que arma `api/contact/route.ts` para el equipo de Valinor queda siempre en español, independiente del idioma en el que se completó el formulario.
 
 ## Rutas
 
 | Ruta | Propósito | Estado |
 | --- | --- | --- |
-| / | Home institucional | Activa |
+| / | Home institucional en español (`src/app/[locale]/page.tsx`, locale "es") | Activa |
+| /en | Home institucional en inglés (mismo `page.tsx`, locale "en") | Activa (implementada 2026-09-16) |
 | /api/contact | Route Handler (POST) que procesa el formulario de contacto vía Resend | Activa (implementada 2026-08-28) |
 | /robots.txt | Generado por `src/app/robots.ts` (convención de Next.js) | Activa (implementada 2026-08-31) |
-| /sitemap.xml | Generado por `src/app/sitemap.ts` (convención de Next.js) | Activa (implementada 2026-08-31) |
-| /opengraph-image | Imagen social generada por `src/app/opengraph-image.tsx` (`next/og`), reutilizada para Twitter | Activa (implementada 2026-08-31) |
+| /sitemap.xml | Generado por `src/app/sitemap.ts` (convención de Next.js), con entradas `/` y `/en` y `alternates.languages` | Activa (actualizada 2026-09-16) |
+| /opengraph-image | Imagen social generada por `src/app/[locale]/opengraph-image.tsx` (`next/og`), reutilizada para Twitter; texto por idioma salvo el `alt`, que queda fijo en español | Activa (implementada 2026-08-31, movida a `[locale]` 2026-09-16) |
 | /_not-found | Página automática de Next.js | Activa |
 
 `/sprite-probe` (prototipo aislado de partículas WebGPU) se eliminó como ruta pública el 2026-08-31: se borró `src/app/sprite-probe/page.tsx` porque no era parte de la home ni estaba enlazada desde ningún lugar público. Ya no es una ruta indexable (`/sprite-probe` responde 404, verificado).
@@ -38,7 +45,7 @@ Las versiones exactas y rangos autorizados están en package.json.
 
 ## Composición de la home
 
-src/app/page.tsx compone:
+src/app/[locale]/page.tsx compone:
 
 - Navbar;
 - HeroParticleAlt;
@@ -49,7 +56,7 @@ src/app/page.tsx compone:
 - FinalCTA;
 - Footer.
 
-src/app/layout.tsx aplica globalmente:
+src/app/[locale]/layout.tsx aplica globalmente:
 
 - metadata base;
 - fuentes;
@@ -195,23 +202,24 @@ Protección explícita contra previews: cuando `VERCEL_ENV === "preview"`, se ig
 
 El dominio candidato `valinoragency.com.ar` no está comprado ni activo; el código no lo presenta como tal, solo lo usaría si se asigna a `SITE_URL` en el entorno real.
 
-### Metadata (`src/app/layout.tsx`)
+### Metadata (`src/app/[locale]/layout.tsx`)
 
+- `generateMetadata` async (ya no un `export const metadata` estático — pasó a depender de `params.locale`, resuelto vía `getTranslations({locale, namespace:"metadata"})`).
 - `metadataBase`: `new URL(getSiteUrl())`.
-- `title`/`description` alineados con el copy visible del hero (`src/components/HeroParticleAlt.tsx`): título "Valinor Agency | Diseño y desarrollo web a medida", descripción "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos de Argentina.".
-- `alternates.canonical: "/"` (home).
-- Open Graph completo: `title`, `description`, `url: "/"`, `siteName: "Valinor Agency"`, `locale: "es_AR"`, `type: "website"`; la imagen se agrega automáticamente por la convención de archivo `opengraph-image.tsx` (no se declara a mano).
-- Twitter: `card: "summary_large_image"`, `title`, `description`; la imagen se reutiliza automáticamente de `opengraph-image.tsx` (comportamiento estándar de Next.js cuando no existe un `twitter-image` dedicado).
-- JSON-LD `Organization` inyectado en `<head>` vía `<script type="application/ld+json">`, generado por `src/lib/organization-json-ld.ts` y serializado de forma segura (escapa `<` para que ningún valor pueda cerrar el `<script>` prematuramente). Solo datos confirmados: `name` "Valinor Agency", `url` (resuelta), `email` `agencyvalinor@gmail.com`, `telephone` `+5491150152833`, `areaServed` "Argentina", `description` (la misma del hero). Sin `address`, `priceRange`, `aggregateRating`, `foundingDate`, `numberOfEmployees` ni `sameAs`. Validado estructuralmente (JSON bien formado, `JSON.parse` exitoso) sobre el HTML servido.
+- `title`/`description` por idioma, en `messages/{locale}.json` → `metadata.title`/`metadata.description` (español ya no menciona "de Argentina", ver `docs/decisions/0001-sitio-bilingue-next-intl.md`). El mismo `metadata.description` alimenta también el párrafo del hero y el JSON-LD (antes era el mismo texto repetido a mano en 3 lugares).
+- `alternates.canonical`: `/` en español, `/en` en inglés; `alternates.languages: { es: "/", en: "/en", "x-default": "/" }`.
+- Open Graph completo: `title`, `description`, `url` (según locale), `siteName: "Valinor Agency"`, `locale: "es_AR"` o `"en_US"` según el idioma, `type: "website"`; la imagen se agrega automáticamente por la convención de archivo `opengraph-image.tsx` (no se declara a mano).
+- Twitter: `card: "summary_large_image"`, `title`, `description`; la imagen se reutiliza automáticamente de `opengraph-image.tsx`.
+- JSON-LD `Organization` inyectado en `<head>` vía `<script type="application/ld+json">`, generado por `src/lib/organization-json-ld.ts` (recibe `description` como parámetro, ya no hardcodeada) y serializado de forma segura (escapa `<` para que ningún valor pueda cerrar el `<script>` prematuramente). Solo datos confirmados: `name` "Valinor Agency", `url` (resuelta), `email` `agencyvalinor@gmail.com`, `telephone` `+5491150152833`, `areaServed` "Argentina" (dato estructurado, sin cambios — no se tocó al ampliar el mercado, es una decisión aparte si se quiere revisar), `description` (por idioma). Sin `address`, `priceRange`, `aggregateRating`, `foundingDate`, `numberOfEmployees` ni `sameAs`.
 
-### Imagen social (`src/app/opengraph-image.tsx`)
+### Imagen social (`src/app/[locale]/opengraph-image.tsx`)
 
-Generada con `next/og` (`ImageResponse`, incluido en Next.js, sin dependencias nuevas): fondo oscuro de marca (`#060609`), wordmark "Valinor Agency", una línea de acento teal (`#24D6BC`) y la propuesta comercial aprobada como texto de apoyo. 1200×630, `image/png`. No usa fotografías, imágenes externas ni assets generados.
+Generada con `next/og` (`ImageResponse`, incluido en Next.js, sin dependencias nuevas): fondo oscuro de marca (`#060609`), wordmark "Valinor Agency", una línea de acento teal (`#24D6BC`) y la propuesta comercial aprobada como texto de apoyo. 1200×630, `image/png`. Texto por idioma vía `generateImageMetadata`/`Image()` leyendo `messages/{locale}.json` directo como JSON (no vía `next-intl`: esta ruta corre sin contexto de request, y `getTranslations` depende de leerlo). El `alt` queda fijo en español (`export const alt`, no parametrizado) — no vale la pena la fragilidad de resolver el locale ahí para un texto de accesibilidad menor de una imagen social. No usa fotografías, imágenes externas ni assets generados.
 
 ### `robots.ts` y `sitemap.ts`
 
-- `src/app/robots.ts` (corregido 2026-08-31): en producción/local permite todo (`allow: "/"`), bloquea `/api/` y apunta `sitemap` a la URL resuelta + `/sitemap.xml` (omitiendo la línea `Sitemap:` si la URL resuelta es `localhost`, para no anunciar un sitemap no público). Cuando `VERCEL_ENV === "preview"`, bloquea todo el rastreo (`disallow: "/"`) y no anuncia sitemap, para que un deployment temporal nunca quede indexable.
-- `src/app/sitemap.ts`: incluye únicamente `/` (única página pública real). No incluye `/api/contact` ni `/sprite-probe` (eliminada). No declara `lastModified`: no existe una fecha real de modificación por página, y generarla en cada request sería una fecha inventada.
+- `src/app/robots.ts` (corregido 2026-08-31): en producción/local permite todo (`allow: "/"`), bloquea `/api/` y apunta `sitemap` a la URL resuelta + `/sitemap.xml` (omitiendo la línea `Sitemap:` si la URL resuelta es `localhost`, para no anunciar un sitemap no público). Cuando `VERCEL_ENV === "preview"`, bloquea todo el rastreo (`disallow: "/"`) y no anuncia sitemap, para que un deployment temporal nunca quede indexable. Sin cambios por el bilingüe: `allow: "/"` ya cubre `/en`.
+- `src/app/sitemap.ts` (actualizado 2026-09-16): una entrada por idioma (`/` y `/en`), cada una con `alternates.languages` apuntando a ambas. No incluye `/api/contact`. No declara `lastModified`: no existe una fecha real de modificación por página, y generarla en cada request sería una fecha inventada.
 
 Pendiente: `metadataBase`/canonical/Open Graph/JSON-LD/sitemap ya resuelven una URL válida en todos los casos, pero la validación real ocurre recién sobre el dominio oficial una vez comprado, verificado y configurado como `SITE_URL` en Vercel (ver P0-04); indexación real mediante Google Search Console, todavía no configurada.
 
@@ -236,7 +244,7 @@ Recursos verificados que sustentan la política (todos same-origin): HTML/JS/CSS
 
 Deuda técnica registrada:
 
-- `script-src 'unsafe-inline'`: Next.js App Router inyecta `<script>` inline con el payload de hidratación de Server Components (`self.__next_f.push(...)`); verificado en el HTML servido (2 bloques inline en `/`). Configurar headers solo desde `next.config.ts`, sin middleware, no permite generar un nonce por request para evitar esta concesión.
+- `script-src 'unsafe-inline'`: Next.js App Router inyecta `<script>` inline con el payload de hidratación de Server Components (`self.__next_f.push(...)`); verificado en el HTML servido (2 bloques inline en `/`). Existe `src/proxy.ts` (middleware de next-intl para el ruteo de idioma, ver "Idiomas" arriba), pero no genera un nonce por request — agregar eso es trabajo aparte, no algo que next-intl resuelva solo. Mientras no haya nonce, la concesión sigue siendo necesaria.
 - `style-src 'unsafe-inline'`: el HTML servido contiene atributos `style="..."` reales (verificado: 78 en `/`, por ejemplo tamaños `clamp()` en el hero) y Framer Motion/GSAP escriben la propiedad `style` directamente por JS.
 - `Strict-Transport-Security` sin `includeSubDomains` ni `preload`: pendiente hasta confirmar el dominio oficial y que todos los subdominios futuros estarán siempre bajo HTTPS.
 - Los headers solo se aplican en runtime de producción (`next build && next start`, y por extensión Vercel); no se aplican en `next dev`.

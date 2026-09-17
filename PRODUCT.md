@@ -5,7 +5,7 @@
 - Organización: Valinor Agency.
 - Producto: sitio web institucional de la agencia.
 - Estado: frontend avanzado, todavía no aprobado como listo para producción.
-- Mercado inicial: Argentina.
+- Mercado: Argentina como base, ampliado a mercado internacional de habla inglesa (decisión confirmada por el usuario, 2026-09-16 — ver "Idioma" en Requisitos confirmados y dominio en Preguntas abiertas).
 - Modalidad de trabajo: además de proyectos de alcance definido, Valinor podrá ofrecer desarrollo por horas, soporte evolutivo o equipo dedicado, sujeto a alcance, disponibilidad y capacidad confirmada en cada caso.
 
 ## Problema
@@ -79,7 +79,7 @@ Copy público alineado con esta política (implementado y verificado, 2026-08-29
 
 ## Requisitos confirmados
 
-- idioma principal español;
+- idioma principal español, con versión en inglés (`/en`) — implementado y verificado (2026-09-16) con `next-intl`, rutas `/` (es, default) y `/en`, switch de idioma en el navbar/menú mobile; ver `docs/decisions/` para el detalle de la decisión;
 - experiencia mobile-first;
 - contacto claro y accesible;
 - contenido verificable, sin métricas ni promesas inventadas;
@@ -142,7 +142,7 @@ No implementar tracking hasta definir proveedor, consentimiento aplicable y alca
 
 Realmente pendientes:
 
-- ¿Cuándo se comprará el dominio oficial? Candidato principal: `valinoragency.com.ar`.
+- ¿Cuándo se comprará el dominio oficial? Candidato principal: `valinoragency.com` (actualizado, 2026-09-16 — antes `valinoragency.com.ar`; el cambio a `.com` acompaña la ampliación a mercado internacional de habla inglesa).
 - ¿Cuál será el remitente definitivo del correo del formulario? Depende de comprar y verificar el dominio.
 - ¿Qué fotos concretas se usarán para la sección de equipo?
 - ¿Qué proyectos reales pueden mostrarse públicamente?
@@ -155,7 +155,7 @@ Resueltas por decisión confirmada del usuario (2026-08-28), pendientes de imple
 - Canal del formulario: formulario web (Resend) y WhatsApp combinados.
 - Proveedor del formulario: Resend.
 - Presentación pública de integrantes y roles: sección breve de equipo con bios de ambos cofundadores. Implementada (2026-08-31); fotos concretas siguen pendientes.
-- Mercado inicial: Argentina.
+- Mercado inicial: Argentina, ampliado a mercado internacional de habla inglesa (2026-09-16, ver Contexto).
 
 ## Fuentes
 

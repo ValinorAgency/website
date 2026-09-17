@@ -1,29 +1,30 @@
 "use client";
 
 import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { scrollToHash } from "@/lib/scroll-to-hash";
-
-const WHATSAPP_URL =
-  "https://wa.me/5491150152833?text=" +
-  encodeURIComponent(
-    "Hola! Vengo de la web de Valinor y quisiera realizar una consulta por un desarrollo."
-  );
+import LanguageSwitch from "./LanguageSwitch";
 
 const expo = cubicBezier(0.16, 1, 0.3, 1);
-
-const links = [
-  { label: "Inicio", href: "#about" },
-  { label: "Servicios", href: "#servicios" },
-  { label: "Capacidades", href: "#capacidades" },
-  { label: "Por qué Valinor", href: "#por-que" },
-  { label: "Contacto", href: "#contacto" },
-];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const reduceMotion = useReducedMotion();
+  const t = useTranslations("nav");
+
+  const WHATSAPP_URL =
+    "https://wa.me/5491150152833?text=" + encodeURIComponent(t("whatsappMessage"));
+
+  const links = [
+    { label: t("inicio"), href: "#about" },
+    { label: t("servicios"), href: "#servicios" },
+    { label: t("capacidades"), href: "#capacidades" },
+    { label: t("porQue"), href: "#por-que" },
+    { label: t("equipo"), href: "#equipo" },
+    { label: t("contacto"), href: "#contacto" },
+  ];
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -63,15 +64,15 @@ export default function Navbar() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logoValinor-removebg.png"
-              alt="Valinor Agency"
+              alt={t("logoAlt")}
               className="h-20 w-20 object-contain brightness-0 invert"
             />
           </a>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label={t("mainNav")}>
             {links.map((link) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 onClick={(event) => handleAnchorClick(event, link.href)}
                 className="rounded-full px-4 py-2 text-sm font-medium text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white"
@@ -82,19 +83,21 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
+            <LanguageSwitch className="hidden h-9 items-center rounded-full border border-white/15 px-3 text-xs font-semibold text-white/80 transition-colors hover:bg-white/[0.08] hover:text-white lg:inline-flex" />
+
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="pill-button-dark hidden px-5 py-2 text-sm sm:inline-flex"
             >
-              Hablemos
+              {t("talk")}
             </a>
 
             <button
               type="button"
               className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.07] text-white transition-colors hover:bg-white/10 lg:hidden"
-              aria-label="Abrir navegación"
+              aria-label={t("openNav")}
               aria-expanded={menuOpen}
               aria-controls="mobile-navigation"
               onClick={() => setMenuOpen(true)}
@@ -118,7 +121,7 @@ export default function Navbar() {
           >
             <motion.button
               type="button"
-              aria-label="Cerrar navegación"
+              aria-label={t("closeNav")}
               className="absolute inset-0 h-full w-full bg-black/55"
               onClick={closeMenu}
               variants={{ closed: { opacity: 0 }, open: { opacity: 1 } }}
@@ -129,7 +132,7 @@ export default function Navbar() {
               id="mobile-navigation"
               role="dialog"
               aria-modal="true"
-              aria-label="Navegación principal"
+              aria-label={t("mainNav")}
               className="absolute inset-y-0 right-0 flex w-full max-w-[34rem] flex-col overflow-y-auto bg-[#ededed] px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-3.5 text-[#0b0b0e] sm:px-8"
               variants={{
                 closed: { x: "100%" },
@@ -139,24 +142,27 @@ export default function Navbar() {
             >
               <div className="flex h-20 shrink-0 items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-[0.16em] text-black/50">
-                  Navegación
+                  {t("navLabel")}
                 </span>
-                <button
-                  type="button"
-                  onClick={closeMenu}
-                  aria-label="Cerrar navegación"
-                  className="flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-black/15 px-3 text-xs font-medium uppercase tracking-[0.08em] transition-colors hover:bg-black hover:text-white"
-                >
-                  <span className="hidden sm:inline">Cerrar</span>
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-                    <path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                  </svg>
-                </button>
+                <div className="flex items-center gap-2">
+                  <LanguageSwitch className="flex h-11 min-w-11 items-center justify-center rounded-full border border-black/15 px-3 text-xs font-semibold uppercase tracking-[0.08em] transition-colors hover:bg-black hover:text-white" />
+                  <button
+                    type="button"
+                    onClick={closeMenu}
+                    aria-label={t("closeNav")}
+                    className="flex h-11 min-w-11 items-center justify-center gap-2 rounded-full border border-black/15 px-3 text-xs font-medium uppercase tracking-[0.08em] transition-colors hover:bg-black hover:text-white"
+                  >
+                    <span className="hidden sm:inline">{t("close")}</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none">
+                      <path d="m6.5 6.5 11 11m0-11-11 11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               <motion.nav
                 className="my-auto py-10"
-                aria-label="Navegación mobile"
+                aria-label={t("mobileNav")}
                 variants={{
                   closed: { transition: { staggerChildren: 0.035, staggerDirection: -1 } },
                   open: { transition: { delayChildren: reduceMotion ? 0 : 0.18, staggerChildren: reduceMotion ? 0 : 0.075 } },
@@ -165,7 +171,7 @@ export default function Navbar() {
                 <ul>
                   {links.map((link, index) => (
                     <motion.li
-                      key={link.label}
+                      key={link.href}
                       className="overflow-hidden border-b border-black/15"
                       variants={{
                         closed: { opacity: 0, y: 45 },
@@ -203,7 +209,7 @@ export default function Navbar() {
                 transition={{ delay: reduceMotion ? 0 : 0.48, duration: reduceMotion ? 0 : 0.4 }}
               >
                 <p className="max-w-56 text-xs leading-5 text-black/55">
-                  Websites, ecommerce y aplicaciones a medida.
+                  {t("mobileTagline")}
                 </p>
                 <a href="mailto:agencyvalinor@gmail.com" className="text-xs font-semibold underline decoration-black/25 underline-offset-4">
                   agencyvalinor@gmail.com

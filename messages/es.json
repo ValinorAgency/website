@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "title": "Valinor Agency | Diseño y desarrollo web a medida",
+    "description": "Creamos sitios web, tiendas online, aplicaciones y dashboards para empresas, profesionales y emprendimientos.",
+    "ogImageAlt": "Valinor Agency — Diseño y desarrollo web a medida"
+  },
+  "nav": {
+    "inicio": "Inicio",
+    "servicios": "Servicios",
+    "capacidades": "Capacidades",
+    "porQue": "Por qué Valinor",
+    "equipo": "Equipo",
+    "contacto": "Contacto",
+    "whatsappMessage": "Hola! Vengo de la web de Valinor y quisiera realizar una consulta por un desarrollo.",
+    "openNav": "Abrir navegación",
+    "closeNav": "Cerrar navegación",
+    "mainNav": "Navegación principal",
+    "mobileNav": "Navegación mobile",
+    "navLabel": "Navegación",
+    "close": "Cerrar",
+    "talk": "Hablemos",
+    "logoAlt": "Valinor Agency",
+    "mobileTagline": "Websites, ecommerce y aplicaciones a medida.",
+    "switchToEs": "Español",
+    "switchToEn": "English"
+  },
+  "footer": {
+    "brand": "Valinor Agency",
+    "tagline": "Diseñamos y desarrollamos soluciones web claras, útiles y adaptadas a cada negocio.",
+    "copyright": "© {year} Valinor Agency.",
+    "bottomTagline": "Websites, ecommerce y aplicaciones a medida"
+  },
+  "hero": {
+    "whatsappMessage": "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera desarrollar",
+    "subheading": "Diseño y desarrollo web a medida",
+    "ctaPrimary": "Contanos tu proyecto",
+    "ctaSecondary": "Ver soluciones",
+    "experience": "Más de 8 años de experiencia diseñando y desarrollando soluciones digitales."
+  },
+  "portfolio": {
+    "heading": "Soluciones digitales a medida",
+    "viewMore": "Ver más sobre {name}",
+    "typesLabel": "Tipos de soluciones",
+    "closeDetail": "Cerrar detalle",
+    "cta": "Conversemos sobre tu proyecto",
+    "projects": [
+      {
+        "name": "Sitios web y landing pages",
+        "purpose": "Presentar tu empresa, marca o producto con una experiencia clara y profesional, o comunicar una propuesta puntual enfocada en captar consultas.",
+        "capabilities": "Diseño de interfaces, arquitectura de contenido, SEO técnico básico y formularios de contacto."
+      },
+      {
+        "name": "Tiendas online",
+        "purpose": "Vender productos o servicios con un catálogo propio, un checkout optimizado y un panel para gestionar pedidos y stock.",
+        "capabilities": "Arquitectura de catálogo, integraciones de pago y paneles de administración de pedidos."
+      },
+      {
+        "name": "Aplicaciones web",
+        "purpose": "Resolver flujos específicos del negocio, como reservas, portales o seguimiento comercial, con una herramienta a medida.",
+        "capabilities": "Diseño de flujos de usuario, autenticación, integraciones y paneles de administración."
+      },
+      {
+        "name": "Dashboards y visualización de datos",
+        "purpose": "Reunir métricas, estados y alertas clave en una vista clara para tomar decisiones con información actualizada.",
+        "capabilities": "Visualización de datos, alertas configurables e integración con distintas fuentes de información."
+      },
+      {
+        "name": "Sistemas de gestión",
+        "purpose": "Organizar documentos, procesos o información interna que hoy vive dispersa en planillas o carpetas.",
+        "capabilities": "Organización de datos, control de acceso por rol y trazabilidad de estados."
+      },
+      {
+        "name": "Integraciones",
+        "purpose": "Conectar herramientas existentes y automatizar tareas puntuales para reducir trabajo manual repetitivo.",
+        "capabilities": "Conexión de APIs y servicios externos, y automatización de procesos según las necesidades del proyecto."
+      }
+    ]
+  },
+  "techStack": {
+    "heading": "Tecnología actual. Criterio humano.",
+    "paragraph": "Nuestro equipo reúne especialistas en producto, diseño, frontend y backend. Elegimos herramientas de primer nivel para cada desafío y usamos inteligencia artificial para acelerar análisis, desarrollo y control de calidad.",
+    "cta": "Conversemos sobre tu proyecto",
+    "capabilities": [
+      { "label": "Experiencias digitales", "title": "Interfaces rápidas, claras y pensadas para convertir." },
+      { "label": "Sistemas sólidos", "title": "Arquitecturas preparadas para crecer y mantenerse." },
+      { "label": "Integraciones a medida", "title": "Conectamos herramientas y automatizamos tareas puntuales cuando el proyecto lo necesita." }
+    ],
+    "capabilityAriaLabel": "{label}: {title}",
+    "browserMock": {
+      "url": "tuempresa.com",
+      "brand": "Valinor Studio",
+      "navProjects": "Proyectos",
+      "navStudio": "Estudio",
+      "navContact": "Contacto",
+      "navCta": "Hablemos",
+      "heroTitleLine1": "Espacios digitales",
+      "heroTitleLine2": "con intención.",
+      "heroCopy": "Diseñamos experiencias claras para marcas que quieren avanzar.",
+      "heroCtaPrimary": "Ver proyectos",
+      "heroCtaSecondary": "Conocer el estudio ↗",
+      "artCaption": "Forma · luz · movimiento",
+      "workHeading": "Trabajo seleccionado",
+      "workYear": "2026",
+      "workItem1": "Atelier Norte",
+      "workItem2": "Casa Prisma",
+      "workItem3": "Materia",
+      "statusRoute": "GET /proyectos",
+      "statusDb": "Base de datos",
+      "statusOnline": "Online",
+      "deployBar": "Publicado en producción"
+    }
+  },
+  "scrollLines": {
+    "ariaLabel": "Soluciones digitales orientadas a objetivos",
+    "lines": ["Sitios que comunican.", "Tiendas que venden.", "Sistemas que ordenan."]
+  },
+  "whyUs": {
+    "heading": "Lo que cambia cuando trabajamos juntos.",
+    "ariaLabel": "Diferenciales de nuestra forma de trabajo",
+    "reasons": [
+      { "title": "Entregas visibles", "desc": "Dividimos el proyecto en instancias revisables para validar decisiones antes de la entrega final." },
+      { "title": "Tecnología con criterio", "desc": "Elegimos la base técnica según el objetivo, el presupuesto y la operación del equipo." },
+      { "title": "Contacto directo", "desc": "Hablás con quienes diseñan y desarrollan. Menos intermediarios, menos contexto perdido." },
+      { "title": "Alcance transparente", "desc": "Acordamos entregables y condiciones antes de empezar. Si cambia algo, lo evaluamos con claridad." },
+      { "title": "Resultados observables", "desc": "Definimos qué debería mejorar para revisar el resultado con evidencia, no con promesas." }
+    ]
+  },
+  "team": {
+    "heading": "Conocé a quienes están detrás de Valinor",
+    "hideInfo": "Ocultar información de {name}",
+    "showInfo": "Ver información de {name}",
+    "infoButton": "+ Info",
+    "members": {
+      "milton": {
+        "name": "Milton Collard",
+        "role": "Cofundador · Frontend y Experiencia Digital",
+        "shortRole": "Cofundador · Frontend",
+        "bio": "Especializado en desarrollo frontend, diseño de interfaces, SEO y optimización de conversiones. Combina análisis funcional y desarrollo para transformar objetivos de negocio en experiencias claras y efectivas.",
+        "skills": ["Frontend", "Diseño", "SEO", "Conversión", "Análisis funcional"]
+      },
+      "martin": {
+        "name": "Martín Abbott",
+        "role": "Cofundador · Backend y Arquitectura de Datos",
+        "shortRole": "Cofundador · Backend",
+        "bio": "Especializado en desarrollo backend, bases de datos e integraciones. Combina análisis funcional y criterio técnico para construir soluciones sólidas, mantenibles y alineadas con las necesidades del negocio.",
+        "skills": ["Backend", "Bases de datos", "Integraciones", "Arquitectura", "Análisis funcional"]
+      }
+    }
+  },
+  "finalCTA": {
+    "heading": "Contanos qué necesitás resolver.",
+    "paragraph": "Puede ser un sitio para presentar tu empresa, una tienda online o una herramienta para ordenar procesos. Revisamos el objetivo y te proponemos un alcance claro.",
+    "emailLeadIn": "También podés escribirnos directamente a",
+    "defaultHelp": "Te respondemos por email o WhatsApp según el dato que nos dejes.",
+    "validationError": "Revisá los datos marcados antes de enviar.",
+    "networkError": "No pudimos conectarnos. Revisá tu conexión e intentá de nuevo.",
+    "submitting": "Enviando tu consulta…",
+    "success": "¡Listo! Recibimos tu consulta y te vamos a responder a la brevedad.",
+    "serverErrors": {
+      "rate_limited": "Recibimos demasiadas consultas en poco tiempo. Probá de nuevo en unos minutos.",
+      "config": "El formulario no está disponible en este momento. Escribinos por WhatsApp o a agencyvalinor@gmail.com.",
+      "send_failed": "No pudimos enviar tu consulta. Probá de nuevo o escribinos por WhatsApp.",
+      "invalid_json": "Ocurrió un error inesperado. Probá de nuevo.",
+      "invalid_body": "Ocurrió un error inesperado. Probá de nuevo."
+    },
+    "form": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "contactLabel": "Email o WhatsApp",
+      "contactPlaceholder": "nombre@empresa.com o tu WhatsApp",
+      "projectTypeLabel": "Tipo de proyecto",
+      "projectTypePlaceholder": "Seleccioná una opción",
+      "messageLabel": "¿Qué necesitás resolver?",
+      "messagePlaceholder": "Contanos brevemente el objetivo, el problema actual o la idea que querés desarrollar.",
+      "honeypotLabel": "Empresa",
+      "submitIdle": "Enviar consulta",
+      "submitBusy": "Enviando…"
+    }
+  },
+  "contactValidation": {
+    "projectTypes": {
+      "sitio-web": "Sitio web",
+      "tienda-online": "Tienda online",
+      "aplicacion-web-dashboard": "Aplicación web / dashboard",
+      "otro": "Otro"
+    },
+    "errors": {
+      "name_length": "Ingresá tu nombre (entre 2 y 120 caracteres).",
+      "contact_too_long": "Ese dato es demasiado largo.",
+      "contact_invalid": "Ingresá un email válido o un número de WhatsApp.",
+      "project_type_invalid": "Seleccioná un tipo de proyecto válido.",
+      "message_length": "Contanos un poco más (entre 10 y 2000 caracteres)."
+    }
+  },
+  "floatingActions": {
+    "quickLinks": "Accesos rápidos",
+    "whatsappAriaLabel": "Contactar a Valinor Agency por WhatsApp",
+    "whatsappLabel": "WhatsApp",
+    "whatsappMessage": "Hola, estuve viendo la web de Valinor y quisiera consultar por un proyecto.",
+    "backToTop": "Volver arriba"
+  },
+  "loadingOverlay": {
+    "label": "Iniciando"
+  },
+  "ogImage": {
+    "titlePart1": "Valinor",
+    "titlePart2": "Agency",
+    "tagline": "Diseño y desarrollo web a medida",
+    "services": "Sitios web · Tiendas online · Aplicaciones · Dashboards"
+  }
+}

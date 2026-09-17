@@ -1,12 +1,13 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
-const lines = [
-  { text: "Sitios que comunican.", direction: 1, tone: "primary" },
-  { text: "Tiendas que venden.", direction: -1, tone: "secondary" },
-  { text: "Sistemas que ordenan.", direction: 1, tone: "primary" },
+const LINE_META = [
+  { direction: 1, tone: "primary" },
+  { direction: -1, tone: "secondary" },
+  { direction: 1, tone: "primary" },
 ] as const;
 
 function RepeatedLine({ text }: { text: string }) {
@@ -25,6 +26,9 @@ function RepeatedLine({ text }: { text: string }) {
 export default function ScrollTextLines() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduceMotion = useReducedMotion();
+  const t = useTranslations("scrollLines");
+  const lineTexts = t.raw("lines") as string[];
+  const lines = LINE_META.map((meta, index) => ({ ...meta, text: lineTexts[index] }));
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -39,10 +43,10 @@ export default function ScrollTextLines() {
     <section
       ref={sectionRef}
       className="scroll-text-lines"
-      aria-label="Soluciones digitales orientadas a objetivos"
+      aria-label={t("ariaLabel")}
     >
       <p className="sr-only">
-        Sitios que comunican. Tiendas que venden. Sistemas que ordenan.
+        {lineTexts.join(" ")}
       </p>
 
       <div className="scroll-lines-visual" aria-hidden="true">

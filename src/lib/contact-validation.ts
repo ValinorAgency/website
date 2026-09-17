@@ -2,15 +2,21 @@
 // (servidor) de /api/contact. No depende de librerías externas: el cliente
 // nunca debe confiar solamente en atributos HTML, y el servidor nunca debe
 // confiar solamente en lo que valide el cliente.
+//
+// Devuelve CÓDIGOS de error, no el texto final: este archivo corre tanto en
+// el cliente (FinalCTA.tsx) como en el servidor (api/contact/route.ts), y
+// ninguno de los dos debería tener que pasarle una función de traducción a
+// una lib compartida. Cada caller mapea el código a texto en su propio
+// idioma usando messages/{locale}.json → contactValidation.errors.
 
-export const PROJECT_TYPES = [
-  { value: "sitio-web", label: "Sitio web" },
-  { value: "tienda-online", label: "Tienda online" },
-  { value: "aplicacion-web-dashboard", label: "Aplicación web / dashboard" },
-  { value: "otro", label: "Otro" },
+export const PROJECT_TYPE_VALUES = [
+  "sitio-web",
+  "tienda-online",
+  "aplicacion-web-dashboard",
+  "otro",
 ] as const;
 
-export type ProjectType = (typeof PROJECT_TYPES)[number]["value"];
+export type ProjectType = (typeof PROJECT_TYPE_VALUES)[number];
 
 export type ContactPayload = {
   name: string;
@@ -20,8 +26,15 @@ export type ContactPayload = {
   company: string;
 };
 
+export type ContactErrorCode =
+  | "name_length"
+  | "contact_too_long"
+  | "contact_invalid"
+  | "project_type_invalid"
+  | "message_length";
+
 export type ContactFieldErrors = Partial<
-  Record<"name" | "contact" | "projectType" | "message", string>
+  Record<"name" | "contact" | "projectType" | "message", ContactErrorCode>
 >;
 
 export type ContactValidationResult =
@@ -65,22 +78,22 @@ export function validateContactPayload(input: {
   const errors: ContactFieldErrors = {};
 
   if (name.length < 2 || name.length > 120) {
-    errors.name = "Ingresá tu nombre (entre 2 y 120 caracteres).";
+    errors.name = "name_length";
   }
 
   if (contact.length > 120) {
-    errors.contact = "Ese dato es demasiado largo.";
+    errors.contact = "contact_too_long";
   } else if (!isValidContact(contact)) {
-    errors.contact = "Ingresá un email válido o un número de WhatsApp.";
+    errors.contact = "contact_invalid";
   }
 
-  const isValidProjectType = PROJECT_TYPES.some((type) => type.value === projectType);
+  const isValidProjectType = PROJECT_TYPE_VALUES.some((value) => value === projectType);
   if (!isValidProjectType) {
-    errors.projectType = "Seleccioná un tipo de proyecto válido.";
+    errors.projectType = "project_type_invalid";
   }
 
   if (message.length < 10 || message.length > 2000) {
-    errors.message = "Contanos un poco más (entre 10 y 2000 caracteres).";
+    errors.message = "message_length";
   }
 
   if (Object.keys(errors).length > 0) {

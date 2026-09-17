@@ -1,21 +1,10 @@
 "use client";
 
 import { cubicBezier, motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
-const WHATSAPP_URL =
-  "https://wa.me/5491150152833?text=" +
-  encodeURIComponent(
-    "Hola! Vengo de la web de Valinor, tengo un proyecto que quisiera  desarrollar"
-  );
-
 const expo = cubicBezier(0.16, 1, 0.3, 1);
-
-const capabilities = [
-  { label: "Experiencias digitales", title: "Interfaces rápidas, claras y pensadas para convertir." },
-  { label: "Sistemas sólidos", title: "Arquitecturas preparadas para crecer y mantenerse." },
-  { label: "Integraciones a medida", title: "Conectamos herramientas y automatizamos tareas puntuales cuando el proyecto lo necesita." },
-] as const;
 
 const browserStates = [
   { rotateX: -4, rotateY: 10, y: -12, scale: 1.035 },
@@ -24,6 +13,7 @@ const browserStates = [
 ] as const;
 
 function BrowserPreview({ reduceMotion, activeIndex }: { reduceMotion: boolean | null; activeIndex: number | null }) {
+  const t = useTranslations("techStack.browserMock");
   const layerMotion = (delay: number, extra?: { scale?: number; x?: number }) => ({
     initial: reduceMotion ? false : { opacity: 0, y: 16, ...extra },
     whileInView: { opacity: 1, y: 0, scale: 1, x: 0 },
@@ -44,32 +34,32 @@ function BrowserPreview({ reduceMotion, activeIndex }: { reduceMotion: boolean |
       <div className="capabilities-browser">
         <div className="browser-chrome">
           <div className="browser-dots"><i /><i /><i /></div>
-          <span>tuempresa.com</span>
+          <span>{t("url")}</span>
         </div>
         <div className="browser-screen" aria-hidden="true">
           <div className="demo-page-wash" />
           <motion.div className="demo-site-nav" {...layerMotion(0.18)}>
-            <div className="demo-site-brand"><span>V</span><b>Valinor Studio</b></div>
-            <div className="demo-site-links"><span>Proyectos</span><span>Estudio</span><span>Contacto</span></div>
-            <div className="demo-site-nav-cta">Hablemos</div>
+            <div className="demo-site-brand"><span>V</span><b>{t("brand")}</b></div>
+            <div className="demo-site-links"><span>{t("navProjects")}</span><span>{t("navStudio")}</span><span>{t("navContact")}</span></div>
+            <div className="demo-site-nav-cta">{t("navCta")}</div>
           </motion.div>
           <motion.div className="demo-hero-copy" {...layerMotion(0.34, { x: -16 })}>
-            <h3>Espacios digitales<br />con intención.</h3>
-            <p>Diseñamos experiencias claras para marcas que quieren avanzar.</p>
-            <div className="demo-hero-actions"><b>Ver proyectos</b><span>Conocer el estudio ↗</span></div>
+            <h3>{t("heroTitleLine1")}<br />{t("heroTitleLine2")}</h3>
+            <p>{t("heroCopy")}</p>
+            <div className="demo-hero-actions"><b>{t("heroCtaPrimary")}</b><span>{t("heroCtaSecondary")}</span></div>
           </motion.div>
           <motion.div className="demo-hero-image" {...layerMotion(0.5, { scale: 0.88 })}>
-            <div className="demo-iridescent-art"><span className="demo-art-orbit demo-art-orbit-one" /><span className="demo-art-orbit demo-art-orbit-two" /><span className="demo-art-core" /><small>Forma · luz · movimiento</small></div>
+            <div className="demo-iridescent-art"><span className="demo-art-orbit demo-art-orbit-one" /><span className="demo-art-orbit demo-art-orbit-two" /><span className="demo-art-core" /><small>{t("artCaption")}</small></div>
           </motion.div>
           <motion.div className="demo-work-strip" {...layerMotion(0.66)}>
-            <div className="demo-work-heading"><span>Trabajo seleccionado</span><b>2026</b></div>
-            <div className="demo-work-items"><div><i className="demo-thumb demo-thumb-one" /><span>Atelier Norte</span></div><div><i className="demo-thumb demo-thumb-two" /><span>Casa Prisma</span></div><div><i className="demo-thumb demo-thumb-three" /><span>Materia</span></div></div>
+            <div className="demo-work-heading"><span>{t("workHeading")}</span><b>{t("workYear")}</b></div>
+            <div className="demo-work-items"><div><i className="demo-thumb demo-thumb-one" /><span>{t("workItem1")}</span></div><div><i className="demo-thumb demo-thumb-two" /><span>{t("workItem2")}</span></div><div><i className="demo-thumb demo-thumb-three" /><span>{t("workItem3")}</span></div></div>
           </motion.div>
           <motion.div className="demo-system-status" {...layerMotion(0.82, { x: 16 })}>
-            <div><span className="demo-status-dot" /><code>GET /proyectos</code><b>200</b></div>
-            <div><span className="demo-status-dot" /><code>Base de datos</code><b>Online</b></div>
+            <div><span className="demo-status-dot" /><code>{t("statusRoute")}</code><b>200</b></div>
+            <div><span className="demo-status-dot" /><code>{t("statusDb")}</code><b>{t("statusOnline")}</b></div>
           </motion.div>
-          <motion.div className="demo-deploy-bar" {...layerMotion(0.98)}><span>✓</span><b>Publicado en producción</b><i>tuempresa.com</i></motion.div>
+          <motion.div className="demo-deploy-bar" {...layerMotion(0.98)}><span>✓</span><b>{t("deployBar")}</b><i>{t("url")}</i></motion.div>
         </div>
       </div>
       <div className="browser-shadow" />
@@ -80,6 +70,13 @@ function BrowserPreview({ reduceMotion, activeIndex }: { reduceMotion: boolean |
 export default function TechStackSection() {
   const reduceMotion = useReducedMotion();
   const [activeCapability, setActiveCapability] = useState<number | null>(null);
+  const t = useTranslations("techStack");
+  // Mismo mensaje de WhatsApp que el CTA principal del hero (ver hero.whatsappMessage).
+  const tHero = useTranslations("hero");
+  const capabilities = t.raw("capabilities") as { label: string; title: string }[];
+
+  const WHATSAPP_URL =
+    "https://wa.me/5491150152833?text=" + encodeURIComponent(tHero("whatsappMessage"));
 
   return (
     <section id="capacidades" className="capabilities-section section-shell">
@@ -91,14 +88,10 @@ export default function TechStackSection() {
           transition={{ duration: reduceMotion ? 0 : 0.7, ease: expo }}
           className="capabilities-copy"
         >
-          <h2 className="font-display">Tecnología actual. Criterio humano.</h2>
-          <p>
-            Nuestro equipo reúne especialistas en producto, diseño, frontend y backend.
-            Elegimos herramientas de primer nivel para cada desafío y usamos inteligencia
-            artificial para acelerar análisis, desarrollo y control de calidad.
-          </p>
+          <h2 className="font-display">{t("heading")}</h2>
+          <p>{t("paragraph")}</p>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-            Conversemos sobre tu proyecto <span aria-hidden="true">↗</span>
+            {t("cta")} <span aria-hidden="true">↗</span>
           </a>
         </motion.div>
 
@@ -120,7 +113,7 @@ export default function TechStackSection() {
               onFocus={() => setActiveCapability(index)}
               onBlur={() => setActiveCapability(null)}
               aria-pressed={activeCapability === index}
-              aria-label={`${capability.label}: ${capability.title}`}
+              aria-label={t("capabilityAriaLabel", { label: capability.label, title: capability.title })}
             >
               <span>0{index + 1}</span>
               <div>

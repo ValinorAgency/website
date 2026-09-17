@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { Environment, Lightformer } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
+import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import LanyardCard from "./LanyardCard";
@@ -11,6 +12,7 @@ import type { TeamMember } from "./TeamSection";
 export default function TeamLanyard({ team, inView }: { team: readonly TeamMember[]; inView: boolean }) {
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const canvasInView = useInView(wrapRef, { margin: "-5% 0px" });
+  const t = useTranslations("team");
   const [flipped, setFlipped] = useState<boolean[]>(() => team.map(() => false));
   const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth < 768);
 
@@ -75,7 +77,7 @@ export default function TeamLanyard({ team, inView }: { team: readonly TeamMembe
             aria-pressed={flipped[index]}
             onClick={() => toggle(index)}
           >
-            {flipped[index] ? `Ocultar información de ${member.name}` : `Ver información de ${member.name}`}
+            {flipped[index] ? t("hideInfo", { name: member.name }) : t("showInfo", { name: member.name })}
           </button>
         ))}
       </div>

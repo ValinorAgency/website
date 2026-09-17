@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import {
-  PROJECT_TYPES,
   isValidEmail,
   validateContactPayload,
 } from "@/lib/contact-validation";
 import { getClientKey, isRateLimited } from "./rate-limit";
+// El email interno que recibe el equipo de Valinor queda siempre en
+// español, sin importar en qué idioma haya completado el formulario quien
+// consulta — es un mensaje para uso interno, no algo que ve el visitante.
+import esMessages from "../../../../messages/es.json";
 
 // Remitente temporal de pruebas provisto por Resend. Solo entrega a
 // destinatarios habilitados por la cuenta hasta verificar un dominio propio.
@@ -77,7 +80,7 @@ export async function POST(request: Request) {
   }
 
   const projectTypeLabel =
-    PROJECT_TYPES.find((type) => type.value === projectType)?.label ?? projectType;
+    esMessages.contactValidation.projectTypes[projectType] ?? projectType;
 
   const resend = new Resend(apiKey);
 

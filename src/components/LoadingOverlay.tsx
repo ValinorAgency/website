@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react"
 
 // Presupuesto total ~650ms (conteo + salida) para que el loader sea una
@@ -34,6 +35,7 @@ const CORNERS = [
 ] as const;
 
 export default function LoadingOverlay() {
+  const t = useTranslations("loadingOverlay");
   const [progress, setProgress] = useState(0);
   const [exiting, setExiting] = useState(false);
   const [interactive, setInteractive] = useState(false);
@@ -202,7 +204,7 @@ export default function LoadingOverlay() {
           textTransform: "uppercase",
           color: "rgba(255,255,255,0.2)",
         }}>
-          Iniciando
+          {t("label")}
         </div>
       </div>
 

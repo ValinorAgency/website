@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "title": "Valinor Agency | Custom Web Design & Development",
+    "description": "We build websites, online stores, applications, and dashboards for companies, professionals, and entrepreneurs.",
+    "ogImageAlt": "Valinor Agency — Custom Web Design & Development"
+  },
+  "nav": {
+    "inicio": "Home",
+    "servicios": "Services",
+    "capacidades": "Capabilities",
+    "porQue": "Why Valinor",
+    "equipo": "Team",
+    "contacto": "Contact",
+    "whatsappMessage": "Hi! I came from the Valinor website and I'd like to ask about a development project.",
+    "openNav": "Open navigation",
+    "closeNav": "Close navigation",
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "navLabel": "Navigation",
+    "close": "Close",
+    "talk": "Let's talk",
+    "logoAlt": "Valinor Agency",
+    "mobileTagline": "Websites, ecommerce, and custom applications.",
+    "switchToEs": "Español",
+    "switchToEn": "English"
+  },
+  "footer": {
+    "brand": "Valinor Agency",
+    "tagline": "We design and build clear, useful web solutions tailored to each business.",
+    "copyright": "© {year} Valinor Agency.",
+    "bottomTagline": "Websites, ecommerce, and custom applications"
+  },
+  "hero": {
+    "whatsappMessage": "Hi! I came from the Valinor website, I have a project I'd like to develop",
+    "subheading": "Custom web design and development",
+    "ctaPrimary": "Tell us about your project",
+    "ctaSecondary": "See solutions",
+    "experience": "Over 8 years of experience designing and building digital solutions."
+  },
+  "portfolio": {
+    "heading": "Digital solutions, built to fit",
+    "viewMore": "See more about {name}",
+    "typesLabel": "Types of solutions",
+    "closeDetail": "Close detail",
+    "cta": "Let's talk about your project",
+    "projects": [
+      {
+        "name": "Websites and landing pages",
+        "purpose": "Present your company, brand, or product with a clear, professional experience, or communicate a specific offer focused on capturing inquiries.",
+        "capabilities": "Interface design, content architecture, basic technical SEO, and contact forms."
+      },
+      {
+        "name": "Online stores",
+        "purpose": "Sell products or services with your own catalog, an optimized checkout, and a panel to manage orders and stock.",
+        "capabilities": "Catalog architecture, payment integrations, and order management panels."
+      },
+      {
+        "name": "Web applications",
+        "purpose": "Solve specific business workflows, like bookings, portals, or sales tracking, with a custom-built tool.",
+        "capabilities": "User flow design, authentication, integrations, and admin panels."
+      },
+      {
+        "name": "Dashboards and data visualization",
+        "purpose": "Bring together key metrics, statuses, and alerts in a clear view to make decisions with up-to-date information.",
+        "capabilities": "Data visualization, configurable alerts, and integration with different data sources."
+      },
+      {
+        "name": "Management systems",
+        "purpose": "Organize documents, processes, or internal information that today lives scattered across spreadsheets or folders.",
+        "capabilities": "Data organization, role-based access control, and status tracking."
+      },
+      {
+        "name": "Integrations",
+        "purpose": "Connect existing tools and automate specific tasks to reduce repetitive manual work.",
+        "capabilities": "Connecting APIs and external services, and automating processes according to each project's needs."
+      }
+    ]
+  },
+  "techStack": {
+    "heading": "Current technology. Human judgment.",
+    "paragraph": "Our team brings together specialists in product, design, frontend, and backend. We choose top-tier tools for each challenge and use artificial intelligence to speed up analysis, development, and quality control.",
+    "cta": "Let's talk about your project",
+    "capabilities": [
+      { "label": "Digital experiences", "title": "Fast, clear interfaces designed to convert." },
+      { "label": "Solid systems", "title": "Architectures built to grow and stay maintainable." },
+      { "label": "Custom integrations", "title": "We connect tools and automate specific tasks whenever a project needs it." }
+    ],
+    "capabilityAriaLabel": "{label}: {title}",
+    "browserMock": {
+      "url": "yourcompany.com",
+      "brand": "Valinor Studio",
+      "navProjects": "Projects",
+      "navStudio": "Studio",
+      "navContact": "Contact",
+      "navCta": "Let's talk",
+      "heroTitleLine1": "Digital spaces",
+      "heroTitleLine2": "with intention.",
+      "heroCopy": "We design clear experiences for brands ready to move forward.",
+      "heroCtaPrimary": "See projects",
+      "heroCtaSecondary": "Meet the studio ↗",
+      "artCaption": "Shape · light · motion",
+      "workHeading": "Selected work",
+      "workYear": "2026",
+      "workItem1": "Atelier Norte",
+      "workItem2": "Casa Prisma",
+      "workItem3": "Materia",
+      "statusRoute": "GET /projects",
+      "statusDb": "Database",
+      "statusOnline": "Online",
+      "deployBar": "Deployed to production"
+    }
+  },
+  "scrollLines": {
+    "ariaLabel": "Digital solutions built around your goals",
+    "lines": ["Sites that communicate.", "Stores that sell.", "Systems that bring order."]
+  },
+  "whyUs": {
+    "heading": "What changes when you work with us.",
+    "ariaLabel": "What sets our way of working apart",
+    "reasons": [
+      { "title": "Visible deliverables", "desc": "We split the project into reviewable milestones to validate decisions before the final delivery." },
+      { "title": "Technology with judgment", "desc": "We choose the technical foundation based on the goal, the budget, and how the team operates." },
+      { "title": "Direct contact", "desc": "You talk to the people designing and building. Fewer intermediaries, less lost context." },
+      { "title": "Transparent scope", "desc": "We agree on deliverables and terms before starting. If something changes, we assess it clearly." },
+      { "title": "Observable results", "desc": "We define what should improve so we can review the outcome with evidence, not promises." }
+    ]
+  },
+  "team": {
+    "heading": "Meet the people behind Valinor",
+    "hideInfo": "Hide information about {name}",
+    "showInfo": "View information about {name}",
+    "infoButton": "+ Info",
+    "members": {
+      "milton": {
+        "name": "Milton Collard",
+        "role": "Co-founder · Frontend & Digital Experience",
+        "shortRole": "Co-founder · Frontend",
+        "bio": "Specializes in frontend development, interface design, SEO, and conversion optimization. Combines functional analysis and development to turn business goals into clear, effective experiences.",
+        "skills": ["Frontend", "Design", "SEO", "Conversion", "Functional analysis"]
+      },
+      "martin": {
+        "name": "Martín Abbott",
+        "role": "Co-founder · Backend & Data Architecture",
+        "shortRole": "Co-founder · Backend",
+        "bio": "Specializes in backend development, databases, and integrations. Combines functional analysis and technical judgment to build solid, maintainable solutions aligned with business needs.",
+        "skills": ["Backend", "Databases", "Integrations", "Architecture", "Functional analysis"]
+      }
+    }
+  },
+  "finalCTA": {
+    "heading": "Tell us what you need to solve.",
+    "paragraph": "It could be a site to present your business, an online store, or a tool to organize processes. We review the goal and propose a clear scope.",
+    "emailLeadIn": "You can also write to us directly at",
+    "defaultHelp": "We'll reply by email or WhatsApp, depending on what you leave us.",
+    "validationError": "Check the marked fields before submitting.",
+    "networkError": "We couldn't connect. Check your connection and try again.",
+    "submitting": "Sending your inquiry…",
+    "success": "Done! We received your inquiry and will get back to you shortly.",
+    "serverErrors": {
+      "rate_limited": "We've received too many inquiries in a short time. Please try again in a few minutes.",
+      "config": "The form isn't available right now. Message us on WhatsApp or at agencyvalinor@gmail.com.",
+      "send_failed": "We couldn't send your inquiry. Try again or message us on WhatsApp.",
+      "invalid_json": "Something went wrong. Please try again.",
+      "invalid_body": "Something went wrong. Please try again."
+    },
+    "form": {
+      "nameLabel": "Name",
+      "namePlaceholder": "Your name",
+      "contactLabel": "Email or WhatsApp",
+      "contactPlaceholder": "you@company.com or your WhatsApp",
+      "projectTypeLabel": "Project type",
+      "projectTypePlaceholder": "Select an option",
+      "messageLabel": "What do you need to solve?",
+      "messagePlaceholder": "Briefly tell us the goal, the current problem, or the idea you'd like to develop.",
+      "honeypotLabel": "Company",
+      "submitIdle": "Send inquiry",
+      "submitBusy": "Sending…"
+    }
+  },
+  "contactValidation": {
+    "projectTypes": {
+      "sitio-web": "Website",
+      "tienda-online": "Online store",
+      "aplicacion-web-dashboard": "Web application / dashboard",
+      "otro": "Other"
+    },
+    "errors": {
+      "name_length": "Enter your name (between 2 and 120 characters).",
+      "contact_too_long": "That field is too long.",
+      "contact_invalid": "Enter a valid email or a WhatsApp number.",
+      "project_type_invalid": "Select a valid project type.",
+      "message_length": "Tell us a bit more (between 10 and 2000 characters)."
+    }
+  },
+  "floatingActions": {
+    "quickLinks": "Quick links",
+    "whatsappAriaLabel": "Contact Valinor Agency on WhatsApp",
+    "whatsappLabel": "WhatsApp",
+    "whatsappMessage": "Hi, I was looking at the Valinor website and I'd like to ask about a project.",
+    "backToTop": "Back to top"
+  },
+  "loadingOverlay": {
+    "label": "Loading"
+  },
+  "ogImage": {
+    "titlePart1": "Valinor",
+    "titlePart2": "Agency",
+    "tagline": "Custom web design and development",
+    "services": "Websites · Online stores · Applications · Dashboards"
+  }
+}

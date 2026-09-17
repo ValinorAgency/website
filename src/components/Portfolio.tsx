@@ -2,49 +2,30 @@
 
 import { gsap } from "gsap";
 import { AnimatePresence, cubicBezier, motion, useInView, useReducedMotion } from "framer-motion";
+import { useTranslations as useTranslations } from "next-intl";
 import { type MouseEvent, useEffect, useRef, useState } from "react";
+import { scrollToHash } from "@/lib/scroll-to-hash";
 
 const expo = cubicBezier(0.16, 1, 0.3, 1);
-const projects = [
-  {
-    name: "Sitios web y landing pages",
-    purpose: "Presentar tu empresa, marca o producto con una experiencia clara y profesional, o comunicar una propuesta puntual enfocada en captar consultas.",
-    capabilities: "Diseño de interfaces, arquitectura de contenido, SEO técnico básico y formularios de contacto.",
-    palette: "radial-gradient(circle at 18% 16%, #fff7dc 0 18%, transparent 44%), radial-gradient(circle at 82% 24%, #d9eef8 0 14%, transparent 43%), radial-gradient(circle at 56% 82%, #edddf7 0 18%, transparent 46%), #e9efe9",
-  },
-  {
-    name: "Tiendas online",
-    purpose: "Vender productos o servicios con un catálogo propio, un checkout optimizado y un panel para gestionar pedidos y stock.",
-    capabilities: "Arquitectura de catálogo, integraciones de pago y paneles de administración de pedidos.",
-    palette: "radial-gradient(circle at 20% 22%, #e0f2ec 0 18%, transparent 45%), radial-gradient(circle at 78% 18%, #f6e2df 0 16%, transparent 44%), radial-gradient(circle at 62% 82%, #e3e5fa 0 18%, transparent 48%), #eef0e8",
-  },
-  {
-    name: "Aplicaciones web",
-    purpose: "Resolver flujos específicos del negocio, como reservas, portales o seguimiento comercial, con una herramienta a medida.",
-    capabilities: "Diseño de flujos de usuario, autenticación, integraciones y paneles de administración.",
-    palette: "radial-gradient(circle at 16% 18%, #f8e5ee 0 17%, transparent 43%), radial-gradient(circle at 84% 28%, #e4f3df 0 16%, transparent 46%), radial-gradient(circle at 52% 84%, #f7edcf 0 18%, transparent 48%), #ecebf3",
-  },
-  {
-    name: "Dashboards y visualización de datos",
-    purpose: "Reunir métricas, estados y alertas clave en una vista clara para tomar decisiones con información actualizada.",
-    capabilities: "Visualización de datos, alertas configurables e integración con distintas fuentes de información.",
-    palette: "radial-gradient(circle at 22% 18%, #dfeefb 0 18%, transparent 45%), radial-gradient(circle at 80% 24%, #f4e3fa 0 15%, transparent 44%), radial-gradient(circle at 58% 82%, #e7f2d9 0 18%, transparent 48%), #f1ece5",
-  },
-  {
-    name: "Sistemas de gestión",
-    purpose: "Organizar documentos, procesos o información interna que hoy vive dispersa en planillas o carpetas.",
-    capabilities: "Organización de datos, control de acceso por rol y trazabilidad de estados.",
-    palette: "radial-gradient(circle at 20% 20%, #fff0d7 0 18%, transparent 44%), radial-gradient(circle at 82% 20%, #e2eafa 0 16%, transparent 45%), radial-gradient(circle at 54% 82%, #f3dfe5 0 18%, transparent 48%), #e8f1ec",
-  },
-  {
-    name: "Integraciones",
-    purpose: "Conectar herramientas existentes y automatizar tareas puntuales para reducir trabajo manual repetitivo.",
-    capabilities: "Conexión de APIs y servicios externos, y automatización de procesos según las necesidades del proyecto.",
-    palette: "radial-gradient(circle at 18% 22%, #e4f3e8 0 18%, transparent 44%), radial-gradient(circle at 82% 18%, #f5e2d8 0 16%, transparent 45%), radial-gradient(circle at 58% 84%, #dfe9f8 0 18%, transparent 48%), #f2edf2",
-  },
+
+// Solo el dato visual (no traducible) de cada proyecto — el texto sale de
+// messages/{locale}.json → portfolio.projects, en el mismo orden que acá.
+const PALETTES = [
+  "radial-gradient(circle at 18% 16%, #fff7dc 0 18%, transparent 44%), radial-gradient(circle at 82% 24%, #d9eef8 0 14%, transparent 43%), radial-gradient(circle at 56% 82%, #edddf7 0 18%, transparent 46%), #e9efe9",
+  "radial-gradient(circle at 20% 22%, #e0f2ec 0 18%, transparent 45%), radial-gradient(circle at 78% 18%, #f6e2df 0 16%, transparent 44%), radial-gradient(circle at 62% 82%, #e3e5fa 0 18%, transparent 48%), #eef0e8",
+  "radial-gradient(circle at 16% 18%, #f8e5ee 0 17%, transparent 43%), radial-gradient(circle at 84% 28%, #e4f3df 0 16%, transparent 46%), radial-gradient(circle at 52% 84%, #f7edcf 0 18%, transparent 48%), #ecebf3",
+  "radial-gradient(circle at 22% 18%, #dfeefb 0 18%, transparent 45%), radial-gradient(circle at 80% 24%, #f4e3fa 0 15%, transparent 44%), radial-gradient(circle at 58% 82%, #e7f2d9 0 18%, transparent 48%), #f1ece5",
+  "radial-gradient(circle at 20% 20%, #fff0d7 0 18%, transparent 44%), radial-gradient(circle at 82% 20%, #e2eafa 0 16%, transparent 45%), radial-gradient(circle at 54% 82%, #f3dfe5 0 18%, transparent 48%), #e8f1ec",
+  "radial-gradient(circle at 18% 22%, #e4f3e8 0 18%, transparent 44%), radial-gradient(circle at 82% 18%, #f5e2d8 0 16%, transparent 45%), radial-gradient(circle at 58% 84%, #dfe9f8 0 18%, transparent 48%), #f2edf2",
 ] as const;
 
-type Project = (typeof projects)[number];
+type Project = { name: string; purpose: string; capabilities: string; palette: string };
+
+function useProjects(): Project[] {
+  const t = useTranslations("portfolio");
+  const raw = t.raw("projects") as { name: string; purpose: string; capabilities: string }[];
+  return raw.map((project, index) => ({ ...project, palette: PALETTES[index] }));
+}
 
 function closestEdge(event: MouseEvent<HTMLElement>, element: HTMLElement) {
   const rect = element.getBoundingClientRect();
@@ -105,6 +86,7 @@ function HighlightedTitle({ project, index, reduce, onSelect }: { project: Proje
   const titleRef = useRef<HTMLButtonElement>(null);
   const isCentered = useInView(titleRef, { amount: .8, margin: "-30% 0px -30% 0px" });
   const active = reduce || isCentered;
+  const t = useTranslations("portfolio");
 
   return (
     <motion.button
@@ -116,7 +98,7 @@ function HighlightedTitle({ project, index, reduce, onSelect }: { project: Proje
       animate={{ color: active ? "#111" : "rgba(17,17,17,.24)", opacity: active ? 1 : .72, x: active ? 0 : -8 }}
       transition={{ duration: reduce ? 0 : .38, ease: expo }}
       onClick={() => onSelect(index)}
-      aria-label={`Ver más sobre ${project.name}`}
+      aria-label={t("viewMore", { name: project.name })}
     >
       <motion.span
         className="mobile-project-hand"
@@ -135,11 +117,12 @@ function HighlightedTitle({ project, index, reduce, onSelect }: { project: Proje
   );
 }
 
-function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
+function MobileProjectHighlight({ projects, reduce }: { projects: Project[]; reduce: boolean | null }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const activeProject = activeIndex === null ? null : projects[activeIndex];
+  const t = useTranslations("portfolio");
 
   const closeProject = () => {
     const triggerIndex = activeIndex;
@@ -176,9 +159,15 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
     };
   }, [activeIndex]);
 
+  const handleCtaClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    closeProject();
+    scrollToHash("#contacto", reduce);
+  };
+
   return (
     <div className="mobile-project-highlight">
-      <div className="mobile-project-titles" aria-label="Tipos de soluciones">
+      <div className="mobile-project-titles" aria-label={t("typesLabel")}>
         {projects.map((project, index) => (
           <HighlightedTitle key={project.name} project={project} index={index} reduce={reduce} onSelect={setActiveIndex} />
         ))}
@@ -199,7 +188,7 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
               transition={{ duration: reduce ? 0 : .42, ease: expo }}
               onMouseDown={(event) => event.stopPropagation()}
             >
-              <button ref={closeRef} type="button" className="project-detail-close" onClick={closeProject} aria-label="Cerrar detalle">×</button>
+              <button ref={closeRef} type="button" className="project-detail-close" onClick={closeProject} aria-label={t("closeDetail")}>×</button>
               <div className="project-detail-visual" style={{ background: activeProject.palette }} aria-hidden="true">
                 <div className="project-detail-window">
                   <div className="project-detail-window-bar"><span /><span /><span /></div>
@@ -213,7 +202,7 @@ function MobileProjectHighlight({ reduce }: { reduce: boolean | null }) {
                 <h3 id="project-detail-title" className="font-display">{activeProject.name}</h3>
                 <p>{activeProject.purpose}</p>
                 <p className="project-detail-outcome">{activeProject.capabilities}</p>
-                <a href="#contacto" onClick={closeProject}>Conversemos sobre tu proyecto <span aria-hidden="true">↗</span></a>
+                <a href="#contacto" onClick={handleCtaClick}>{t("cta")} <span aria-hidden="true">↗</span></a>
               </div>
             </motion.article>
           </motion.div>
@@ -227,6 +216,8 @@ export default function Portfolio() {
   const ref = useRef<HTMLElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const reduce = useReducedMotion();
+  const t = useTranslations("portfolio");
+  const projects = useProjects();
 
   return (
     <section ref={ref} id="servicios" className="portfolio-flow">
@@ -236,14 +227,14 @@ export default function Portfolio() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: .7, ease: expo }}
       >
-        <h2 className="font-display">Soluciones digitales a medida</h2>
+        <h2 className="font-display">{t("heading")}</h2>
       </motion.div>
 
       <div className="flow-project-list">
         {projects.map((project, index) => <ProjectRow key={project.name} project={project} index={index} reduce={reduce} />)}
       </div>
 
-      <MobileProjectHighlight reduce={reduce} />
+      <MobileProjectHighlight projects={projects} reduce={reduce} />
 
       <style>{`
         .portfolio-flow { position: relative; padding: clamp(7rem,12vw,10rem) 0; background: #08090d; }

@@ -1,8 +1,26 @@
 import { ImageResponse } from "next/og";
+import { routing, type AppLocale } from "@/i18n/routing";
+import esMessages from "../../../messages/es.json";
+import enMessages from "../../../messages/en.json";
 
-export const alt = "Valinor Agency — Diseño y desarrollo web a medida";
+// El propio Image() corre sin contexto de request (sin headers), así que acá
+// no se puede usar getTranslations/next-intl (internamente depende de leer
+// la request) — se leen los diccionarios de mensajes directo como JSON, sin
+// pasar por next-intl, solo para esta ruta especial.
+const messagesByLocale = { es: esMessages, en: enMessages } as const;
+
+// alt queda fijo en español (el locale default): generateImageMetadata para
+// traducirlo por idioma entra en conflicto con el [__metadata_id__] interno
+// que genera Next para esta misma ruta (el locale que le llega ahí no es
+// fiable) — no vale la pena la fragilidad por un texto de accesibilidad
+// menor.
+export const alt = esMessages.metadata.ogImageAlt;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 // Constelación sutil de partículas para el sector derecho: mismo lenguaje
 // visual (puntos blancos/teal) que BackgroundCanvas.tsx en el sitio real,
@@ -22,7 +40,14 @@ const particles = [
   { top: "91%", left: "40%", size: 3, color: "#EEEEF2", opacity: 0.3 },
 ] as const;
 
-export default function Image() {
+export default async function Image({
+  params,
+}: {
+  params: Promise<{ locale: AppLocale }>;
+}) {
+  const { locale } = await params;
+  const og = (messagesByLocale[locale] ?? messagesByLocale[routing.defaultLocale]).ogImage;
+
   return new ImageResponse(
     (
       <div
@@ -46,10 +71,10 @@ export default function Image() {
         >
           <div style={{ display: "flex", alignItems: "baseline", gap: 16 }}>
             <span style={{ fontSize: 74, fontWeight: 700, color: "#EEEEF2", letterSpacing: -2 }}>
-              Valinor
+              {og.titlePart1}
             </span>
             <span style={{ fontSize: 74, fontWeight: 300, color: "#C9C9D3", letterSpacing: -2 }}>
-              Agency
+              {og.titlePart2}
             </span>
           </div>
 
@@ -65,7 +90,7 @@ export default function Image() {
               color: "#EEEEF2",
             }}
           >
-            Diseño y desarrollo web a medida
+            {og.tagline}
           </div>
 
           <div
@@ -78,7 +103,7 @@ export default function Image() {
               color: "#C9C9D3",
             }}
           >
-            Sitios web · Tiendas online · Aplicaciones · Dashboards
+            {og.services}
           </div>
         </div>
 

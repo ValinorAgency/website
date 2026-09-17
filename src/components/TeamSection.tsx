@@ -1,6 +1,7 @@
 "use client";
 
 import { cubicBezier, motion, useInView, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import TeamLanyard from "./TeamLanyard";
 
@@ -9,6 +10,7 @@ const expo = cubicBezier(0.16, 1, 0.3, 1);
 export type TeamMember = {
   name: string;
   role: string;
+  shortRole: string;
   bio: string;
   skills: readonly string[];
   initials: string;
@@ -17,28 +19,26 @@ export type TeamMember = {
   model: string;
 };
 
-const team: readonly TeamMember[] = [
-  {
-    name: "Milton Collard",
-    role: "Cofundador · Frontend y Experiencia Digital",
-    bio: "Especializado en desarrollo frontend, diseño de interfaces, SEO y optimización de conversiones. Combina análisis funcional y desarrollo para transformar objetivos de negocio en experiencias claras y efectivas.",
-    skills: ["Frontend", "Diseño", "SEO", "Conversión", "Análisis funcional"],
-    initials: "MC",
-    accent: "blue",
-    photo: "/us/frontend_milton.png",
-    model: "/us/valinor_card_milton_collard.glb",
-  },
-  {
-    name: "Martín Abbott",
-    role: "Cofundador · Backend y Arquitectura de Datos",
-    bio: "Especializado en desarrollo backend, bases de datos e integraciones. Combina análisis funcional y criterio técnico para construir soluciones sólidas, mantenibles y alineadas con las necesidades del negocio.",
-    skills: ["Backend", "Bases de datos", "Integraciones", "Arquitectura", "Análisis funcional"],
-    initials: "MA",
-    accent: "teal",
-    photo: "/us/backend_martin.png",
-    model: "/us/valinor_card_martin_abbott.glb",
-  },
+// Solo los datos que NO son texto — nombre, rol, bio y skills salen de
+// messages/{locale}.json → team.members.{key} (ver useTeam más abajo).
+const TEAM_STATIC = [
+  { key: "milton", initials: "MC", accent: "blue", photo: "/us/frontend_milton.png", model: "/us/valinor_card_milton_collard.glb" },
+  { key: "martin", initials: "MA", accent: "teal", photo: "/us/backend_martin.png", model: "/us/valinor_card_martin_abbott.glb" },
 ] as const;
+
+function useTeam(): TeamMember[] {
+  const t = useTranslations("team");
+  return TEAM_STATIC.map((entry) => {
+    const translated = t.raw(`members.${entry.key}`) as {
+      name: string;
+      role: string;
+      shortRole: string;
+      bio: string;
+      skills: string[];
+    };
+    return { ...entry, ...translated };
+  });
+}
 
 // Reemplaza el lanyard 3D en mobile (≤1023px, mismo corte que
 // .team-heading-slot): tarjetas HTML/CSS apiladas, sin WebGL ni física, para
@@ -54,55 +54,50 @@ const team: readonly TeamMember[] = [
 function MobileTeamCards({ team }: { team: readonly TeamMember[] }) {
   const mobileTeam = [...team].reverse();
   const [flipped, setFlipped] = useState<boolean[]>(() => mobileTeam.map(() => false));
+  const t = useTranslations("team");
   const toggle = (index: number) => {
     setFlipped((prev) => prev.map((value, i) => (i === index ? !value : value)));
   };
 
   return (
     <div className="team-mobile-cards">
-      {mobileTeam.map((member, index) => {
-        // member.role es la descripción completa ("Cofundador · Frontend y
-        // Experiencia Digital"); acá solo entra el rol corto ("Cofundador ·
-        // Frontend"), la parte antes del " y ".
-        const shortRole = member.role.split(" y ")[0];
-        return (
-          <button
-            key={member.name}
-            type="button"
-            className="team-flip-card"
-            aria-pressed={flipped[index]}
-            aria-label={flipped[index] ? `Ocultar información de ${member.name}` : `Ver información de ${member.name}`}
-            onClick={() => toggle(index)}
-          >
-            <div className={`team-flip-inner${flipped[index] ? " is-flipped" : ""}`}>
-              <div className="team-flip-face team-flip-front" aria-hidden={flipped[index]}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="team-flip-front-photo" src={member.photo} alt="" />
-                <span className="team-flip-front-scrim" aria-hidden="true" />
-                <div className="team-flip-front-label">
-                  <span className="team-flip-front-name">{member.name}</span>
-                  <span className="team-flip-front-role">{shortRole}</span>
-                </div>
-                <span className="team-flip-info-btn">+ Info</span>
+      {mobileTeam.map((member, index) => (
+        <button
+          key={member.name}
+          type="button"
+          className="team-flip-card"
+          aria-pressed={flipped[index]}
+          aria-label={flipped[index] ? t("hideInfo", { name: member.name }) : t("showInfo", { name: member.name })}
+          onClick={() => toggle(index)}
+        >
+          <div className={`team-flip-inner${flipped[index] ? " is-flipped" : ""}`}>
+            <div className="team-flip-face team-flip-front" aria-hidden={flipped[index]}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="team-flip-front-photo" src={member.photo} alt="" />
+              <span className="team-flip-front-scrim" aria-hidden="true" />
+              <div className="team-flip-front-label">
+                <span className="team-flip-front-name">{member.name}</span>
+                <span className="team-flip-front-role">{member.shortRole}</span>
               </div>
-              <div className="team-flip-face team-flip-back" aria-hidden={!flipped[index]}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="team-flip-photo" src={member.photo} alt="" />
-                <div className="team-flip-back-info">
-                  <h3>{member.name}</h3>
-                  <p className="team-flip-role">{shortRole}</p>
-                  <p className="team-flip-bio">{member.bio}</p>
-                </div>
+              <span className="team-flip-info-btn">{t("infoButton")}</span>
+            </div>
+            <div className="team-flip-face team-flip-back" aria-hidden={!flipped[index]}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="team-flip-photo" src={member.photo} alt="" />
+              <div className="team-flip-back-info">
+                <h3>{member.name}</h3>
+                <p className="team-flip-role">{member.shortRole}</p>
+                <p className="team-flip-bio">{member.bio}</p>
               </div>
             </div>
-          </button>
-        );
-      })}
+          </div>
+        </button>
+      ))}
     </div>
   );
 }
 
-function StaticTeamGrid() {
+function StaticTeamGrid({ team }: { team: readonly TeamMember[] }) {
   return (
     <div className="team-grid">
       {team.map((member) => (
@@ -128,6 +123,8 @@ export default function TeamSection() {
   const ref = useRef<HTMLElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const reduce = useReducedMotion();
+  const t = useTranslations("team");
+  const team = useTeam();
 
   return (
     <section ref={ref} id="equipo" className="team-section section-shell">
@@ -135,9 +132,9 @@ export default function TeamSection() {
         {reduce ? (
           <>
             <motion.div className="team-heading" initial={false} animate={{ opacity: 1, y: 0 }}>
-              <h2 className="font-display">Conocé a quienes están detrás de Valinor</h2>
+              <h2 className="font-display">{t("heading")}</h2>
             </motion.div>
-            <StaticTeamGrid />
+            <StaticTeamGrid team={team} />
           </>
         ) : (
           <div className="team-stage">
@@ -148,7 +145,7 @@ export default function TeamSection() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, ease: expo }}
               >
-                <h2 className="font-display">Conocé a quienes están detrás de Valinor</h2>
+                <h2 className="font-display">{t("heading")}</h2>
               </motion.div>
             </div>
             <div className="team-lanyard-slot">
